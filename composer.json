@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.2.5",
         "akaunting/firewall": "^1.2",
+        "coinbase/coinbase-commerce": "^1.0",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^6.3",
@@ -19,6 +20,7 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.1",
         "pulkitjalan/geoip": "^4.1",
+        "shakurov/coinbase": "^0.7.6",
         "torrix/laravel-ui-uikit": "^3.3"
     },
     "require-dev": {

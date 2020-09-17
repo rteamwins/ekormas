@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProfitsTable extends Migration
+class CreateTransactionsTable extends Migration
 {
   /**
    * Run the migrations.
@@ -13,11 +13,13 @@ class CreateProfitsTable extends Migration
    */
   public function up()
   {
-    Schema::create('profits', function (Blueprint $table) {
+    Schema::create('transactions', function (Blueprint $table) {
       $table->id();
-      $table->string('type');
       $table->decimal('amount', 14, 2);
-      $table->nullableMorphs('profitable');
+      $table->string('status');
+      $table->string('type');
+      $table->unsignedBigInteger('user_id');
+      $table->nullableMorphs('transactable');
       $table->timestamp('created_at', 6)->nullable()->default(null);
       $table->timestamp('updated_at', 6)->nullable()->default(null);
       $table->timestamp('deleted_at', 6)->nullable()->default(null);
@@ -31,6 +33,6 @@ class CreateProfitsTable extends Migration
    */
   public function down()
   {
-    Schema::dropIfExists('profits');
+    Schema::dropIfExists('transactions');
   }
 }

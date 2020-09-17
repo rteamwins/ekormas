@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProfitsTable extends Migration
+class CreateKYCSTable extends Migration
 {
   /**
    * Run the migrations.
@@ -13,11 +13,14 @@ class CreateProfitsTable extends Migration
    */
   public function up()
   {
-    Schema::create('profits', function (Blueprint $table) {
+    Schema::create('k_y_c_s', function (Blueprint $table) {
       $table->id();
-      $table->string('type');
+      $table->string('code', 15)->unique();
       $table->decimal('amount', 14, 2);
-      $table->nullableMorphs('profitable');
+      $table->string('source');
+      $table->string('status');
+      $table->unsignedBigInteger('created_by');
+      $table->unsignedBigInteger('used_by')->nullable()->default(null);
       $table->timestamp('created_at', 6)->nullable()->default(null);
       $table->timestamp('updated_at', 6)->nullable()->default(null);
       $table->timestamp('deleted_at', 6)->nullable()->default(null);
@@ -31,6 +34,6 @@ class CreateProfitsTable extends Migration
    */
   public function down()
   {
-    Schema::dropIfExists('profits');
+    Schema::dropIfExists('k_y_c_s');
   }
 }
