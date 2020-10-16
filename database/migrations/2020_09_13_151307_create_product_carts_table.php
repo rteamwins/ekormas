@@ -15,11 +15,18 @@ class CreateProductCartsTable extends Migration
   {
     Schema::create('product_carts', function (Blueprint $table) {
       $table->id();
-      $table->string('orders_id');
+      $table->text('products')->nullable();
+      $table->unsignedBigInteger('transaction_id')->default(null)->nullable();
       $table->unsignedBigInteger('user_id');
+      $table->integer('type');
+      $table->decimal('total_amount', 14, 2);
+      $table->string('status');
       $table->string('delivery_country');
       $table->string('delivery_state');
-      $table->string('delivery_address');
+      $table->text('delivery_address')->nullable();
+      $table->boolean('traded')->default(false);
+      $table->unsignedBigInteger('trade_id')->default(null)->nullable();
+      $table->timestamp('collected_at', 6)->nullable()->default(null);
       $table->timestamp('created_at', 6)->nullable()->default(null);
       $table->timestamp('updated_at', 6)->nullable()->default(null);
       $table->timestamp('deleted_at', 6)->nullable()->default(null);

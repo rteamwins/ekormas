@@ -17,7 +17,6 @@ class CreateMembershipPlanUsersTable extends Migration
       $table->id();
       $table->unsignedBigInteger('user_id');
       $table->unsignedBigInteger('membership_plan_id');
-      $table->unsignedBigInteger('transaction_id');
       $table->timestamp('last_profit_at', 6)->nullable()->default(null);
       $table->timestamp('created_at', 6)->nullable()->default(null);
       $table->timestamp('updated_at', 6)->nullable()->default(null);

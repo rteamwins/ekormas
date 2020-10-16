@@ -11,13 +11,13 @@ class CryptoTransaction extends Model
     'investment_id',
     'charge_id',
     'charge_code',
-    'recieving_wallet_address',
+    'system_wallet_address',
     'unresolved_context',
   ];
 
   public function transaction()
   {
-    $this->morphOne(Transaction::class, 'transactable');
+    return $this->morphOne(Transaction::class, 'method');
   }
   protected $dateFormat = 'Y-m-d H:i:s.u';
 }

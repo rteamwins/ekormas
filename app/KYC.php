@@ -13,9 +13,9 @@ class KYC extends Model
     'used_by', 'status',
   ];
 
-  public function investment()
+  public function transaction()
   {
-    $this->morphOne(Investment::class, 'investable');
+    return $this->morphOne(Transaction::class, 'method');
   }
   protected $dateFormat = 'Y-m-d H:i:s.u';
 }

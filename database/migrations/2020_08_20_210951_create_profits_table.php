@@ -15,9 +15,9 @@ class CreateProfitsTable extends Migration
   {
     Schema::create('profits', function (Blueprint $table) {
       $table->id();
-      $table->string('type');
-      $table->decimal('amount', 14, 2);
-      $table->nullableMorphs('profitable');
+      $table->unsignedBigInteger('trade_id');
+      $table->unsignedBigInteger('user_id');
+      $table->decimal('amount', 21, 9);
       $table->timestamp('created_at', 6)->nullable()->default(null);
       $table->timestamp('updated_at', 6)->nullable()->default(null);
       $table->timestamp('deleted_at', 6)->nullable()->default(null);

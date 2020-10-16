@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\InvestmentWithdraw;
+use App\RegistrationCredit;
 use Illuminate\Http\Request;
 
-class InvestmentWithdrawController extends Controller
+class RegistrationCreditController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class InvestmentWithdrawController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\InvestmentWithdraw  $investmentWithdraw
+     * @param  \App\RegistrationCredit  $registrationCredit
      * @return \Illuminate\Http\Response
      */
-    public function show(InvestmentWithdraw $investmentWithdraw)
+    public function show(RegistrationCredit $registrationCredit)
     {
         //
     }
@@ -52,10 +52,10 @@ class InvestmentWithdrawController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\InvestmentWithdraw  $investmentWithdraw
+     * @param  \App\RegistrationCredit  $registrationCredit
      * @return \Illuminate\Http\Response
      */
-    public function edit(InvestmentWithdraw $investmentWithdraw)
+    public function edit(RegistrationCredit $registrationCredit)
     {
         //
     }
@@ -64,10 +64,10 @@ class InvestmentWithdrawController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\InvestmentWithdraw  $investmentWithdraw
+     * @param  \App\RegistrationCredit  $registrationCredit
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, InvestmentWithdraw $investmentWithdraw)
+    public function update(Request $request, RegistrationCredit $registrationCredit)
     {
         //
     }
@@ -75,10 +75,10 @@ class InvestmentWithdrawController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\InvestmentWithdraw  $investmentWithdraw
+     * @param  \App\RegistrationCredit  $registrationCredit
      * @return \Illuminate\Http\Response
      */
-    public function destroy(InvestmentWithdraw $investmentWithdraw)
+    public function destroy(RegistrationCredit $registrationCredit)
     {
         //
     }

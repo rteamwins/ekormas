@@ -17,8 +17,7 @@ class CreateReferalsTable extends Migration
       $table->id();
       $table->unsignedBigInteger('referer_id');
       $table->unsignedBigInteger('referred_id');
-      $table->decimal('bonus', 14, 2);
-      $table->boolean('released')->default(false);
+      $table->unsignedBigInteger('bonus_id');
       $table->timestamp('created_at', 6)->nullable()->default(null);
       $table->timestamp('updated_at', 6)->nullable()->default(null);
       $table->timestamp('deleted_at', 6)->nullable()->default(null);

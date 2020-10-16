@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\InvestmentTransaction;
+use App\Bonus;
 use Illuminate\Http\Request;
 
-class InvestmentTransactionController extends Controller
+class BonusController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class InvestmentTransactionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\InvestmentTransaction  $investmentTransaction
+     * @param  \App\Bonus  $bonus
      * @return \Illuminate\Http\Response
      */
-    public function show(InvestmentTransaction $investmentTransaction)
+    public function show(Bonus $bonus)
     {
         //
     }
@@ -52,10 +52,10 @@ class InvestmentTransactionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\InvestmentTransaction  $investmentTransaction
+     * @param  \App\Bonus  $bonus
      * @return \Illuminate\Http\Response
      */
-    public function edit(InvestmentTransaction $investmentTransaction)
+    public function edit(Bonus $bonus)
     {
         //
     }
@@ -64,10 +64,10 @@ class InvestmentTransactionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\InvestmentTransaction  $investmentTransaction
+     * @param  \App\Bonus  $bonus
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, InvestmentTransaction $investmentTransaction)
+    public function update(Request $request, Bonus $bonus)
     {
         //
     }
@@ -75,10 +75,10 @@ class InvestmentTransactionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\InvestmentTransaction  $investmentTransaction
+     * @param  \App\Bonus  $bonus
      * @return \Illuminate\Http\Response
      */
-    public function destroy(InvestmentTransaction $investmentTransaction)
+    public function destroy(Bonus $bonus)
     {
         //
     }

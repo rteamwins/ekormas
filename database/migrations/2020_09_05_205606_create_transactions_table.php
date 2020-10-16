@@ -19,7 +19,7 @@ class CreateTransactionsTable extends Migration
       $table->string('status');
       $table->string('type');
       $table->unsignedBigInteger('user_id');
-      $table->nullableMorphs('transactable');
+      $table->nullableMorphs('method');
       $table->timestamp('created_at', 6)->nullable()->default(null);
       $table->timestamp('updated_at', 6)->nullable()->default(null);
       $table->timestamp('deleted_at', 6)->nullable()->default(null);

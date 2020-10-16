@@ -17,10 +17,11 @@ class CreateCryptoTransactionsTable extends Migration
       $table->id();
       $table->string('status');
       $table->string('currency');
-      $table->uuid('charge_id');
-      $table->string('charge_code', 10);
-      $table->string('recieving_wallet_address', 45);
-      $table->string('unresolved_context')->nullable();
+      $table->string('hosted_url')->nullable()->default(null);
+      $table->uuid('charge_id')->nullable()->default(null);
+      $table->string('charge_code', 10)->nullable()->default(null);
+      $table->string('system_wallet_address', 45)->nullable()->default(null);
+      $table->string('unresolved_context')->nullable()->default(null);
       $table->timestamp('created_at', 6)->nullable()->default(null);
       $table->timestamp('updated_at', 6)->nullable()->default(null);
       $table->timestamp('deleted_at', 6)->nullable()->default(null);

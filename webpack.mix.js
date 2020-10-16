@@ -1,4 +1,4 @@
-const mix = require('laravel-mix');
+const mix = require("laravel-mix");
 
 /*
  |--------------------------------------------------------------------------
@@ -11,7 +11,10 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .extract(['vue'])
-    .version()
-    .sass('resources/sass/app.scss', 'public/css');
+mix
+  .js("resources/js/app.js", "public/js")
+  .extract(["vue"])
+  .version()
+  .sass("resources/sass/app.scss", "public/css");
+mix.browserSync("localhost:8005");
+mix.disableNotifications();

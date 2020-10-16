@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Http\Controllers\HomeController;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -16,10 +17,10 @@ class User extends Authenticatable
    * @var array
    */
   protected $fillable = [
-    'first_name', 'last_name', 'gender',
-    'gender', 'investment_wallet', 'bounus_wallet',
-    'profit_wallet', 'email', 'password', 'referer',
-    'role', 'activated_at',
+    'first_name', 'last_name', 'username', 'phone', 'gender',
+    'gender', 'wallet', 'bounus', 'email', 'password', 'referer',
+    'role', 'activated_at', 'trading_capital', 'membership_plan_id',
+    'last_profit_at', 'points',
   ];
 
   /**
@@ -31,6 +32,9 @@ class User extends Authenticatable
     'password', 'remember_token',
   ];
 
+
+  protected $appends = ['available_wallet'];
+  // protected $withCount = ['registration_credit'];
   /**
    * The attributes that should be cast to native types.
    *
@@ -39,7 +43,9 @@ class User extends Authenticatable
   protected $casts = [
     'email_verified_at' => 'datetime',
     'activated_at' => 'datetime',
+    'last_profit_at' => 'datetime',
   ];
+
 
   protected $dateFormat = 'Y-m-d H:i:s.u';
 
@@ -79,5 +85,18 @@ class User extends Authenticatable
     return $this->hasMany(KYC::class, 'created_by');
   }
 
-  
+  // public function registration_credits()
+  // {
+  //   return $this->hasMany(RegistrationCredit::class, 'created_by');
+  // }
+
+  public function membership_plan()
+  {
+    return $this->belongsTo(MembershipPlan::class);
+  }
+
+  public function getAvailableWalletAttribute()
+  {
+    return $this->wallet - $this->membership_plan->fee;
+  }
 }
