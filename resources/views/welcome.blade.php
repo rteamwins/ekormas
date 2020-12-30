@@ -11,14 +11,14 @@
 @section('title', 'Available Products')
 @section('content')
 <div class="uk-container uk-margin-bottom uk-margin-large-top uk-margin-large-bottom">
-  <div class="uk-child-width-1-2 uk-child-width-1-2@s uk-child-width-1-3@m uk-child-width-1-4@l uk-grid-match uk-grid-small uk-margin-top" uk-grid>
+  <div class="uk-child-width-1-1 uk-child-width-1-2@s uk-child-width-1-3@m uk-child-width-1-4@l uk-grid-match uk-grid-small uk-margin-top" uk-grid>
     @for ($i = 1; $i < 10; $i++) <div class="uk-margin-small-bottom">
       <div class="uk-card uk-card-default uk-card-body
           uk-padding-remove uk-margin-small my-card uk-link-text">
         <div class="uk-card-media-top uk-overflow-hidden">
           <a href="#" class="uk-link-reset uk-transition-toggle" tabindex="0">
-            <img class="home_ad_list_thumb uk-transition-scale-up uk-transition-opaque"
-              src="{{asset("images/misc/service{$i}.jpeg")}}" alt="" />
+            <img class="uk-img uk-transition-scale-up uk-transition-opaque"
+              src="{{asset("images/misc/service{$i}.jpeg")}}"  alt="" />
           </a>
           <div class="uk-overlay uk-card-default green white-text
                 uk-position-top-left uk-position-small uk-padding-left-remove"
@@ -31,14 +31,14 @@
         </div>
         <div class="uk-card-body uk-text-center uk-padding-small">
           <a href="#" class="uk-link-reset">
-            <h5 class="uk-text-small orange-text text-darken-1 uk-text-bold uk-display-block uk-text-truncate">
+            <h5 class="uk-text-small green-text  text-accent-2  uk-text-bold uk-display-block uk-text-truncate">
               Product
               kur iur kiu iu8hre kiuer iuer jiperi uerjh Name</h5>
           </a>
           <div uk-grid="" class="uk-text-small uk-grid-collapse uk-grid">
             <div class="uk-width-2-3 uk-first-column">
               <a href="#" class="uk-button uk-button-default uk-padding-remove-horizontal
-                  uk-border-pill orange darken-2 uk-text-bold white-text
+                  uk-border-pill green accent-2 uk-text-bold white-text
                   uk-text-truncate uk-margin-remove uk-width-1-1
                   uk-align-center">
                 <i uk-icon="icon:cart"></i>

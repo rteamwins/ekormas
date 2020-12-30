@@ -8,7 +8,6 @@ class CryptoTransaction extends Model
 {
   protected $fillable = [
     'status',
-    'investment_id',
     'charge_id',
     'charge_code',
     'system_wallet_address',

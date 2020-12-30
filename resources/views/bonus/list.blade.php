@@ -13,7 +13,7 @@
         <div class="uk-card-header">
           <h2 class="uk-h2 uk-margin-remove-bottom uk-text-bolder">BONUS</h2>
           <p class="uk-margin-remove-top">
-            All Bonus Recieved By You
+            All Your Bonuses
           </p>
         </div>
         <div class="uk-card-body uk-padding-remove">
@@ -29,21 +29,22 @@
             <tbody>
               @if (count($bonuses))
               @foreach ($bonuses as $bonus)
-              <tr>
-                <td>{{$loop->index +1}}</td>
-                <td>${{number_format($bonus->amount,2)}}</td>
+              <tr class="{{$bonus->amount<0?"red":"green"}} lighten-5">
+                <td><span class="uk-hidden@m uk-text-bold">#: </span>{{$loop->index +1}}</td>
+                <td><span class="uk-hidden@m uk-text-bold">Amount: </span>${{number_format($bonus->amount,2)}}</td>
                 <td>
-                  <span class="uk-label cyan">
-                    {{$bonus->type}}
+                  <span class="uk-hidden@m uk-text-bold">Type: </span> <span class="uk-label cyan">
+                    {{str_replace("_"," ",$bonus->type)}}
                   </span>
                 </td>
-                <td>{{ $fund->created_at}}</td>
+                <td><span class="uk-hidden@m uk-text-bold">Date: </span>{{ $bonus->created_at->DiffForHumans()}}</td>
               </tr>
               @endforeach
-              @endif
+              @else
               <tr>
                 <td class="uk-text-center" colspan="4"> <span class="uk-label cyan"> No Data to Display</span></td>
               </tr>
+              @endif
             </tbody>
           </table>
         </div>

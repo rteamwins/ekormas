@@ -119,7 +119,7 @@
           <div class="uk-width-1-1 uk-width-2-3@s uk-width-1-2@m  uk-margin-top uk-align-center">
             <div class="uk-form-control ">
               <button type="submit"
-                class="uk-button uk-border-rounded orange darken-2 white-text uk-text-bolder uk-width-1-1">
+                class="uk-button uk-border-rounded green accent-2 white-text uk-text-bolder uk-width-1-1">
                 <span class="uk-text-large">P</span>roceed
               </button>
             </div>

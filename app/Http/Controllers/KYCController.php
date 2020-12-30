@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\KYC;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class KYCController extends Controller
@@ -15,8 +16,19 @@ class KYCController extends Controller
    */
   public function index()
   {
-    $all_kycs = KYC::where('user_id', Auth()->id())->paginate(10);
+    $all_kycs = KYC::where('user_id', Auth()->user()->id)->paginate(10);
     return view('kyc.list', ['kycs' => $all_kycs]);
+  }
+
+  /**
+   * Display a listing of the resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function index_json()
+  {
+    $kycs = KYC::where('user_id', auth()->user()->id)->paginate(10);
+    return response()->json($kycs, Response::HTTP_OK);
   }
 
   /**
@@ -37,22 +49,19 @@ class KYCController extends Controller
    */
   public function store(Request $request)
   {
+    $max = (Auth()->user()->available_wallet * ((100 - 5) / 100));
 
     $this->validate($request, [
-      'amount' => 'digits_between:250,49999',
-      'source' => 'in:profit,bonus',
+      'amount' => 'required|numeric|min:100|max:' . $max,
     ]);
-    if (Auth()->user()->{$request->source . '_amount'} < $request->amount) {
-      return back()->withErrors('amount', "Your {$request->source} is not enough for the amount, reduce the amount or select another souce for the KYC");
-    } else {
-      $new_kyc = new KYC();
-      $new_kyc->amount = $request->amount;
-      $new_kyc->source = $request->source;
-      $new_kyc->created_by = $request->user()->id;
-      $new_kyc->status = 'created';
-      $new_kyc->save();
-      return redirect()->route('list_all_kycs')->with('success', "Your {$request->amount} KYC has been created")->setStatusCode(201);
-    }
+
+    $new_kyc = new KYC();
+    $new_kyc->amount = $request->amount;
+    $new_kyc->source = $request->source;
+    $new_kyc->created_by = $request->user()->id;
+    $new_kyc->status = 'created';
+    $new_kyc->save();
+    return redirect()->route('list_all_kycs')->with('user-success', "Your {$request->amount} KYC has been created")->setStatusCode(201);
   }
 
   /**

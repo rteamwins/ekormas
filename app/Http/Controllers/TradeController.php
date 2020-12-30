@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\AddProfitToTrades;
+use App\Jobs\LoadAddProfitJob;
 use App\Trade;
 use App\User;
 use Illuminate\Http\Request;
@@ -27,7 +29,7 @@ class TradeController extends Controller
    */
   public function create()
   {
-    if (Auth()->user()->available_wallet < Auth()->user()->membership_plan->max_trading_capital) {
+    if (Auth()->user()->available_wallet >= Auth()->user()->membership_plan->max_trading_capital) {
       return view('trade.create');
     } else {
       return back()->with('user-info', sprintf("You Do not have availble funds to trade with. Try funding you account and try again, <a href='%s'>Fund Account now</a>.", route('user_fund_wallet')));
@@ -64,7 +66,8 @@ class TradeController extends Controller
     $new_trade->user_id = Auth()->user()->id;
     $new_trade->profit_percent = $trader->membership_plan->weekly_trading_percent;
     $new_trade->completed = false;
-    $new_trade->closing_at = now()->addDays($trade_duration);
+    $days_duration = now()->addDays($trade_duration);
+    $new_trade->closing_at = $days_duration;
     if ($request->trade_type == (3 || 2 || 1)) {
       $new_trade->method = "automatic";
     } else {
@@ -74,6 +77,14 @@ class TradeController extends Controller
     $trader->wallet -= $request->trade_amount;
     $trader->trading_capital += $request->trade_amount;
     $trader->update();
+
+    //adding the profits to queue
+
+    $profit_count = floor($days_duration->diffInMinutes() / 15);
+    $profitable_roi = $new_trade->amount + $new_trade->earning;
+    LoadAddProfitJob::dispatch($trader->id, $new_trade->id, $profitable_roi, $profit_count)
+    ->onQueue('load_profit_job')
+    ->delay(now()->addMinute());
     return redirect()->route('user_trade_history');
   }
 

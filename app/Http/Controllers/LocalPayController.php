@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\MembershipPlanUser;
+use App\LocalPay;
 use Illuminate\Http\Request;
 
-class MembershipPlanUserController extends Controller
+class LocalPayController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class MembershipPlanUserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\MembershipPlanUser  $membershipPlanUser
+     * @param  \App\LocalPay  $localPay
      * @return \Illuminate\Http\Response
      */
-    public function show(MembershipPlanUser $membershipPlanUser)
+    public function show(LocalPay $localPay)
     {
         //
     }
@@ -52,10 +52,10 @@ class MembershipPlanUserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\MembershipPlanUser  $membershipPlanUser
+     * @param  \App\LocalPay  $localPay
      * @return \Illuminate\Http\Response
      */
-    public function edit(MembershipPlanUser $membershipPlanUser)
+    public function edit(LocalPay $localPay)
     {
         //
     }
@@ -64,10 +64,10 @@ class MembershipPlanUserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\MembershipPlanUser  $membershipPlanUser
+     * @param  \App\LocalPay  $localPay
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, MembershipPlanUser $membershipPlanUser)
+    public function update(Request $request, LocalPay $localPay)
     {
         //
     }
@@ -75,10 +75,10 @@ class MembershipPlanUserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\MembershipPlanUser  $membershipPlanUser
+     * @param  \App\LocalPay  $localPay
      * @return \Illuminate\Http\Response
      */
-    public function destroy(MembershipPlanUser $membershipPlanUser)
+    public function destroy(LocalPay $localPay)
     {
         //
     }

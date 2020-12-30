@@ -7,16 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Withdraw extends Model
 {
   protected $fillable = [
-    'amount', 'status', 'type',
+    'amount', 'fee', 'status',
     'destination_wallet_address',
-    'user_id', 'investment_id',
+    'user_id',
   ];
 
   protected $dateFormat = 'Y-m-d H:i:s.u';
 
-  public function investment()
+  public function user()
   {
-    return $this->belongsTo(investment::class, 'investment_id');
+    return $this->belongsTo(User::class);
   }
-
 }

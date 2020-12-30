@@ -40,8 +40,17 @@ class LoginController extends Controller
     $this->middleware('guest')->except('logout');
   }
 
+  protected function authenticated(Request $request, $user)
+  {
+    $user->update([
+      'last_login' => now(),
+      'last_ip' => $request->getClientIp(),
+    ]);
+    Auth::User()->createToken('ekormas')->accessToken;
+  }
+
   protected function redirectTo()
   {
-      return '/user/dashboard';
+    return '/user/dashboard';
   }
 }

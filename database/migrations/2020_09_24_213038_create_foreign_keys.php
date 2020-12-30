@@ -25,9 +25,8 @@ class CreateForeignKeys extends Migration
       $table->foreign('user_id')->references('id')->on('users');
     });
 
-    Schema::table('membership_plan_users', function (Blueprint $table) {
+    Schema::table('bonuses', function (Blueprint $table) {
       $table->foreign('user_id')->references('id')->on('users');
-      $table->foreign('membership_plan_id')->references('id')->on('membership_plans');
     });
 
     Schema::table('transactions', function (Blueprint $table) {
@@ -45,18 +44,23 @@ class CreateForeignKeys extends Migration
     });
 
     Schema::table('k_y_c_s', function (Blueprint $table) {
-      $table->foreign('created_by')->references('id')->on('users');
+      $table->foreign('user_id')->references('id')->on('users');
       $table->foreign('used_by')->references('id')->on('users');
     });
 
     Schema::table('registration_credits', function (Blueprint $table) {
-      $table->foreign('created_by')->references('id')->on('users');
+      $table->foreign('user_id')->references('id')->on('users');
       $table->foreign('used_by')->references('id')->on('users');
     });
 
     Schema::table('product_carts', function (Blueprint $table) {
       $table->foreign('user_id')->references('id')->on('users');
       $table->foreign('transaction_id')->references('id')->on('transactions');
+    });
+
+    Schema::table('profits', function (Blueprint $table) {
+      $table->foreign('user_id')->references('id')->on('users');
+      $table->foreign('trade_id')->references('id')->on('trades');
     });
   }
 
@@ -79,11 +83,10 @@ class CreateForeignKeys extends Migration
       $table->dropForeign('user_id');
     });
 
-    Schema::table('membership_plan_users', function (Blueprint $table) {
+    Schema::table('bonuses', function (Blueprint $table) {
       $table->dropForeign('user_id');
-      $table->dropForeign('membership_plan_id');
     });
-
+    
     Schema::table('transactions', function (Blueprint $table) {
       $table->dropForeign('user_id');
     });
@@ -99,17 +102,22 @@ class CreateForeignKeys extends Migration
     });
 
     Schema::table('k_y_c_s', function (Blueprint $table) {
-      $table->dropForeign('created_by');
+      $table->dropForeign('user_id');
       $table->dropForeign('used_by');
     });
 
     Schema::table('registration_credits', function (Blueprint $table) {
-      $table->dropForeign('created_by');
+      $table->dropForeign('user_id');
       $table->dropForeign('used_by');
     });
 
     Schema::table('product_carts', function (Blueprint $table) {
       $table->dropForeign('transactions_id');
+      $table->dropForeign('user_id');
+    });
+
+    Schema::table('profits', function (Blueprint $table) {
+      $table->dropForeign('trade_id');
       $table->dropForeign('user_id');
     });
   }

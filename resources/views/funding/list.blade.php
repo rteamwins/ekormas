@@ -36,6 +36,8 @@
                 <td><span class="uk-label cyan">
                     @if(class_basename($fund->method_type) == 'CryptoTransaction')
                     Bitcoin
+                    @elseif(class_basename($fund->method_type) == 'BonusTransaction')
+                    Bonus
                     @else
                     KYC
                     @endif
@@ -43,13 +45,14 @@
                 <td><span class="uk-label green">
                     {{$fund->status}}
                   </span></td>
-                <td>{{ $fund->created_at}}</td>
+                <td>{{ $fund->created_at->diffForHumans()}}</td>
               </tr>
               @endforeach
-              @endif
+              @else
               <tr>
                 <td class="uk-text-center" colspan="5"> <span class="uk-label cyan"> No Data to Display</span></td>
               </tr>
+              @endif
             </tbody>
           </table>
         </div>

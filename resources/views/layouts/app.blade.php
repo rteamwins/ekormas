@@ -55,36 +55,135 @@
 
 <body>
   <!----offcanvas start here---->
-  <div id="side_menu" uk-offcanvas="mode: push; overlay: true">
-    <div class="uk-offcanvas-bar sidenav white">
+  <div id="side_menu" uk-offcanvas="mode: slide; overlay: true">
+    <div class="uk-offcanvas-bar sidenav white uk-padding-remove">
 
       <!-----usefull links ends here---->
-      <ul class="uk-nav uk-nav-default " uk-nav>
+      <ul class="uk-nav-default uk-nav-parent-icon" uk-nav>
         <li>
-          <div class="uk-padding-remove uk-margin-small">
-            <a href="#"
-              class="uk-button orange darken-2 uk-text-bold white-text uk-width-1-1 uk-border-rounded">HOME</a>
+          <div class="uk-padding-small green accent-2">
+            <a href="{{route('user_home')}}" class="uk-button-small uk-text-bold uk-text-left uk-width-1-1">HOME</a>
           </div>
         </li>
         @guest
         <li>
-          <div class="uk-padding-remove uk-margin-small">
+          <div class="uk-padding-small green accent-2">
             <a href="{{route('login')}}"
-              class="uk-button orange darken-2 uk-text-bold white-text uk-width-1-1 uk-border-rounded">LOGIN</a>
+              class="uk-button-small  white green-text  text-accent-2 uk-text-bold uk-text-left uk-width-1-1">LOGIN</a>
           </div>
         </li>
         <li>
-          <div class="uk-padding-remove uk-margin-small">
+          <div class="uk-padding-small green accent-2">
             <a href="{{route('register')}}"
-              class="uk-button orange darken-2 uk-text-bold white-text uk-width-1-1 uk-border-rounded">REGISTER</a>
+              class="uk-button-small green-text  text-accent-2 uk-text-bold uk-text-left uk-width-1-1">REGISTER</a>
           </div>
         </li>
         @endguest
         @auth
+        <li class="uk-parent uk-padding-remove">
+          <a href="#"
+            class="uk-button-small cyan-text text-darken-1 uk-text-bold uk-text-right uk-width-1-1 uk-margin-small-top uk-margin-small-bottom">
+            #WALLET
+          </a>
+          <ul class="uk-nav-sub uk-padding-remove">
+            <li>
+              <div class="uk-padding-small green accent-2">
+                <a href="{{route('user_fund_wallet')}}"
+                  class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">FUND NOW</a>
+              </div>
+            </li>
+            <li>
+              <div class="uk-padding-small green accent-2">
+                <a href="{{route('user_fund_history')}}"
+                  class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">FUNDING HISTORY</a>
+              </div>
+            </li>
+          </ul>
+        </li>
+        <li class="uk-parent uk-padding-remove">
+          <a href="#"
+            class="uk-button-small green-text  text-accent-2 uk-text-bold uk-text-right uk-width-1-1 uk-margin-small-top uk-margin-small-bottom">
+            #TRADES
+          </a>
+          <ul class="uk-nav-sub uk-padding-remove">
+            <li>
+              <div class="uk-padding-small green accent-2">
+                <a href="{{route('user_create_trade')}}"
+                  class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">TRADE NOW</a>
+              </div>
+            </li>
+            <li>
+              <div class="uk-padding-small green accent-2">
+                <a href="{{route('user_trade_history')}}"
+                  class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">TRADE HISTORY</a>
+              </div>
+            </li>
+          </ul>
+        </li>
+        <li class="uk-parent uk-padding-remove">
+          <a href="#"
+            class="uk-button-small green-text  text-accent-2 uk-text-bold uk-text-right uk-width-1-1 uk-margin-small-top uk-margin-small-bottom">
+            #BONUS
+          </a>
+          <ul class="uk-nav-sub uk-padding-remove">
+            <li>
+              <div class="uk-padding-small green accent-2">
+                <a href="{{route('create_bonus_to_wallet_funds')}}"
+                  class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">MOVE TO WALLET</a>
+              </div>
+            </li>
+            <li>
+              <div class="uk-padding-small green accent-2">
+                <a href="{{route('user_bonus_history')}}"
+                  class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">BONUS HISTORY</a>
+              </div>
+            </li>
+          </ul>
+        </li>
+        <li class="uk-parent uk-padding-remove">
+          <a href="#"
+            class="uk-button-small green-text  text-accent-2 uk-text-bold uk-text-right uk-width-1-1 uk-margin-small-top uk-margin-small-bottom">
+            #WITHDRAWS
+          </a>
+          <ul class="uk-nav-sub uk-padding-remove">
+            <li>
+              <div class="uk-padding-small green accent-2">
+                <a href="{{route('user_create_withdraw_fund')}}"
+                  class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">WITHDRAW NOW</a>
+              </div>
+            </li>
+            <li>
+              <div class="uk-padding-small green accent-2">
+                <a href="{{route('user_withdraw_fund_history')}}"
+                  class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">WITHDRAW HISTORY</a>
+              </div>
+            </li>
+          </ul>
+        </li>
+        <li class="uk-parent uk-padding-remove">
+          <a href="#"
+            class="uk-button-small green-text  text-accent-2 uk-text-bold uk-text-right uk-width-1-1 uk-margin-small-top uk-margin-small-bottom">
+            #CREDITS
+          </a>
+          <ul class="uk-nav-sub uk-padding-remove">
+            <li>
+              <div class="uk-padding-small green accent-2">
+                <a href="{{route('user_list_kyc')}}"
+                  class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">KYC</a>
+              </div>
+            </li>
+            <li>
+              <div class="uk-padding-small green accent-2">
+                <a href="#" class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">REGISTRATION
+                  CREDITS</a>
+              </div>
+            </li>
+          </ul>
+        </li>
         <li>
-          <div class="uk-padding-remove uk-margin-small">
+          <div class="uk-padding-small red white-text">
             <a href="#" onclick="event.preventDefault(); document.getElementById('sidebar-logout-form').submit();"
-              class="uk-button white-text uk-text-bold red uk-width-1-1 uk-border-rounded" style="">LOG
+              class="uk-button-small  uk-text-bold uk-width-1-1" style="">LOG
               OUT
             </a>
           </div>
@@ -227,7 +326,7 @@
 
 
         <div class="uk-navbar-right uk-visible@m ">
-          <ul class="uk-navbar-nav uk-flex uk-flex-middle orange darken-3 uk-margin-small-right">
+          <ul class="uk-navbar-nav uk-flex uk-flex-middle green accent-2 uk-margin-small-right">
             <li class="">
               <a href="{{route('user_create_trade')}}"
                 class="uk-button uk-button-text uk-width-1-1 btn-bg-none uk-text-bold"
@@ -235,7 +334,7 @@
             </li>
             <li>
               <a href="{{route('user_fund_wallet')}}" class="uk-button uk-button-text uk-width-1-1  uk-text-bold"
-                style="color:white;min-height:50px !important">Service</a>
+                style="color:white;min-height:50px !important">Fund Wallet</a>
             </li>
             <li>
               <a href="#" class="uk-button uk-button-text uk-width-1-1 btn-bg-none uk-text-bold"
@@ -351,7 +450,7 @@
       <h4 class="white-text uk-text-bolder">NEWSLETTER</h4>
       <div class="uk-margin-top ">
         <div class="uk-inline">
-          <button style="border: none; " class="uk-form-icon orange lighten-1 uk-form-icon-flip remove-highlight"
+          <button style="border: none; " class="uk-form-icon green accent-2 uk-form-icon-flip remove-highlight"
             type="submit"><i class="white-text" uk-icon="icon:forward"></i></button>
           <input class="uk-input" type="email" placeholder="Email Address">
         </div>

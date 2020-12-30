@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMembershipPlanUsersTable extends Migration
+class CreateRegistrationCreditPurchasesTable extends Migration
 {
   /**
    * Run the migrations.
@@ -13,11 +13,14 @@ class CreateMembershipPlanUsersTable extends Migration
    */
   public function up()
   {
-    Schema::create('membership_plan_users', function (Blueprint $table) {
+    Schema::create('registration_credit_purchases', function (Blueprint $table) {
       $table->id();
+      $table->string('status');
+      $table->text('package');
+      $table->text('quantity');
+      $table->decimal('amount', 14, 2);
       $table->unsignedBigInteger('user_id');
-      $table->unsignedBigInteger('membership_plan_id');
-      $table->timestamp('last_profit_at', 6)->nullable()->default(null);
+      $table->unsignedBigInteger('transaction_id');
       $table->timestamp('created_at', 6)->nullable()->default(null);
       $table->timestamp('updated_at', 6)->nullable()->default(null);
       $table->timestamp('deleted_at', 6)->nullable()->default(null);
@@ -31,6 +34,6 @@ class CreateMembershipPlanUsersTable extends Migration
    */
   public function down()
   {
-    Schema::dropIfExists('membership_plan_users');
+    Schema::dropIfExists('registration_credit_purchases');
   }
 }

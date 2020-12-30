@@ -17,15 +17,6 @@ class ReferalController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -44,32 +35,9 @@ class ReferalController extends Controller
      * @param  \App\Referal  $referal
      * @return \Illuminate\Http\Response
      */
-    public function show(Referal $referal)
+    public function show()
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Referal  $referal
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Referal $referal)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Referal  $referal
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Referal $referal)
-    {
-        //
+        return view('referal.listing');
     }
 
     /**

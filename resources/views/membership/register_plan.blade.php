@@ -86,7 +86,7 @@
           <div class="uk-margin uk-width-1-1">
             <div class="uk-form-control">
               <button id="reg_submit" type="submit"
-                class="uk-button uk-border-rounded orange darken-2 white-text uk-text-bolder uk-width-1-1">
+                class="uk-button uk-border-rounded green accent-2 white-text uk-text-bolder uk-width-1-1">
                 <span class="uk-text-large">P</span>ay Registration Fee
               </button>
             </div>

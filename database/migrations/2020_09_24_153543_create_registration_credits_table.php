@@ -17,7 +17,7 @@ class CreateRegistrationCreditsTable extends Migration
       $table->string('code', 15)->unique();
       $table->string('status')->nullable()->default(null);
       $table->string('plan')->default('pearl');
-      $table->unsignedBigInteger('created_by');
+      $table->unsignedBigInteger('user_id');
       $table->unsignedBigInteger('used_by')->nullable()->default(null);
       $table->timestamp('created_at', 6)->nullable()->default(null);
       $table->timestamp('updated_at', 6)->nullable()->default(null);

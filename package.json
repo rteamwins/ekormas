@@ -26,12 +26,14 @@
     "dependencies": {
         "@mdi/font": "^5.5.55",
         "chart.js": "^2.9.3",
-        "moment": "^2.27.0",
+        "moment": "^2.29.1",
         "node-thermal-printer": "^4.1.2",
+        "qrcode": "^1.4.4",
         "vue-chartjs": "^3.5.1",
         "vue-chartjs-financial": "^1.0.1",
-        "vue-qrcode-reader": "^2.3.13",
-        "vue-sweetalert2": "^3.0.6",
+        "vue-qrcode": "^0.3.5",
+        "vue-qrcode-reader": "^2.3.16",
+        "vue-sweetalert2": "^3.0.8",
         "vuejs-paginate": "^2.1.0"
     }
 }

@@ -36,7 +36,7 @@
         </div>
         <div class="uk-margin uk-width-1-1">
           <div class="uk-form-control">
-            <button type="submit" class="uk-button orange darken-2 white-text uk-text-bolder uk-width-1-1"
+            <button type="submit" class="uk-button green accent-2 white-text uk-text-bolder uk-width-1-1"
               uk-icon="icon:arrow-right;ratio:1.3">
               Upgrade Now
             </button>

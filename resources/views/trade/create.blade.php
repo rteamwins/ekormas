@@ -52,7 +52,7 @@
                   <span class="uk-form-icon">$</span>
                   <input class="uk-input @error('trade_amount') uk-form-danger @enderror" name="trade_amount"
                     id="trade_amount" type="number"
-                    max="{{Auth()->user()->available_wallet >= Auth()->user()->membership_plan->max_trading_capital?Auth()->user()->membership_plan->min_trading_capital:Auth()->user()->available_wallet}}"
+                    max="{{Auth()->user()->available_wallet >= Auth()->user()->membership_plan->max_trading_capital?Auth()->user()->membership_plan->max_trading_capital:Auth()->user()->available_wallet}}"
                     min="{{Auth()->user()->membership_plan->min_trading_capital}}"
                     value="{{ old('trade_amount')?:Auth()->user()->membership_plan->min_trading_capital }}" required
                     autofocus>
@@ -65,7 +65,7 @@
             <div class="uk-margin uk-width-1-1">
               <div class="uk-form-control">
                 <button type="submit"
-                  class="uk-button orange darken-2 white-text uk-text-bolder uk-width-1-1 uk-width-1-2@m"
+                  class="uk-button green accent-2 white-text uk-text-bolder uk-width-1-1 uk-width-1-2@m"
                   uk-icon="icon:arrow-right;ratio:1.3">
                   <span class="uk-text-large">T</span>rade Now
 

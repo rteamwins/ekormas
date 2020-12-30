@@ -49,7 +49,7 @@ class HomeController extends Controller
         "pointRadius" => 0,
         "borderWidth" => 1,
         "barPercentage" => 0.9,
-        "lineTension"=>0.4,
+        "lineTension" => 0.4,
         "categoryPercentage" => 1.0,
       ]]
     ];
@@ -79,6 +79,10 @@ class HomeController extends Controller
     return view('welcome');
   }
 
+  public function get_agent_stat()
+  {
+   
+  }
 
   /**
    * pay registraion fee.
@@ -138,7 +142,6 @@ class HomeController extends Controller
         $new_trx->save();
         // $new_crypto_trx = CryptoTransaction::find($new_crypto_trx->id)->first();
         $new_crypto_trx->transaction()->save($new_trx);
-
 
         $new_charge = Coinbase::createCharge([
           'name' => Auth()->user()->username . " " . "\${$plan[$request->plan]} {$request->plan} Plan",

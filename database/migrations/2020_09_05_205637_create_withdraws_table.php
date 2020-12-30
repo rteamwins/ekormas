@@ -16,9 +16,9 @@ class CreateWithdrawsTable extends Migration
     Schema::create('withdraws', function (Blueprint $table) {
       $table->id();
       $table->unsignedBigInteger('user_id');
-      $table->string('type');
       $table->string('status');
       $table->decimal('amount', 14, 2);
+      $table->decimal('fee', 14, 2);
       $table->string('destination_wallet_address');
       $table->timestamp('created_at', 6)->nullable()->default(null);
       $table->timestamp('updated_at', 6)->nullable()->default(null);

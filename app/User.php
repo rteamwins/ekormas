@@ -6,10 +6,11 @@ use App\Http\Controllers\HomeController;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
-  use Notifiable;
+  use Notifiable, HasApiTokens;
 
   /**
    * The attributes that are mass assignable.
@@ -34,7 +35,7 @@ class User extends Authenticatable
 
 
   protected $appends = ['available_wallet'];
-  // protected $withCount = ['registration_credit'];
+  protected $withCount = ['registration_credits', 'referals'];
   /**
    * The attributes that should be cast to native types.
    *
@@ -80,15 +81,20 @@ class User extends Authenticatable
     return $this->hasOne(User::class, 'referer');
   }
 
-  public function kycs()
+  public function created_kycs()
   {
-    return $this->hasMany(KYC::class, 'created_by');
+    return $this->hasMany(KYC::class);
   }
 
-  // public function registration_credits()
-  // {
-  //   return $this->hasMany(RegistrationCredit::class, 'created_by');
-  // }
+  public function consumed_kycs()
+  {
+    return $this->hasMany(KYC::class, 'used_by');
+  }
+
+  public function registration_credits()
+  {
+    return $this->hasMany(RegistrationCredit::class);
+  }
 
   public function membership_plan()
   {

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Bonus;
 use App\CryptoTransaction;
 use App\KYC;
 use App\Transaction;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Shakurov\Coinbase\Facades\Coinbase;
 
 class FundingController extends Controller
@@ -63,7 +65,7 @@ class FundingController extends Controller
 
 
         $new_charge = Coinbase::createCharge([
-          'name' => Auth()->user()->username . " $" . $request->funding_amount ." Funding",
+          'name' => Auth()->user()->username . " $" . $request->funding_amount . " Funding",
           'description' => Auth()->user()->username . " $" . $request->funding_amount . " Wallet funding",
           'local_price' => [
             'amount' => $request->funding_amount,
@@ -108,6 +110,29 @@ class FundingController extends Controller
         $user->wallet += $new_trx->amount;
         $user->update();
 
+        if (Auth()->user()->type == 'agent') {
+          $benefactor = $user;
+        } else {
+          $benefactor = User::whereRole("admin")->firstOrFail();
+        }
+
+        $new_trx = new Transaction();
+        $new_trx->amount = ($valid_kyc->fee / 2);
+        $new_trx->status = 'created';
+        $new_trx->type = 'funding';
+        $new_trx->user_id = $benefactor->id;
+
+        $new_bonus_trx = new Bonus();
+        $new_bonus_trx->user_id = $benefactor->id;
+        $new_bonus_trx->amount = ($valid_kyc->fee / 2);
+        $new_bonus_trx->status = 'created';
+        $new_bonus_trx->type = 'service_charge_completed';
+        $new_bonus_trx->save();
+        $new_bonus_trx->transaction()->save($new_trx);
+        $new_trx->status = 'completed';
+        $new_trx->update();
+        $benefactor->bonus += $new_trx->amount;
+        $benefactor->update();
 
         return redirect()->route('home')->with('success', "Your wallet was successfully funded with {$valid_kyc->amount}");
       } catch (\Exception $e) {

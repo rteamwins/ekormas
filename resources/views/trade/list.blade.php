@@ -34,16 +34,18 @@
               @if (count($trades))
               @foreach ($trades as $trade)
               <tr>
-                <td>{{$loop->index +1}}</td>
-                <td>${{number_format($trade->amount,2)}}</td>
-                <td>${{number_format($trade->earning,2)}}</td>
-                <td><span class="uk-label {{$trade->method !== 'manual'?"green":"cyan"}}">{{$trade->method}}
+                <td><span class="uk-hidden@m uk-text-bold">#: </span>{{$loop->index +1}}</td>
+                <td><span class="uk-hidden@m uk-text-bold">Amount: </span>${{number_format($trade->amount,2)}}</td>
+                <td><span class="uk-hidden@m uk-text-bold">Earning: </span>${{number_format($trade->earning,2)}}</td>
+                <td><span class="uk-hidden@m uk-text-bold">Method: </span><span
+                    class="uk-label {{$trade->method !== 'manual'?"green":"cyan"}}">{{$trade->method}}
                   </span></td>
-                <td><span class="uk-label {{$trade->completed?"green":"orange"}}">
+                <td><span class="uk-hidden@m uk-text-bold">Status: </span><span
+                    class="uk-label {{$trade->completed?"green":"orange"}}">
                     {{$trade->completed?"Completed":"In Session"}}
                   </span></td>
-                <td>{{$trade->created_at->diffForHumans()}}</td>
-                <td>{{$trade->closing_at->diffForHumans()}}</td>
+                <td><span class="uk-hidden@m uk-text-bold">Opened: </span>{{$trade->created_at->diffForHumans()}}</td>
+                <td><span class="uk-hidden@m uk-text-bold">Closing: </span>{{$trade->closing_at->diffForHumans()}}</td>
               </tr>
               @endforeach
               @else
