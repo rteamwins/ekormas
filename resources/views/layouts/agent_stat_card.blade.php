@@ -141,12 +141,12 @@
               <tbody class="uk-text-small">
                 <tr>
                   <td class="uk-text-bold uk-text-truncate uk-width-1-3">COUNT:</td>
-                  <td class="uk-text-right uk-text-bold white-text">32
+                  <td class="uk-text-right uk-text-bold white-text">{{auth()->user()->avail_created_kycs()->count()}}
                   </td>
                 </tr>
                 <tr>
                   <td class="uk-text-bold uk-text-truncate uk-width-2-3">TOTAL:</td>
-                  <td class="uk-text-right uk-text-bold white-text">${{number_format(Auth()->user()->bonus?:0,2)}}
+                  <td class="uk-text-right uk-text-bold white-text">${{number_format(Auth()->user()->avail_created_kycs_sum())}}
                   </td>
                 </tr>
                 <tr class="black">
@@ -183,11 +183,15 @@
                 <tr class="black">
                   <td class="uk-padding-remove" colspan="2">
                     <div class="uk-width-1-1 uk-flex uk-flex-around">
+                      <a href="{{route('user_purchase_registration_credits')}}"
+                        class="uk-button uk-button-link uk-text-bold white-text"><span uk-icon="cart"></span>
+                        <span class="uk-visible@m">Purchase</span> </a>
+                      <a href="{{route('user_list_purchase_registration_credits')}}"
+                        class="uk-button uk-button-link uk-text-bold white-text"><span uk-icon="list"></span>
+                        <span class="uk-visible@m">History</span> </a>
                       <a href="{{route('user_referal_history')}}"
                         class="uk-button uk-button-link uk-text-bold white-text"><span uk-icon="users"></span> <span
-                          class="uk-visible@m">Start</span> </a>
-                      <a href="#" class="uk-button uk-button-link uk-text-bold white-text"><span uk-icon="list"></span>
-                        <span class="uk-visible@m">History</span> </a>
+                          class="uk-visible@m">Referals</span> </a>
                     </div>
                   </td>
               </tbody>
@@ -301,7 +305,8 @@
                 <tr class="black">
                   <td class="uk-padding-remove" colspan="2">
                     <div class="uk-width-1-1 uk-flex uk-flex-around">
-                      <a href="#" class="uk-button uk-button-link uk-text-bold white-text"><span uk-icon="list"></span>
+                      <a href="{{route('user_withdraw_local_history')}}"
+                        class="uk-button uk-button-link uk-text-bold white-text"><span uk-icon="list"></span>
                         <span class="uk-visible@m">History</span> </a>
                     </div>
                   </td>

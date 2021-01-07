@@ -72,12 +72,12 @@
               class="uk-button-small  white green-text  text-accent-2 uk-text-bold uk-text-left uk-width-1-1">LOGIN</a>
           </div>
         </li>
-        <li>
+        {{-- <li>
           <div class="uk-padding-small green accent-2">
-            <a href="{{route('register')}}"
+            <a href="#"
               class="uk-button-small green-text  text-accent-2 uk-text-bold uk-text-left uk-width-1-1">REGISTER</a>
           </div>
-        </li>
+        </li> --}}
         @endguest
         @auth
         <li class="uk-parent uk-padding-remove">
@@ -271,7 +271,7 @@
               style="color:white;min-height:50px !important" uk-icon="sign-in">Login</a>
           </li>
           <li>
-            <a href="{{route('register')}}" class="uk-button uk-button-text uk-width-1-1 btn-bg-none uk-text-bold"
+            <a href="#" class="uk-button uk-button-text uk-width-1-1 btn-bg-none uk-text-bold"
               style="color:white;min-height:50px !important" uk-icon="link">Register</a>
           </li>
           @endguest
@@ -345,10 +345,10 @@
               <a href="{{route('login')}}" class="uk-button uk-button-text uk-width-1-1 btn-bg-none uk-text-bold"
                 style="color:white;min-height:50px !important">Login</a>
             </li>
-            <li>
-              <a href="{{route('register')}}" class="uk-button uk-button-text uk-width-1-1 btn-bg-none uk-text-bold"
+            {{-- <li>
+              <a href="#" class="uk-button uk-button-text uk-width-1-1 btn-bg-none uk-text-bold"
                 style="color:white;min-height:50px !important">Register</a>
-            </li>
+            </li> --}}
             @endguest
             @auth
             <a title="logout" class="uk-button uk-border-pill white-text" href="{{ route('logout') }}"

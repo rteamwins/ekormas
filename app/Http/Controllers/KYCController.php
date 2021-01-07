@@ -32,16 +32,6 @@ class KYCController extends Controller
   }
 
   /**
-   * Show the form for creating a new resource.
-   *
-   * @return \Illuminate\Http\Response
-   */
-  public function create()
-  {
-    //
-  }
-
-  /**
    * Store a newly created resource in storage.
    *
    * @param  \Illuminate\Http\Request  $request
@@ -64,48 +54,5 @@ class KYCController extends Controller
     return redirect()->route('list_all_kycs')->with('user-success', "Your {$request->amount} KYC has been created")->setStatusCode(201);
   }
 
-  /**
-   * Display the specified resource.
-   *
-   * @param  \App\KYC  $kYC
-   * @return \Illuminate\Http\Response
-   */
-  public function show(KYC $kYC)
-  {
-    //
-  }
 
-  /**
-   * Show the form for editing the specified resource.
-   *
-   * @param  \App\KYC  $kYC
-   * @return \Illuminate\Http\Response
-   */
-  public function edit(KYC $kYC)
-  {
-    //
-  }
-
-  /**
-   * Update the specified resource in storage.
-   *
-   * @param  \Illuminate\Http\Request  $request
-   * @param  \App\KYC  $kYC
-   * @return \Illuminate\Http\Response
-   */
-  public function update(Request $request, KYC $kYC)
-  {
-    //
-  }
-
-  /**
-   * Remove the specified resource from storage.
-   *
-   * @param  \App\KYC  $kYC
-   * @return \Illuminate\Http\Response
-   */
-  public function destroy(KYC $kYC)
-  {
-    //
-  }
 }

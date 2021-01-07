@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\OrderTransaction;
+use App\OrderedProducts;
 use Illuminate\Http\Request;
 
-class OrderTransactionController extends Controller
+class OrderedProductsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class OrderTransactionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\OrderTransaction  $orderTransaction
+     * @param  \App\OrderedProducts  $orderedProducts
      * @return \Illuminate\Http\Response
      */
-    public function show(OrderTransaction $orderTransaction)
+    public function show(OrderedProducts $orderedProducts)
     {
         //
     }
@@ -52,10 +52,10 @@ class OrderTransactionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\OrderTransaction  $orderTransaction
+     * @param  \App\OrderedProducts  $orderedProducts
      * @return \Illuminate\Http\Response
      */
-    public function edit(OrderTransaction $orderTransaction)
+    public function edit(OrderedProducts $orderedProducts)
     {
         //
     }
@@ -64,10 +64,10 @@ class OrderTransactionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\OrderTransaction  $orderTransaction
+     * @param  \App\OrderedProducts  $orderedProducts
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, OrderTransaction $orderTransaction)
+    public function update(Request $request, OrderedProducts $orderedProducts)
     {
         //
     }
@@ -75,10 +75,10 @@ class OrderTransactionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\OrderTransaction  $orderTransaction
+     * @param  \App\OrderedProducts  $orderedProducts
      * @return \Illuminate\Http\Response
      */
-    public function destroy(OrderTransaction $orderTransaction)
+    public function destroy(OrderedProducts $orderedProducts)
     {
         //
     }

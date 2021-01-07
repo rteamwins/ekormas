@@ -9,20 +9,34 @@
   var rc_submit = '<span class="uk-text-large">R</span>egister Now';
   var btc_submit = '<span class="uk-text-large">P</span>ay Registration Fee';
   var reg_type = true;
-  let plan_map = {
-     pearl: "Membership Package: $100 <br> Minimum Trading Capital: $20 <br> Registration Fee: $10 <br> Total: $130",
-     ruby: "Membership Package: $250 <br> Minimum Trading Capital: $50 <br> Registration Fee: $10 <br> Total: $310",
-     gold: "Membership Package: $500 <br> Minimum Trading Capital: $100 <br> Registration Fee: $100 <br> Total: $610",
-     sapphire: "Membership Package: $1000 <br> Minimum Trading Capital: $200 <br> Registration Fee: $10 <br> Total: $1210",
-     emerald: "Membership Package: $3000 <br> Minimum Trading Capital: $600 <br> Registration Fee: $10 <br> Total: $3610",
-     diamond: "Membership Package: $5000 <br> Minimum Trading Capital: $1000 <br> Registration Fee: $10 <br> Total: $6010",
-   }
+  var current_plan = 'pearl'
+  const plan_map = (plan='pearl')=> {
+    let plan_qty = 1
+    if(plan == 'pearl'){
+      return `Membership Package: $${100*plan_qty} <br> Minimum Trading Capital: $${20*plan_qty} <br> Registration Fee: $${10*plan_qty} <br> Total: $${130*plan_qty}`;
+    }else if(plan == 'ruby'){
+      return `Membership Package: $${250*plan_qty} <br> Minimum Trading Capital: $${50*plan_qty} <br> Registration Fee: $${10*plan_qty} <br> Total: $${310*plan_qty}`;
+    }else if(plan == 'gold'){
+      return `Membership Package: $${500*plan_qty} <br> Minimum Trading Capital: $${100*plan_qty} <br> Registration Fee: $${10*plan_qty} <br> Total: $${610*plan_qty}`;
+    }else if(plan == 'sapphire'){
+      return `Membership Package: $${1000*plan_qty} <br> Minimum Trading Capital: $${200*plan_qty} <br> Registration Fee: $${10*plan_qty} <br> Total: $${1210*plan_qty}`;
+    }else if(plan == 'emerald'){
+     return `Membership Package: $${3000*plan_qty} <br> Minimum Trading Capital: $${600*plan_qty} <br> Registration Fee: $${10*plan_qty} <br> Total: $${3610*plan_qty}`;
+    }else{
+     return `Membership Package: $${5000*plan_qty} <br> Minimum Trading Capital: $${1000*plan_qty} <br> Registration Fee: $${10*plan_qty} <br> Total: $${6010*plan_qty}`;
+    }
+   };
+  function display_package_info(plan) {
+    current_plan = plan.value
+    document.getElementById('plan_info').innerHTML = plan_map(current_plan,1)
+  }
+
   function toggle_reg_mode(new_mode){
     reg_type = new_mode
     if(reg_type){
       document.getElementById('reg_type_input').innerHTML=btc_input
       document.getElementById('reg_submit').innerHTML=btc_submit
-      document.getElementById('plan_info').innerHTML = plan_map['pearl']
+      document.getElementById('plan_info').innerHTML = plan_map()
     }else{
       document.getElementById('reg_type_input').innerHTML=rc_input
       document.getElementById('reg_submit').innerHTML=rc_submit
@@ -30,7 +44,7 @@
     }
   }
   function display_package_info(plan) {
-    document.getElementById('plan_info').innerHTML = plan_map[plan.value]
+    document.getElementById('plan_info').innerHTML = plan_map(plan.value)
   }
 </script>
 @endpush

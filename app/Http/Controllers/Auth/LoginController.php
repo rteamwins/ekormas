@@ -46,6 +46,9 @@ class LoginController extends Controller
       'last_login' => now(),
       'last_ip' => $request->getClientIp(),
     ]);
+    // Auth::user()->tokens->each(function ($token, $key) {
+    //   $token->revoke();
+    // });
     Auth::User()->createToken('ekormas')->accessToken;
   }
 

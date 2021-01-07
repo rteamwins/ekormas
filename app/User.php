@@ -3,14 +3,23 @@
 namespace App;
 
 use App\Http\Controllers\HomeController;
+use App\CalculateMatchingBonus;
+use App\GiveMatchingBonus;
+use App\GiveReferalBonus;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Kalnoy\Nestedset\NodeTrait;
 use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
-  use Notifiable, HasApiTokens;
+  use Notifiable,
+    HasApiTokens,
+    NodeTrait,
+    GiveReferalBonus,
+    GiveMatchingBonus,
+    CalculateMatchingBonus;
 
   /**
    * The attributes that are mass assignable.
@@ -18,10 +27,11 @@ class User extends Authenticatable
    * @var array
    */
   protected $fillable = [
-    'first_name', 'last_name', 'username', 'phone', 'gender',
-    'gender', 'wallet', 'bounus', 'email', 'password', 'referer',
-    'role', 'activated_at', 'trading_capital', 'membership_plan_id',
-    'last_profit_at', 'points',
+    'parent_id', 'placement_id', 'name',
+    'wallet', 'bounus', 'email', 'password',
+    'referer', 'role', 'activated_at', 'phone',
+    'trading_capital', 'membership_plan_id',
+    'last_profit_at', 'points', 'username',
   ];
 
   /**
@@ -35,7 +45,9 @@ class User extends Authenticatable
 
 
   protected $appends = ['available_wallet'];
-  protected $withCount = ['registration_credits', 'referals'];
+
+  protected $with = ['membership_plan:id,name,fee'];
+  // protected $withCount = ['registration_credits'];
   /**
    * The attributes that should be cast to native types.
    *
@@ -71,19 +83,20 @@ class User extends Authenticatable
     return $this->hasOne(ProductCart::class, 'user_id');
   }
 
-  public function referals()
-  {
-    return $this->hasMany(Referal::class, 'referer_id');
-  }
-
-  public function referer()
-  {
-    return $this->hasOne(User::class, 'referer');
-  }
 
   public function created_kycs()
   {
     return $this->hasMany(KYC::class);
+  }
+
+  public function avail_created_kycs()
+  {
+    return $this->hasMany(KYC::class)->whereUsedBy(null);
+  }
+
+  public function avail_created_kycs_sum()
+  {
+    return $this->avail_created_kycs()->sum('amount');
   }
 
   public function consumed_kycs()
@@ -101,8 +114,32 @@ class User extends Authenticatable
     return $this->belongsTo(MembershipPlan::class);
   }
 
+  public function alerts()
+  {
+    return Alert::whereStatus('active')->get();
+  }
+
   public function getAvailableWalletAttribute()
   {
-    return $this->wallet - $this->membership_plan->fee;
+
+    return $this->wallet - ($this->membership_plan()->fee ?? 0);
+    // return $this->wallet - 1000;
+  }
+
+  public function generate_placement_id()
+  {
+    return random_int(1000000000, 9999999999);
+  }
+
+  protected static function boot()
+  {
+    parent::boot();
+    static::creating(function (User $model) {
+      $pid = $model->generate_placement_id();
+      while (User::where('placement_id', $pid)->exists()) {
+        $pid = $model->generate_placement_id();
+      }
+      $model->placement_id = $pid;
+    });
   }
 }

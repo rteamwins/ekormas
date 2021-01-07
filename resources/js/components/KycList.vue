@@ -163,7 +163,7 @@ export default {
     load_data(page = 1) {
       this.loading = !this.loading;
       axios
-        .get(`${this.base_url}/api/user/kyc/list`)
+        .get(`${this.base_url}/api/user/kyc/list?page=${page}`)
         .then(res => {
           this.kycs = res.data.data.map(x => ({ ...x, show: false }));
           this.load_kyc_pagination_data(
@@ -203,7 +203,6 @@ export default {
       return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
     },
     copyValueToClipboard(x) {
-      console.log(x);
       let tt = this.Toast;
       navigator.clipboard.writeText(x).then(
         function() {

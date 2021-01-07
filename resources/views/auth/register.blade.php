@@ -14,35 +14,20 @@
   </div>
   <div class="uk-margin-large-bottom uk-flex-center" uk-grid>
     <div class="uk-width-1-1 uk-width-1-2@m">
-      <form method="POST" action="{{route('register')}}" class="uk-form-stacked">
+      <form method="POST" action="{{route('register_save')}}" class="uk-form-stacked">
         @csrf
         <div uk-grid>
           <div class="uk-width-1-1 uk-width-1-2@s uk-margin-small-top">
-            <label for="first_name" class="uk-form-label">
-              First Name *
+            <label for="name" class="uk-form-label">
+              Name *
             </label>
             <div class="uk-form-control uk-width-1-1">
               <div class="uk-inline uk-width-1-1">
                 <span class="uk-form-icon" uk-icon="user"></span>
-                <input class="uk-input uk-border-rounded @error('first_name') uk-form-danger @enderror"
-                  name="first_name" type="text" autocomplete="given-name" value="{{ old('first_name') }}" required autofocus>
+                <input class="uk-input uk-border-rounded @error('name') uk-form-danger @enderror" name="name"
+                  type="text" autocomplete="name" value="{{ old('name') }}" required autofocus>
               </div>
-              @error('first_name')
-              <span class="uk-text-danger">{{ $message }}</span>
-              @enderror
-            </div>
-          </div>
-          <div class="uk-width-1-1 uk-width-1-2@s uk-margin-small-top">
-            <label for="last_name" class="uk-form-label">
-              Last Name *
-            </label>
-            <div class="uk-form-control uk-width-1-1">
-              <div class="uk-inline uk-width-1-1">
-                <span class="uk-form-icon" uk-icon="user"></span>
-                <input class="uk-input uk-border-rounded @error('last_name') uk-form-danger @enderror" autocomplete="family-name" name="last_name"
-                  type="text" value="{{ old('last_name') }}" required>
-              </div>
-              @error('last_name')
+              @error('name')
               <span class="uk-text-danger">{{ $message }}</span>
               @enderror
             </div>
@@ -67,7 +52,17 @@
             <div class="uk-form-control uk-width-1-1">
               <div class="uk-inline uk-width-1-1"><span class="uk-form-icon" uk-icon="users"></span><input
                   class="uk-input uk-border-rounded @error('referer') uk-form-danger @enderror" name="referer"
-                  type="text" value="{{ old('referer') }}"></div>@error('referer')<span
+                  type="text" readonly value="{{$referer}}"></div>@error('referer')<span
+                class="uk-text-danger">{{ $message }}</span>@enderror
+            </div>
+          </div>
+
+          <div class="uk-width-1-1 uk-width-1-2@s uk-margin-small-top">
+            <label for="placement_id" class="uk-form-label">Placement Id *</label>
+            <div class="uk-form-control uk-width-1-1">
+              <div class="uk-inline uk-width-1-1"><span class="uk-form-icon" uk-icon="users"></span><input
+                  class="uk-input uk-border-rounded @error('placement_id') uk-form-danger @enderror" name="placement_id"
+                  type="text" readonly value="{{$placement_id}}"></div>@error('placement_id')<span
                 class="uk-text-danger">{{ $message }}</span>@enderror
             </div>
           </div>

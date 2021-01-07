@@ -20,7 +20,7 @@ class CreateRegistrationCreditPurchasesTable extends Migration
       $table->text('quantity');
       $table->decimal('amount', 14, 2);
       $table->unsignedBigInteger('user_id');
-      $table->unsignedBigInteger('transaction_id');
+      $table->unsignedBigInteger('transaction_id')->nullable()->default(null);
       $table->timestamp('created_at', 6)->nullable()->default(null);
       $table->timestamp('updated_at', 6)->nullable()->default(null);
       $table->timestamp('deleted_at', 6)->nullable()->default(null);

@@ -16,9 +16,9 @@ class VerifyRegistrationPayment
    */
   public function handle($request, Closure $next)
   {
-    // if (Auth::check() && Auth::user()->registration_credit_id == null) {
-    //   return redirect()->route('choose_reg_plan');
-    // }
+    if (Auth::check() && Auth::user()->membership_plan_id == null) {
+      return redirect()->route('choose_reg_plan');
+    }
     return $next($request);
   }
 }

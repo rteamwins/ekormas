@@ -41,7 +41,7 @@ class WithdrawController extends Controller
    */
   public function create()
   {
-    $agents = User::select(DB::raw("concat_ws(' ',first_name, last_name) as name"), 'username')->get()->makeHidden(['available_wallet']);
+    $agents = User::select("name", 'username')->get()->makeHidden(['available_wallet']);
     return view('withdraw.create', ['agents' => $agents]);
   }
 
@@ -100,7 +100,7 @@ class WithdrawController extends Controller
     $new_trx = new Transaction();
     $new_trx->amount = ($withdraw->fee / 2);
     $new_trx->status = 'created';
-    $new_trx->type = 'funding';
+    $new_trx->type = 'withdrawal';
     $new_trx->user_id = $admin->id;
 
     $new_bonus_trx = new Bonus();

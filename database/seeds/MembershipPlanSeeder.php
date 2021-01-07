@@ -14,6 +14,22 @@ class MembershipPlanSeeder extends Seeder
   {
     $plans = [
       [
+        'name' => 'Onyx',
+        'slug' => 'onyx',
+        'status' => 'active',
+        'fee' => 50,
+        'min_trading_capital' => 10,
+        'max_trading_capital' => 50,
+        'weekly_membership_percent' => 3,
+        'weekly_trading_percent' => 1,
+        // 'membership_cancellation_percent'=>'',
+        // 'product_discount_percent'=>'',
+        // 'product_resale_percent'=>'',
+        // 'kyc_creation_percent'=>'',
+        'referal_bonus_percent' => 3,
+        'level1_downline_upgrade_bonus_percent' => 1
+      ],
+      [
         'name' => 'Pearl',
         'slug' => 'pearl',
         'status' => 'active',

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Referal;
+use App\User;
 use Illuminate\Http\Request;
 
 class ReferalController extends Controller
@@ -37,7 +38,8 @@ class ReferalController extends Controller
      */
     public function show()
     {
-        return view('referal.listing');
+      $parent_node = User::decendantsAndSelf(Auth()->user()->id);
+        return view('referal.listing',['']);
     }
 
     /**

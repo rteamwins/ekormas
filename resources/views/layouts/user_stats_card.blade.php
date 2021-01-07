@@ -3,11 +3,10 @@
     <div class="uk-card uk-card-default uk-card-body" style="border-radius:0 0 5px 5px;padding:5px;">
       <div>
         <div class="scrolling_news green accent-2 uk-margin-remove-vertical uk-border-rounded" uk-alert>
-          <p class=" uk-text-bold">Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, fugit debitis ut
-            minima
-            cum ducimus
-            delectus autem veritatis qui ratione tenetur porro iure optio sit quasi aspernatur suscipit odio tempore.
-            >>>
+          <p class=" uk-text-bold">
+            @foreach (Auth()->user()->alerts() as $alert)
+            {{ $alert->message }} <----||---->
+            @endforeach
           </p>
         </div>
         @if ($message = Session::get('user-success'))

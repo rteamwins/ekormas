@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Profit extends Model
 {
   protected $fillable = [
-    'amount', 'trade_id','user_id'
+    'amount', 'trade_id', 'user_id', 'applied','volume'
   ];
 
   protected $dateFormat = 'Y-m-d H:i:s.u';
+
+  protected $cast = ['applied' => 'boolean'];
 
   public function trade()
   {

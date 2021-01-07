@@ -33,4 +33,9 @@ class LocalPay extends Model
   {
     return $this->morphOne(Transaction::class, 'method');
   }
+
+  public function getPopAttribute($value)
+  {
+    return isset($value)? asset('images/pop/' . $value) : null;
+  }
 }

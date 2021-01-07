@@ -15,6 +15,12 @@ class KYC extends Model
     'status',
   ];
 
+  protected $cast = [
+    'created_at' => 'datetime',
+    'updated_at' => 'datetime',
+    'deleted_at' => 'datetime',
+  ];
+
   protected $dateFormat = 'Y-m-d H:i:s.u';
 
   protected $hidden = [];

@@ -8,6 +8,7 @@ use App\Transaction;
 use App\User;
 use CoinbaseCommerce\ApiClient;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Shakurov\Coinbase\Facades\Coinbase;
@@ -15,9 +16,9 @@ use Shakurov\Coinbase\Facades\Coinbase;
 //Make sure you don't store your API Key in your source code!
 $apiClientObj = ApiClient::init(env('COINBASE_API_KEY'));
 $apiClientObj->setTimeout(5);
-
 class HomeController extends Controller
 {
+  public  $today_earning = 0;
   /**
    * Create a new controller instance.
    *
@@ -25,6 +26,26 @@ class HomeController extends Controller
    */
   public function __construct()
   {
+  }
+
+  public function get_ref_level($id = null)
+  {
+    if ($id === null) {
+      $id = Auth()->user()->id;
+    }
+    $node = User::select('id', '_rgt', '_lft', 'parent_id', 'placement_id', 'username', 'name', 'total_points', 'phone')->where('id', $id)->firstOrFail();
+    $nodes = User::descendantsOf($id, ['id', '_rgt', '_lft', 'parent_id', 'placement_id', 'username', 'name', 'total_points', 'phone']);
+    $node->children = $nodes->toTree();
+    return response()->json($node, Response::HTTP_OK);
+  }
+
+  public function recur($data)
+  {
+    $this->today_earning;
+  }
+  public function show_referal()
+  {
+    return view('referal.listing');
   }
 
   /**
@@ -81,7 +102,6 @@ class HomeController extends Controller
 
   public function get_agent_stat()
   {
-   
   }
 
   /**
@@ -105,6 +125,7 @@ class HomeController extends Controller
       'rc_code' => 'required_without:plan|alpha_num|size:15|exists:registration_credits,code',
       'plan' => 'required_without:rc_code|in:pearl,ruby,gold,sapphire,emerald,diamond',
     ]);
+
     $plan = ['pearl' => 130, 'ruby' => 310, 'gold' => 610, 'sapphire' => 1210, 'emerald' => 3610, 'diamond' => 6010];
     if (Auth::user()->registration_credit_id == null) {
       if ($request->has('rc_code')) {
@@ -126,6 +147,11 @@ class HomeController extends Controller
         Auth()->user()->update();
         $new_trx->status = 'completed';
         $new_trx->update();
+        $user = User::where('id', Auth()->user()->id)->first();
+        $user->give_referal_bonus();
+        if ($user->parent->children->count() == 2) {
+          $this->check_for_bonus_eligible_ancestors($user);
+        }
         return redirect()->route('home');
       } else {
 
@@ -167,6 +193,43 @@ class HomeController extends Controller
         $new_crypto_trx->system_wallet_address = $new_charge['data']['addresses']['bitcoin'];
         $new_crypto_trx->update();
         return redirect()->away($new_crypto_trx->hosted_url);
+      }
+    }
+  }
+
+
+  public function check_for_bonus_eligible_ancestors(User $user)
+  {
+    $ancestors = User::defaultOrder()->with(['membership_plan:id,fee,name'])
+      ->ancestorsOf($user->id, ['id', '_rgt', '_lft', 'parent_id', 'placement_id', 'username', 'name', 'total_points', 'phone', 'membership_plan_id', 'created_at', 'activated_at']);
+    foreach ($ancestors as $ancestor) {
+      $ancestor_directline_count = $ancestor->children->count();
+      $leg_count[$ancestor->username]['name'] = $ancestor->name;
+      if ($ancestor_directline_count > 0) {
+        if ($ancestor_directline_count == 2) {
+          $leg_count[$ancestor->username]['left'] = $leg_count[$ancestor->username]['right'] = 1;
+          $leg_count[$ancestor->username]['left_amount'] = $ancestor->children->first()->membership_plan->fee ?? 0;
+          $leg_count[$ancestor->username]['right_amount'] = $ancestor->children->last()->membership_plan->fee ?? 0;
+        } else {
+          $leg_count[$ancestor->username]['left'] = 1;
+          $leg_count[$ancestor->username]['right'] = 0;
+          $leg_count[$ancestor->username]['left_amount'] = $ancestor->children->first()->membership_plan->fee ?? 0;
+          $leg_count[$ancestor->username]['right_amount'] = 0;
+        }
+      } else {
+        $leg_count[$ancestor->username]['left'] = $leg_count[$ancestor->username]['right'] = 1;
+        $leg_count[$ancestor->username]['left_amount'] = $leg_count[$ancestor->username]['right_amount'] = 0;
+      }
+      $left_desc = User::descendantsOf($ancestor->children->first());
+      $right_desc = User::descendantsOf($ancestor->children->last());
+
+      $leg_count[$ancestor->username]['left'] += $left_desc->count();
+      $leg_count[$ancestor->username]['right'] += $right_desc->count();
+
+      $leg_count[$ancestor->username]['left_amount'] += $left_desc->sum('membership_plan.fee');
+      $leg_count[$ancestor->username]['right_amount'] += $right_desc->sum('membership_plan.fee');
+      if ($leg_count[$ancestor->username]['left'] == $leg_count[$ancestor->username]['right']) {
+        $ancestor->calculate_matching_bonus($leg_count[$ancestor->username]['left'] + $leg_count[$ancestor->username]['right']);
       }
     }
   }

@@ -1,8 +1,8 @@
 @push('style_top')
 <style>
-  .ref_card {
+  /* .ref_card {
     width: 200px;
-  }
+  } */
 </style>
 @endpush
 @push('bottom_scripts')
@@ -27,7 +27,7 @@
           </p>
         </div>
         <div class="uk-card-body" style="padding:5px;">
-          <referal-slider></referal-slider>
+          <referal-slider user_name="{{Auth()->user()->username}}" :user_id="{{Auth()->user()->id}}"></referal-slider>
         </div>
       </div>
     </div>

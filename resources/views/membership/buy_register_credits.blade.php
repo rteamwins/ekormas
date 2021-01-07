@@ -26,20 +26,6 @@
      return `Membership Package: $${5000*plan_qty} <br> Minimum Trading Capital: $${1000*plan_qty} <br> Registration Fee: $${10*plan_qty} <br> Total: $${6010*plan_qty}`;
     }
    };
-  function toggle_reg_mode(new_mode){
-    reg_type = new_mode
-    if(reg_type){
-      document.getElementById('kyc_code').removeAttribute('required');
-      document.getElementById('kyc_code').setAttribute('disabled',true);
-      document.getElementById('kyc_payment_container').classList.toggle('uk-hidden',true)
-      document.getElementById('plan_info').innerText = 'Paying with Bitcoins.'
-    }else{
-      document.getElementById('kyc_code').setAttribute('required',true);
-      document.getElementById('kyc_code').removeAttribute('disabled');
-      document.getElementById('kyc_payment_container').classList.toggle('uk-hidden',false)
-      document.getElementById('plan_info').innerText = 'Paying with KYC.'
-    }
-  }
   function display_package_info(plan) {
     current_plan = plan.value
     document.getElementById('plan_info').innerHTML = plan_map(current_plan,1)
@@ -61,13 +47,8 @@
   </div>
   <div class="uk-margin-large-bottom uk-flex-center" uk-grid>
     <div class="uk-width-1-1 uk-width-1-2@m">
-      <ul class="uk-subnav uk-subnav-pill uk-text-bold uk-text-center uk-child-width-expand" uk-switcher>
-        <li><a href="#" onclick="toggle_reg_mode(true)"><span></span> VIA &#8383;itcoin</a></li>
-        <li><a href="#" onclick="toggle_reg_mode(false)"> With KYC</a></li>
-      </ul>
-      <div class="uk-divider-icon"></div>
       <div>
-        <form method="POST" action="#" class="uk-form-stacked">
+        <form method="POST" action="{{route('user_store_purchase_registration_credits')}}" class="uk-form-stacked">
           @csrf
           <div class="uk-width-1-1">
             <label for="plan" class="uk-form-label">
@@ -104,15 +85,6 @@
               @error('plan_quantity')
               <span class="uk-text-danger">{{ $message }}</span>
               @enderror
-            </div>
-          </div>
-          <div class="uk-width-1-1 uk-hidden" id="kyc_payment_container">
-            <label for="kyc_code" class="uk-form-label">KYC Code <span class="red-text uk-text-bold">*</span></label>
-            <div class="uk-form-control uk-width-1-1">
-              <div class="uk-inline uk-width-1-1"><span class="uk-form-icon" uk-icon="hashtag"></span><input
-                  class="uk-input uk-border-rounded @error('kyc_code') uk-form-danger @enderror" name="kyc_code"
-                  id="kyc_code" type="text" value="{{ old('kyc_code') }}" required></div>@error('kyc_code')<span
-                class="uk-text-danger">{{ $message }}</span>@enderror
             </div>
           </div>
           <div class="uk-margin uk-width-1-1">
