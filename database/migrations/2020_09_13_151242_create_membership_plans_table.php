@@ -29,6 +29,7 @@ class CreateMembershipPlansTable extends Migration
       $table->decimal('kyc_creation_percent', 7, 4)->default(0);
       $table->decimal('referal_bonus_percent', 7, 4)->default(0);
       $table->decimal('level1_downline_upgrade_bonus_percent', 7, 4)->default(0);
+      $table->decimal('point_value')->default(0);
       $table->timestamp('created_at', 6)->nullable()->default(null);
       $table->timestamp('updated_at', 6)->nullable()->default(null);
       $table->timestamp('deleted_at', 6)->nullable()->default(null);

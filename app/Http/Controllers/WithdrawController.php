@@ -100,7 +100,7 @@ class WithdrawController extends Controller
     $new_trx = new Transaction();
     $new_trx->amount = ($withdraw->fee / 2);
     $new_trx->status = 'created';
-    $new_trx->type = 'withdrawal';
+    $new_trx->type = 'withdrawal_bonus';
     $new_trx->user_id = $admin->id;
 
     $new_bonus_trx = new Bonus();

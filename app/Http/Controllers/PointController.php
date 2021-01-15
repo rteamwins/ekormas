@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Bonus;
-use App\BonusTransaction;
+use App\Point;
 use App\Transaction;
 use App\User;
 use Illuminate\Http\Request;
 
-class BonusController extends Controller
+class PointController extends Controller
 {
   /**
    * Display a listing of the resource.
@@ -17,8 +16,7 @@ class BonusController extends Controller
    */
   public function index()
   {
-    $bonuses = Bonus::where('user_id', Auth()->user()->id)->paginate(10);
-    return view('bonus.list', ['bonuses' => $bonuses]);
+    //
   }
 
   /**
@@ -26,7 +24,7 @@ class BonusController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function convert_to_wallet_funds()
+  public function convert_points_to_wallet_funds()
   {
     return view('bonus.convert_to_wallet');
   }
@@ -37,11 +35,11 @@ class BonusController extends Controller
    * @param  \Illuminate\Http\Request  $request
    * @return \Illuminate\Http\Response
    */
-  public function store_convert_to_wallet_funds(Request $request)
+  public function store_convert_points_to_wallet_funds(Request $request)
   {
     $max = (Auth()->user()->available_wallet);
     request()->validate([
-      'funding_amount' => 'required|numeric|min:100|max:' . $max,
+      'funding_amount' => 'required|numeric|min:500|max:' . $max,
     ]);
 
     if ($request->has('funding_amount')) {
@@ -52,7 +50,7 @@ class BonusController extends Controller
         $new_trx->type = 'funding';
         $new_trx->user_id = Auth()->id();
 
-        $new_bonus_trx = new Bonus();
+        $new_bonus_trx = new Point();
         $new_bonus_trx->user_id = Auth()->user()->id;
         $new_bonus_trx->amount = -$request->funding_amount;
         $new_bonus_trx->status = 'created';

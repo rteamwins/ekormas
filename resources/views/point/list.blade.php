@@ -3,7 +3,7 @@
 </style>
 @endpush
 @extends('layouts.app')
-@section('title', 'All Bonus Recieved')
+@section('title', 'All Points Recieved')
 @section('content')
 <div class="uk-container uk-padding-remove uk-margin-bottom">
   @include('layouts.user_stats_card')
@@ -11,9 +11,9 @@
     <div class="uk-width-1-1">
       <div class="uk-card uk-card-default uk-padding-remove uk-border-rounded">
         <div class="uk-card-header">
-          <h2 class="uk-h2 uk-margin-remove-bottom uk-text-bolder">BONUS</h2>
+          <h2 class="uk-h2 uk-margin-remove-bottom uk-text-bolder">POINTS</h2>
           <p class="uk-margin-remove-top">
-            All Your Bonuses
+            All Your Points
           </p>
         </div>
         <div class="uk-card-body uk-padding-remove">
@@ -23,6 +23,7 @@
                 <th>#</th>
                 <th>AMOUNT</th>
                 <th>TYPE</th>
+                <th>TAG</th>
                 <th>DATE</th>
               </tr>
             </thead>

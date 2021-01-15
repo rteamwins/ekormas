@@ -27,7 +27,8 @@ class MembershipPlanSeeder extends Seeder
         // 'product_resale_percent'=>'',
         // 'kyc_creation_percent'=>'',
         'referal_bonus_percent' => 3,
-        'level1_downline_upgrade_bonus_percent' => 1
+        'level1_downline_upgrade_bonus_percent' => 1,
+        'point_value' => 20,
       ],
       [
         'name' => 'Pearl',
@@ -43,7 +44,8 @@ class MembershipPlanSeeder extends Seeder
         // 'product_resale_percent'=>'',
         // 'kyc_creation_percent'=>'',
         'referal_bonus_percent' => 5,
-        'level1_downline_upgrade_bonus_percent' => 2
+        'level1_downline_upgrade_bonus_percent' => 2,
+        'point_value' => 40,
       ],
       [
         'name' => 'Ruby',
@@ -59,7 +61,8 @@ class MembershipPlanSeeder extends Seeder
         // 'product_resale_percent'=>'',
         // 'kyc_creation_percent'=>'',
         'referal_bonus_percent' => 10,
-        'level1_downline_upgrade_bonus_percent' => 2
+        'level1_downline_upgrade_bonus_percent' => 2,
+        'point_value' => 80,
       ],
       [
         'name' => 'Gold',
@@ -75,7 +78,8 @@ class MembershipPlanSeeder extends Seeder
         // 'product_resale_percent'=>'',
         // 'kyc_creation_percent'=>'',
         'referal_bonus_percent' => 10,
-        'level1_downline_upgrade_bonus_percent' => 2
+        'level1_downline_upgrade_bonus_percent' => 2,
+        'point_value' => 160,
       ],
       [
         'name' => 'Sapphire',
@@ -91,7 +95,8 @@ class MembershipPlanSeeder extends Seeder
         // 'product_resale_percent'=>'',
         // 'kyc_creation_percent'=>'',
         'referal_bonus_percent' => 10,
-        'level1_downline_upgrade_bonus_percent' => 2
+        'level1_downline_upgrade_bonus_percent' => 2,
+        'point_value' => 320,
       ],
       [
         'name' => 'Emerald',
@@ -107,7 +112,8 @@ class MembershipPlanSeeder extends Seeder
         // 'product_resale_percent'=>'',
         // 'kyc_creation_percent'=>'',
         'referal_bonus_percent' => 10,
-        'level1_downline_upgrade_bonus_percent' => 2
+        'level1_downline_upgrade_bonus_percent' => 2,
+        'point_value' => 640,
       ],
       [
         'name' => 'Diamond',
@@ -123,7 +129,8 @@ class MembershipPlanSeeder extends Seeder
         // 'product_resale_percent'=>'',
         // 'kyc_creation_percent'=>'',
         'referal_bonus_percent' => 10,
-        'level1_downline_upgrade_bonus_percent' => 2
+        'level1_downline_upgrade_bonus_percent' => 2,
+        'point_value' => 1280,
       ],
     ];
 

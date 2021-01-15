@@ -23,7 +23,8 @@ class CreateUsersTable extends Migration
       $table->string('username')->unique();
       $table->string('phone')->unique();
       $table->decimal('wallet', 14, 2)->default(0);
-      $table->decimal('total_points')->default(0);
+      $table->decimal('active_points')->default(0);
+      $table->decimal('dormant_points')->default(0);
       $table->decimal('last_award_point')->default(0);
       $table->decimal('trading_capital', 14, 2)->default(0);
       $table->decimal('bonus', 14, 2)->default(0);

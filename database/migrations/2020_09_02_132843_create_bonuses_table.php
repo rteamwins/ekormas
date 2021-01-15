@@ -17,8 +17,8 @@ class CreateBonusesTable extends Migration
       $table->id();
       $table->unsignedBigInteger('user_id');
       $table->decimal('amount', 14, 4)->default(0);
-      $table->string('status', 25)->default('pending');
-      $table->string('type', 25);
+      $table->string('status')->default('pending');
+      $table->string('type');
       $table->timestamp('created_at', 6)->nullable()->default(null);
       $table->timestamp('updated_at', 6)->nullable()->default(null);
       $table->timestamp('deleted_at', 6)->nullable()->default(null);

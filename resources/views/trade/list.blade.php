@@ -56,7 +56,11 @@
             </tbody>
           </table>
         </div>
-
+        @if ($trades->hasPages())
+        <div class="uk-text-center uk-card-footer">
+          {!! $trades->links() !!}
+        </div>
+        @endif
       </div>
     </div>
   </div>

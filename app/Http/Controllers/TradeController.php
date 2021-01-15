@@ -20,7 +20,7 @@ class TradeController extends Controller
    */
   public function index()
   {
-    $trades = Trade::where('user_id', Auth()->user()->id)->paginate(10);
+    $trades = Trade::where('user_id', Auth()->user()->id)->latest()->paginate(10);
     return view('trade.list', ['trades' => $trades]);
   }
 
@@ -31,7 +31,11 @@ class TradeController extends Controller
    */
   public function create()
   {
-    if (Auth()->user()->available_wallet >= Auth()->user()->membership_plan->max_trading_capital) {
+    $user = Auth()->user();
+    if (Trade::whereUserId($user->id)->where('closing_at', '>', now())->exists()) {
+      return back()->with('user-info', sprintf("You have a trade currently in session, you cant place any more trades during this period.", route('user_fund_wallet')));
+    }
+    if ($user->available_wallet >= $user->membership_plan->max_trading_capital) {
       return view('trade.create');
     } else {
       return back()->with('user-info', sprintf("You Do not have availble funds to trade with. Try funding you account and try again, <a href='%s'>Fund Account now</a>.", route('user_fund_wallet')));
@@ -67,7 +71,7 @@ class TradeController extends Controller
     $new_trade->user_id = Auth()->user()->id;
 
     // $new_trade->earning = (($request->trade_amount * (2 / 100)) * ($trade_duration / 7));
-    $new_trade->profit_percent = ($trader->membership_plan->weekly_trading_percent * ($trade_duration / 7));
+    $new_trade->profit_percent = (($trader->membership_plan->weekly_trading_percent + ($trader->membership_plan->fee * .03)) * ($trade_duration / 7));
     $new_trade->completed = false;
     $days_duration = now()->addDays($trade_duration);
     $new_trade->closing_at = $days_duration;

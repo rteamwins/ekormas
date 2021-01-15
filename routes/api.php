@@ -24,6 +24,11 @@ Route::middleware('auth:api')->group(function () {
 
   Route::get('user/referal/tree_data/for/{id}', 'HomeController@get_ref_level')->where(['id' => '[0-9]+']);
 
+  Route::get('local-pay/request/list/open', 'LocalPayController@index_json');
+  Route::post('local-pay/request/confirm/{id}', 'LocalPayController@confirm')->where(['id' => '[0-9]+']);;
+  Route::get('local-pay/request/decline/{id}', 'LocalPayController@decline')->where(['id' => '[0-9]+']);;
+
+
   Route::get('alert/list', 'AlertController@index_json');
   Route::get('alert/enable/{id}', 'AlertController@enable')->where(['id' => '[0-9]+']);
   Route::get('alert/disable/{id}', 'AlertController@disable')->where(['id' => '[0-9]+']);

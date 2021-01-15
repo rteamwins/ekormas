@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePostsTable extends Migration
+class CreatePointsTable extends Migration
 {
   /**
    * Run the migrations.
@@ -13,13 +13,13 @@ class CreatePostsTable extends Migration
    */
   public function up()
   {
-    Schema::create('posts', function (Blueprint $table) {
+    Schema::create('points', function (Blueprint $table) {
       $table->id();
       $table->unsignedBigInteger('user_id');
-      $table->string('title');
-      $table->string('slug')->unique();
-      $table->string('image')->nullable()->default(null);
-      $table->string('message', 2000);
+      $table->decimal('amount', 14, 4)->default(0);
+      $table->string('status')->default('pending');
+      $table->string('tag');
+      $table->string('type');
       $table->timestamp('created_at', 6)->nullable()->default(null);
       $table->timestamp('updated_at', 6)->nullable()->default(null);
       $table->timestamp('deleted_at', 6)->nullable()->default(null);
@@ -33,6 +33,6 @@ class CreatePostsTable extends Migration
    */
   public function down()
   {
-    Schema::dropIfExists('posts');
+    Schema::dropIfExists('points');
   }
 }

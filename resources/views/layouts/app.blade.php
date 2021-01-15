@@ -158,6 +158,18 @@
                   class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">WITHDRAW HISTORY</a>
               </div>
             </li>
+            <li>
+              <div class="uk-padding-small green accent-2">
+                <a href="{{route('user_withdraw_local_history')}}"
+                  class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">LOCAL WITHDRAW HISTORY</a>
+              </div>
+            </li>
+            <li>
+              <div class="uk-padding-small green accent-2">
+                <a href="{{route('local_pay_requests')}}"
+                  class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">LOCAL PAY REQUEST</a>
+              </div>
+            </li>
           </ul>
         </li>
         <li class="uk-parent uk-padding-remove">

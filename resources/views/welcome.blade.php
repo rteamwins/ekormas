@@ -17,7 +17,7 @@
           uk-padding-remove uk-margin-small my-card uk-link-text">
         <div class="uk-card-media-top uk-overflow-hidden">
           <a href="#" class="uk-link-reset uk-transition-toggle" tabindex="0">
-            <img class="uk-img uk-transition-scale-up uk-transition-opaque"
+            <img class="uk-img uk-width-1-1 uk-transition-scale-up uk-transition-opaque"
               src="{{asset("images/misc/service{$i}.jpeg")}}"  alt="" />
           </a>
           <div class="uk-overlay uk-card-default green white-text

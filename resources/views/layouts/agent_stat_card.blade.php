@@ -134,6 +134,36 @@
         </div>
         <div style="padding:3px;">
           <div class="uk-border-rounded uk-card green accent-2 uk-light uk-padding-remove">
+            <h4 class="uk-margin-remove-bottom uk-padding-small uk-padding-remove-vertical uk-text-truncate">POINTS
+            </h4>
+            <table class="uk-table uk-table-small uk-table-divider uk-margin-remove">
+              <tbody class="uk-text-small">
+                <tr>
+                  <td class="uk-text-bold uk-text-truncate uk-width-1-3">ACTIVE:</td>
+                  <td class="uk-text-right uk-text-bold white-text">
+                    ${{number_format(Auth()->user()->active_points?:0,2)}}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="uk-text-bold uk-text-truncate uk-width-2-3">DORMANT:</td>
+                  <td class="uk-text-right uk-text-bold white-text">
+                    ${{number_format(Auth()->user()->dormant_points?:0,2)}}
+                  </td>
+                </tr>
+                <tr class="black">
+                  <td class="uk-padding-remove" colspan="2">
+                    <div class="uk-width-1-1 uk-flex uk-flex-around">
+                      <a href="{{route('create_bonus_to_wallet_funds')}}"
+                        class="uk-button uk-button-link uk-text-bold white-text"><span uk-icon="cart"></span> <span
+                          class="uk-visible@m">CLAIM</span> </a>
+                    </div>
+                  </td>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div style="padding:3px;">
+          <div class="uk-border-rounded uk-card green accent-2 uk-light uk-padding-remove">
             <h4 class="uk-margin-remove-bottom uk-padding-small uk-padding-remove-vertical uk-text-truncate">GLM
               TOKEN
             </h4>
@@ -146,7 +176,8 @@
                 </tr>
                 <tr>
                   <td class="uk-text-bold uk-text-truncate uk-width-2-3">TOTAL:</td>
-                  <td class="uk-text-right uk-text-bold white-text">${{number_format(Auth()->user()->avail_created_kycs_sum())}}
+                  <td class="uk-text-right uk-text-bold white-text">
+                    ${{number_format(Auth()->user()->avail_created_kycs_sum())}}
                   </td>
                 </tr>
                 <tr class="black">
@@ -308,6 +339,162 @@
                       <a href="{{route('user_withdraw_local_history')}}"
                         class="uk-button uk-button-link uk-text-bold white-text"><span uk-icon="list"></span>
                         <span class="uk-visible@m">History</span> </a>
+                    </div>
+                  </td>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div style="padding:3px;">
+          <div class="uk-border-rounded uk-card green accent-2 uk-light uk-padding-remove">
+            <h4 class="uk-margin-remove-bottom uk-padding-small uk-padding-remove-vertical uk-text-truncate">AGENTS
+            </h4>
+            <table class="uk-table uk-table-small uk-table-divider uk-margin-remove">
+              <tbody class="uk-text-small">
+                <tr>
+                  <td class="uk-text-bold uk-text-truncate uk-width-1-3">AVAIL:</td>
+                  <td class="uk-text-right uk-text-bold white-text">{{$avail_agent_count??0}}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="uk-text-bold uk-text-truncate uk-width-2-3">POTENTIAL:</td>
+                  <td class="uk-text-right uk-text-bold white-text">{{$potential_agent_count??0}}
+                  </td>
+                </tr>
+                <tr class="black">
+                  <td class="uk-padding-remove" colspan="2">
+                    <div class="uk-width-1-1 uk-flex uk-flex-around">
+                      <a href="{{route('admin_list_avail_agents')}}"
+                        class="uk-button uk-button-link uk-text-bold white-text"><span uk-icon="git-branch"></span>
+                        <span class="uk-visible@m">Avail</span> </a>
+                      <a href="{{route('admin_list_potential_agents')}}"
+                        class="uk-button uk-button-link uk-text-bold white-text"><span uk-icon="plus-circle"></span>
+                        <span class="uk-visible@m">Potential</span> </a>
+                    </div>
+                  </td>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div style="padding:3px;">
+          <div class="uk-border-rounded uk-card green accent-2 uk-light uk-padding-remove">
+            <h4 class="uk-margin-remove-bottom uk-padding-small uk-padding-remove-vertical uk-text-truncate">INVESTORS
+            </h4>
+            <table class="uk-table uk-table-small uk-table-divider uk-margin-remove">
+              <tbody class="uk-text-small">
+                <tr>
+                  <td class="uk-text-bold uk-text-truncate uk-width-1-3">AVAIL:</td>
+                  <td class="uk-text-right uk-text-bold white-text">{{$active_user_count??0}}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="uk-text-bold uk-text-truncate uk-width-2-3">POTENTIAL:</td>
+                  <td class="uk-text-right uk-text-bold white-text">{{$non_active_user_count??0}}
+                  </td>
+                </tr>
+                <tr class="black">
+                  <td class="uk-padding-remove" colspan="2">
+                    <div class="uk-width-1-1 uk-flex uk-flex-around">
+                      <a href="{{route('admin_list_active_users')}}"
+                        class="uk-button uk-button-link uk-text-bold white-text"><span uk-icon="users"></span>
+                        <span class="uk-visible@m">Active</span> </a>
+                      <a href="{{route('admin_list_non_active_users')}}"
+                        class="uk-button uk-button-link uk-text-bold white-text"><span uk-icon="plus-circle"></span>
+                        <span class="uk-visible@m">Pending</span> </a>
+                    </div>
+                  </td>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div style="padding:3px;">
+          <div class="uk-border-rounded uk-card green accent-2 uk-light uk-padding-remove">
+            <h4 class="uk-margin-remove-bottom uk-padding-small uk-padding-remove-vertical uk-text-truncate">POSTS
+            </h4>
+            <table class="uk-table uk-table-small uk-table-divider uk-margin-remove">
+              <tbody class="uk-text-small">
+                <tr>
+                  <td class="uk-text-bold uk-text-truncate uk-width-1-3">ACTIVE:</td>
+                  <td class="uk-text-right uk-text-bold white-text">{{$active_post??0}}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="uk-text-bold uk-text-truncate uk-width-2-3">DELETED:</td>
+                  <td class="uk-text-right uk-text-bold white-text">{{$deleted_post??0}}
+                  </td>
+                </tr>
+                <tr class="black">
+                  <td class="uk-padding-remove" colspan="2">
+                    <div class="uk-width-1-1 uk-flex uk-flex-around">
+                      <a href="{{route('create_post')}}" class="uk-button uk-button-link uk-text-bold white-text"><span
+                          uk-icon="file-edit"></span>
+                        <span class="uk-visible@m">Create</span> </a>
+                      <a href="{{route('list_post')}}" class="uk-button uk-button-link uk-text-bold white-text"><span
+                          uk-icon="list"></span>
+                        <span class="uk-visible@m">List</span> </a>
+                    </div>
+                  </td>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div style="padding:3px;">
+          <div class="uk-border-rounded uk-card green accent-2 uk-light uk-padding-remove">
+            <h4 class="uk-margin-remove-bottom uk-padding-small uk-padding-remove-vertical uk-text-truncate">ALERTS
+            </h4>
+            <table class="uk-table uk-table-small uk-table-divider uk-margin-remove">
+              <tbody class="uk-text-small">
+                <tr>
+                  <td class="uk-text-bold uk-text-truncate uk-width-1-3">ACTIVE:</td>
+                  <td class="uk-text-right uk-text-bold white-text">{{$active_alert??0}}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="uk-text-bold uk-text-truncate uk-width-2-3">DISABLED:</td>
+                  <td class="uk-text-right uk-text-bold white-text">{{$disabled_alert??0}}
+                  </td>
+                </tr>
+                <tr class="black">
+                  <td class="uk-padding-remove" colspan="2">
+                    <div class="uk-width-1-1 uk-flex uk-flex-around">
+                      <a href="{{route('admin_list_alert')}}"
+                        class="uk-button uk-button-link uk-text-bold white-text"><span uk-icon="file-edit"></span>
+                        <span class="uk-visible@m">Manage</span> </a>
+                    </div>
+                  </td>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div style="padding:3px;">
+          <div class="uk-border-rounded uk-card green accent-2 uk-light uk-padding-remove">
+            <h4 class="uk-margin-remove-bottom uk-padding-small uk-padding-remove-vertical uk-text-truncate">PRODUCTS
+            </h4>
+            <table class="uk-table uk-table-small uk-table-divider uk-margin-remove">
+              <tbody class="uk-text-small">
+                <tr>
+                  <td class="uk-text-bold uk-text-truncate uk-width-1-3">ACTIVE:</td>
+                  <td class="uk-text-right uk-text-bold white-text">{{$active_alert??0}}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="uk-text-bold uk-text-truncate uk-width-2-3">DISABLED:</td>
+                  <td class="uk-text-right uk-text-bold white-text">{{$disabled_alert??0}}
+                  </td>
+                </tr>
+                <tr class="black">
+                  <td class="uk-padding-remove" colspan="2">
+                    <div class="uk-width-1-1 uk-flex uk-flex-around">
+                      <a href="{{route('create_product')}}"
+                        class="uk-button uk-button-link uk-text-bold white-text"><span uk-icon="file-edit"></span>
+                        <span class="uk-visible@m">Create</span> </a>
+                      <a href="{{route('list_product')}}" class="uk-button uk-button-link uk-text-bold white-text"><span
+                          uk-icon="list"></span>
+                        <span class="uk-visible@m">List</span> </a>
                     </div>
                   </td>
               </tbody>

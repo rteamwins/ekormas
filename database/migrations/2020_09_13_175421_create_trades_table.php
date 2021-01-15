@@ -20,7 +20,7 @@ class CreateTradesTable extends Migration
       $table->unsignedBigInteger('user_id');
       $table->decimal('profit_percent', 7, 4);
       $table->boolean('completed');
-      $table->string('method', 15)->default('manual');
+      $table->string('method', 25)->default('manual');
       $table->timestamp('closing_at', 6)->nullable()->default(null);
       $table->timestamp('created_at', 6)->nullable()->default(null);
       $table->timestamp('updated_at', 6)->nullable()->default(null);

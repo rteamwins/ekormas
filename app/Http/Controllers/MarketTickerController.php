@@ -16,38 +16,38 @@ class MarketTickerController extends Controller
    */
   public function index()
   {
+    
+    // $n = 1;
+    // while ($n <= 20) {
+    //   $arr["stage_{$n}"] = number_format(5 * ((100 / $n) / 100), 2);
+    //   $n++;
+    // }
+    // return $arr;
+    // return number_format((2 ** (2 * $n - 1)) + 2 ** (2 * $n));
 
-    $n = 1;
-    while ($n <= 20) {
-      $arr["stage_{$n}"] = number_format(5 * ((100 / $n) / 100), 2);
-      $n++;
+
+    $date_ranges = [];
+    $first_date = Profit::oldest()->first()->created_at;
+    $last_date = Profit::latest()->first()->created_at;
+    while ($last_date->greaterThan($first_date)) {
+      $date_ranges[] = $first_date->addHour()->getTimestamp();
     }
-    return $arr;
-    return number_format((2 ** (2 * $n - 1)) + 2 ** (2 * $n));
 
-
-    // $date_ranges = [];
-    // $first_date = Profit::oldest()->first()->created_at;
-    // $last_date = Profit::latest()->first()->created_at;
-    // while ($last_date->greaterThan($first_date)) {
-    //   $date_ranges[] = $first_date->addHour()->getTimestamp();
-    // }
-
-    // $OHLCs = [];
-    // array_pop($date_ranges);
-    // foreach ($date_ranges as $date) {
-    //   $open_time = now()->setTimestamp($date);
-    //   $close_time = now()->setTimestamp($date)->addHour();
-    //   $OHLC['date'] = $date ?? null;
-    //   $profits = Profit::whereBetween('created_at', [$open_time, $close_time])->get();
-    //   $OHLC['open'] = $profits->first()->amount ?? null;
-    //   $OHLC['high'] = $profits->max('amount') ?? null;
-    //   $OHLC['low'] = $profits->min('amount') ?? null;
-    //   $OHLC['close'] = $profits->last()->amount ?? null;
-    //   $OHLC['volume'] = $profits->avg('volume') ?? null;
-    //   $OHLCs[] = $OHLC;
-    // }
-    // return $OHLCs;
+    $OHLCs = [];
+    array_pop($date_ranges);
+    foreach ($date_ranges as $date) {
+      $open_time = now()->setTimestamp($date);
+      $close_time = now()->setTimestamp($date)->addHour();
+      $OHLC['date'] = $date ?? null;
+      $profits = Profit::whereBetween('created_at', [$open_time, $close_time])->get();
+      $OHLC['open'] = $profits->first()->amount ?? null;
+      $OHLC['high'] = $profits->max('amount') ?? null;
+      $OHLC['low'] = $profits->min('amount') ?? null;
+      $OHLC['close'] = $profits->last()->amount ?? null;
+      $OHLC['volume'] = $profits->avg('volume') ?? null;
+      $OHLCs[] = $OHLC;
+    }
+    return $OHLCs;
   }
 
   /**

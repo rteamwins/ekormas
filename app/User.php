@@ -46,7 +46,7 @@ class User extends Authenticatable
 
   protected $appends = ['available_wallet'];
 
-  protected $with = ['membership_plan:id,name,fee'];
+  protected $with = ['membership_plan'];
   // protected $withCount = ['registration_credits'];
   /**
    * The attributes that should be cast to native types.
@@ -81,6 +81,11 @@ class User extends Authenticatable
   public function product_cart()
   {
     return $this->hasOne(ProductCart::class, 'user_id');
+  }
+
+  public function downlines()
+  {
+    return $this->hasMany(User::class, 'referer');
   }
 
 

@@ -27,7 +27,7 @@ trait CalculateMatchingBonus
         ->descendantsOf($this->children->last());
       $amount['left_amount'] = $left_desc->sum('membership_plan.fee') * $stage_per;
       $amount['right_amount'] = $right_desc->sum('membership_plan.fee') * $stage_per;
-      $weak_amount = $amount['left_amount'] < $amount['right_amount'] ? $amount['left_amount'] : $amount['right_amount'];
+      $weak_amount = $amount['left_amount'] <= $amount['right_amount'] ? $amount['left_amount'] : $amount['right_amount'];
       $this->give_stage_matching_bonus($weak_amount, $stage_num, 'stage');
 
       if (2 % $stage_num == 0) {
@@ -41,7 +41,7 @@ trait CalculateMatchingBonus
           ->descendantsOf($this->children->last());
         $amount['left_amount'] = $left_desc->sum('membership_plan.fee') * $stage_per;
         $amount['right_amount'] = $right_desc->sum('membership_plan.fee') * $stage_per;
-        $weak_amount = $amount['left_amount'] < $amount['right_amount'] ? $amount['left_amount'] : $amount['right_amount'];
+        $weak_amount = $amount['left_amount'] <= $amount['right_amount'] ? $amount['left_amount'] : $amount['right_amount'];
         $this->give_stage_matching_bonus($weak_amount, $stage_num, 'level');
       }
     }

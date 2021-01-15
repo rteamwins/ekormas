@@ -43,6 +43,8 @@ Route::group(['middleware' => ['verifyRegPayment']], function () {
     Route::get('/withdraw/fund/history', 'WithdrawController@index')->name('user_withdraw_fund_history');
     Route::get('/withdraw/local/history', 'LocalPayController@index')->name('user_withdraw_local_history');
 
+    Route::get('/local-pay/list/request', 'LocalPayController@index_request')->name('local_pay_requests');
+
     Route::get('/trade/create', 'TradeController@create')->name('user_create_trade');
     Route::post('/trade/save', 'TradeController@store')->name('user_trade_save');
     Route::get('/trade/history', 'TradeController@index')->name('user_trade_history');
@@ -60,6 +62,33 @@ Route::group(['middleware' => ['verifyRegPayment']], function () {
   });
   Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
     Route::get('/', 'AdminController@index')->name('admin_home');
+    Route::get('/agent/list/available', 'HomeController@avail_agents')->name('admin_list_avail_agents');
+    Route::get('/agent/list/potential', 'HomeController@potential_agents')->name('admin_list_potential_agents');
+    Route::get('/investor/list/active', 'HomeController@active_users')->name('admin_list_active_users');
+    Route::get('/investor/list/potential', 'HomeController@non_active_users')->name('admin_list_non_active_users');
+
+
+    Route::group(['prefix' => 'post'], function () {
+      Route::post('/process_new_post', 'PostController@store')->name('process_new_post');
+      Route::get('/create', 'PostController@create')->name('create_post');
+      Route::get('/list', 'PostController@index')->name('list_post');
+      Route::get('/show/{id}', 'PostController@show')->name('show_post');
+      Route::get('/delete/{id}', 'PostController@destroy')->name('delete_post');
+      Route::get('/delete_image/{id}', 'PostController@delete_post_image')->name('delete_post_image');
+      Route::get('/edit/{id}', 'PostController@edit')->name('edit_post');
+      Route::post('/update/{id}', 'PostController@update')->name('update_post');
+    });
+
+    Route::group(['prefix' => 'product'], function () {
+      Route::get('/create', 'ProductController@create')->name('create_product');
+      Route::post('/process_new_product', 'ProductController@store')->name('process_new_product');
+      Route::get('/list', 'ProductController@index')->name('list_product');
+      // Route::get('/show/{id}', 'ProductController@show')->name('show_post');
+      Route::get('/delete/{id}', 'PostController@destroy')->name('delete_post');
+      Route::get('/{id}/delete_image/{image_name}', 'ProductController@delete_product_image')->name('delete_product_image');
+      Route::get('/edit/{id}', 'ProductController@edit')->name('edit_product');
+      Route::post('/update/{id}', 'ProductController@update')->name('update_product');
+    });
   });
 });
 Route::post('/process_registration_plan', 'HomeController@process_reg_plan')->name('process_reg_plan');
