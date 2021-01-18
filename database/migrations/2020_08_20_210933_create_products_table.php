@@ -17,6 +17,7 @@ class CreateProductsTable extends Migration
       $table->id();
       $table->string('code', 6);
       $table->string('title');
+      $table->string('status');
       $table->string('slug')->unique();
       $table->decimal('amount', 14, 2);
       $table->integer('reward_level')->default(1); // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])

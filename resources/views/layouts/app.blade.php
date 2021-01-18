@@ -143,6 +143,33 @@
         <li class="uk-parent uk-padding-remove">
           <a href="#"
             class="uk-button-small green-text  text-accent-2 uk-text-bold uk-text-right uk-width-1-1 uk-margin-small-top uk-margin-small-bottom">
+            #POINTS
+          </a>
+          <ul class="uk-nav-sub uk-padding-remove">
+            <li>
+              <div class="uk-padding-small green accent-2">
+                <a href="{{route('create_point_to_wallet_funds')}}"
+                  class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">CLAIM</a>
+              </div>
+            </li>
+            <li>
+              <div class="uk-padding-small green accent-2">
+                <a href="{{route('user_point_history')}}"
+                  class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">POINT HISTORY</a>
+              </div>
+            </li>
+            <li>
+              <div class="uk-padding-small green accent-2">
+                <a href="{{route('admin_list_point_nominees')}}"
+                  class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">NOMINEES</a>
+              </div>
+            </li>
+
+          </ul>
+        </li>
+        <li class="uk-parent uk-padding-remove">
+          <a href="#"
+            class="uk-button-small green-text  text-accent-2 uk-text-bold uk-text-right uk-width-1-1 uk-margin-small-top uk-margin-small-bottom">
             #WITHDRAWS
           </a>
           <ul class="uk-nav-sub uk-padding-remove">
@@ -191,6 +218,15 @@
               </div>
             </li>
           </ul>
+        </li>
+        <li>
+          <div
+            class="uk-padding-small orange white-text @if(auth()->user()->downlines->count() <100) uk-disabled @endif">
+            <a href="/" class="uk-button-small  uk-text-bold uk-width-1-1" style="">MAKE ME AN AGENT
+            </a>
+            <progress class="uk-progress uk-margin-remove" value="{{auth()->user()->downlines->count()}}"
+              max="100"></progress>
+          </div>
         </li>
         <li>
           <div class="uk-padding-small red white-text">

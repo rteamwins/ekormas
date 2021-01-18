@@ -3,7 +3,7 @@
 </style>
 @endpush
 @extends('layouts.app')
-@section('title', 'Fund Wallet With Bonus')
+@section('title', 'Fund Wallet With Point')
 @section('content')
 <div class="uk-container uk-padding-remove">
   @include('layouts.user_stats_card')
@@ -16,10 +16,8 @@
             Add more funds to your wallet.
           </p>
         </div>
-
         <div class="uk-card-body uk-padding-small">
-
-          <form method="POST" id="wallet_funding" action="{{route('save_bonus_to_wallet_funds')}}"
+          <form method="POST" id="wallet_funding" action="{{route('save_point_to_wallet_funds')}}"
             class="uk-form-stacked uk-flex uk-flex-column">
             @csrf
             <div class="uk-margin uk-width-1-1 uk-width-2-3@s uk-width-1-2@m  uk-align-center">
@@ -30,7 +28,10 @@
                 <div class="uk-inline uk-width-1-1">
                   <span class="uk-form-icon">$</span>
                   <input class="uk-input uk-border-rounded @error('funding_amount') uk-form-danger @enderror"
-                    name="funding_amount" id="funding_amount" type="number" value="{{ old('funding_amount') }}"
+                    name="funding_amount"
+                    id="funding_amount"
+                    type="number"
+                    value="{{ old('funding_amount') }}"
                     min="100" required autofocus>
                 </div>
                 @error('funding_amount')

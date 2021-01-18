@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Http\Controllers\HomeController;
 use App\CalculateMatchingBonus;
 use App\GiveMatchingBonus;
 use App\GiveReferalBonus;
@@ -19,7 +18,11 @@ class User extends Authenticatable
     NodeTrait,
     GiveReferalBonus,
     GiveMatchingBonus,
-    CalculateMatchingBonus;
+    GiveActiveSalesPoint,
+    GiveDormantSalesPoint,
+    CalculateMatchingBonus,
+    CalculateSalesPoint;
+
 
   /**
    * The attributes that are mass assignable.
@@ -28,6 +31,7 @@ class User extends Authenticatable
    */
   protected $fillable = [
     'parent_id', 'placement_id', 'name',
+    'active_points', 'dormant_points',
     'wallet', 'bounus', 'email', 'password',
     'referer', 'role', 'activated_at', 'phone',
     'trading_capital', 'membership_plan_id',

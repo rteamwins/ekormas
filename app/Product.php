@@ -10,9 +10,8 @@ class Product extends Model
 {
   use SoftDeletes;
   protected $fillable = [
-    'title', 'slug', 'amount',
-    'reward_level', 'images',
-    'description',
+    'code', 'title', 'slug','status',
+    'amount', 'images', 'description',
   ];
 
   protected $dateFormat = 'Y-m-d H:i:s.u';
@@ -39,10 +38,19 @@ class Product extends Model
     }
   }
 
+  public function getImagesAttribute($value)
+  {
+    $full_url = [];
+    foreach (json_decode($value) as  $val) {
+      $full_url[] = asset('images/product/' . $val);
+    }
+    return $full_url;
+  }
+
   protected static function boot()
   {
     parent::boot();
-    static::creating(function (Post $model) {
+    static::creating(function (Product $model) {
       $source = $model->title;
       $model_slug = Str::slug($source);
       if (!static::where('id', '!=', $model->id)->where('slug', $model_slug)->withTrashed()->exists()) {

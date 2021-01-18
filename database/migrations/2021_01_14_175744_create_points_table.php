@@ -18,7 +18,7 @@ class CreatePointsTable extends Migration
       $table->unsignedBigInteger('user_id');
       $table->decimal('amount', 14, 4)->default(0);
       $table->string('status')->default('pending');
-      $table->string('tag');
+      // $table->string('tag');
       $table->string('type');
       $table->timestamp('created_at', 6)->nullable()->default(null);
       $table->timestamp('updated_at', 6)->nullable()->default(null);

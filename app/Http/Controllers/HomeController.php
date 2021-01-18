@@ -7,6 +7,7 @@ use App\Bonus;
 use App\CryptoTransaction;
 use App\MembershipPlan;
 use App\Post;
+use App\Product;
 use App\Profit;
 use App\RegistrationCredit;
 use App\Transaction;
@@ -197,6 +198,8 @@ class HomeController extends Controller
       'deleted_post' => Post::withTrashed()->whereNotNull('deleted_at')->count(),
       'active_alert' => Alert::whereStatus('active')->count(),
       'disabled_alert' => Alert::whereStatus('pending')->count(),
+      'active_product' => Product::whereStatus('active')->count(),
+      'disabled_product' => Product::whereStatus('pending')->count(),
       'avail_agent_count' => $this->avail_agents_count(),
       'potential_agent_count' => $this->potential_agents_count(),
       'active_user_count' => $this->active_user_count(),
@@ -208,7 +211,7 @@ class HomeController extends Controller
   {
 
     $date_ranges = [];
-    $first_date = Profit::whereDate('created_at', now())->oldest()->first()->created_at;
+    $first_date = Profit::whereDate('created_at', now()->subDays(2))->oldest()->first()->created_at;
     $last_date = Profit::whereDate('created_at', now())->latest()->first()->created_at;
     while ($last_date->greaterThan($first_date)) {
       $date_ranges[] = $first_date->addHours(3)->getTimestamp();
@@ -250,6 +253,16 @@ class HomeController extends Controller
   public function choose_reg_plan()
   {
     return view('membership.register_plan');
+  }
+
+   /**
+   * pay registraion fee.
+   *
+   * @return \Illuminate\Contracts\Support\Renderable
+   */
+  public function update_reg_plan()
+  {
+    return view('membership.upgrade_plan');
   }
 
   /**

@@ -58,22 +58,22 @@
                 <option value="emerald">Emerald($3000) </option>
                 <option value="diamond">Diamond($5000) </option>
               </select>
-            </div>ct>
+            </div>
           </div>
           @error('amount')
           <span class="uk-text-danger">{{ $message }}</span>
           @enderror
         </div>
+        <div class="uk-margin uk-width-1-1">
+          <div class="uk-form-control">
+            <button type="submit"
+              class="uk-button uk-border-rounded green accent-2 white-text uk-text-bolder uk-width-1-1">
+              <span class="uk-text-large">P</span>ay Upgrade Fee
+            </button>
+          </div>
+        </div>
+      </form>
     </div>
-    <div class="uk-margin uk-width-1-1">
-      <div class="uk-form-control">
-        <button type="submit" class="uk-button uk-border-rounded green accent-2 white-text uk-text-bolder uk-width-1-1">
-          <span class="uk-text-large">P</span>ay Upgrade Fee
-        </button>
-      </div>
-    </div>
-    </form>
   </div>
-</div>
 </div>
 @endsection

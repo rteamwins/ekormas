@@ -28,6 +28,7 @@ class CreateUsersTable extends Migration
       $table->decimal('last_award_point')->default(0);
       $table->decimal('trading_capital', 14, 2)->default(0);
       $table->decimal('bonus', 14, 2)->default(0);
+      $table->text('address');
       $table->enum('role', ['user', 'agent', 'admin', 'super_admin'])->default('user');
       $table->string('email')->unique();
       $table->string('password');

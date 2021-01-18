@@ -35,4 +35,9 @@ Route::middleware('auth:api')->group(function () {
   Route::get('alert/delete/{id}', 'AlertController@destroy')->where(['id' => '[0-9]+']);
   Route::post('alert/update/{id}', 'AlertController@update')->where(['id' => '[0-9]+']);
   Route::post('alert/new', 'AlertController@store');
+
+  Route::get('product/enable/{id}', 'ProductController@enable')->where(['id' => '[0-9]+']);
+  Route::get('product/disable/{id}', 'ProductController@disable')->where(['id' => '[0-9]+']);
+  Route::get('product/{id}/delete_image/{image_name}', 'ProductController@disable')->where(['id' => '[0-9]+']);
 });
+Route::get('product/list', 'ProductController@index_json');

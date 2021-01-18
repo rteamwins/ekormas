@@ -34,14 +34,22 @@ Route::group(['middleware' => ['verifyRegPayment']], function () {
   Route::group(['prefix' => 'user', 'middleware' => ['auth']], function () {
     Route::get('/dashboard', 'HomeController@user_dashboard')->name('user_home');
 
-    Route::get('/wallet/fund/create', 'FundingController@create')->name('user_fund_wallet');
-    Route::post('/wallet/fund/save', 'FundingController@store')->name('user_fund_wallet_save');
-    Route::get('/wallet/fund/history', 'FundingController@index')->name('user_fund_history');
+    Route::group(['prefix' => 'wallet'], function () {
+      Route::group(['prefix' => 'fund'], function () {
+        Route::get('create', 'FundingController@create')->name('user_fund_wallet');
+        Route::post('save', 'FundingController@store')->name('user_fund_wallet_save');
+        Route::get('history', 'FundingController@index')->name('user_fund_history');
+      });
+    });
 
-    Route::get('/withdraw/fund', 'WithdrawController@create')->name('user_create_withdraw_fund');
-    Route::post('/withdraw/fund/save', 'WithdrawController@store')->name('user_create_withdraw_fund_save');
-    Route::get('/withdraw/fund/history', 'WithdrawController@index')->name('user_withdraw_fund_history');
-    Route::get('/withdraw/local/history', 'LocalPayController@index')->name('user_withdraw_local_history');
+    Route::group(['prefix' => 'withdraw'], function () {
+      Route::group(['prefix' => 'fund'], function () {
+        Route::get('/', 'WithdrawController@create')->name('user_create_withdraw_fund');
+        Route::post('save', 'WithdrawController@store')->name('user_create_withdraw_fund_save');
+        Route::get('history', 'WithdrawController@index')->name('user_withdraw_fund_history');
+      });
+      Route::get('local/history', 'LocalPayController@index')->name('user_withdraw_local_history');
+    });
 
     Route::get('/local-pay/list/request', 'LocalPayController@index_request')->name('local_pay_requests');
 
@@ -49,9 +57,23 @@ Route::group(['middleware' => ['verifyRegPayment']], function () {
     Route::post('/trade/save', 'TradeController@store')->name('user_trade_save');
     Route::get('/trade/history', 'TradeController@index')->name('user_trade_history');
 
-    Route::get('/bonus/convert_to/wallet', 'BonusController@convert_to_wallet_funds')->name('create_bonus_to_wallet_funds');
-    Route::post('/bonus/convert_to/wallet/save', 'BonusController@store_convert_to_wallet_funds')->name('save_bonus_to_wallet_funds');
-    Route::get('/bonus/history', 'BonusController@index')->name('user_bonus_history');
+
+    Route::group(['prefix' => 'bonus'], function () {
+      Route::group(['prefix' => 'convert_to'], function () {
+        Route::get('wallet', 'BonusController@convert_to_wallet_funds')->name('create_bonus_to_wallet_funds');
+        Route::post('wallet/save', 'BonusController@store_convert_to_wallet_funds')->name('save_bonus_to_wallet_funds');
+      });
+      Route::get('history', 'BonusController@index')->name('user_bonus_history');
+    });
+
+    Route::group(['prefix' => 'point'], function () {
+      Route::group(['prefix' => 'convert_to'], function () {
+        Route::get('wallet', 'PointController@convert_points_to_wallet_funds')->name('create_point_to_wallet_funds');
+        Route::post('wallet/save', 'PointController@store_convert_points_to_wallet_funds')->name('save_point_to_wallet_funds');
+      });
+      Route::get('history', 'PointController@index')->name('user_point_history');
+      Route::get('list/nominee', 'PointController@index_nominees')->name('admin_list_point_nominees');
+    });
 
     Route::get('/kyc/list', 'KYCController@index')->name('user_list_kyc');
     Route::get('/referal/history', 'HomeController@show_referal')->name('user_referal_history');
@@ -83,9 +105,6 @@ Route::group(['middleware' => ['verifyRegPayment']], function () {
       Route::get('/create', 'ProductController@create')->name('create_product');
       Route::post('/process_new_product', 'ProductController@store')->name('process_new_product');
       Route::get('/list', 'ProductController@index')->name('list_product');
-      // Route::get('/show/{id}', 'ProductController@show')->name('show_post');
-      Route::get('/delete/{id}', 'PostController@destroy')->name('delete_post');
-      Route::get('/{id}/delete_image/{image_name}', 'ProductController@delete_product_image')->name('delete_product_image');
       Route::get('/edit/{id}', 'ProductController@edit')->name('edit_product');
       Route::post('/update/{id}', 'ProductController@update')->name('update_product');
     });
@@ -93,6 +112,7 @@ Route::group(['middleware' => ['verifyRegPayment']], function () {
 });
 Route::post('/process_registration_plan', 'HomeController@process_reg_plan')->name('process_reg_plan');
 Route::get('/choose_registration_plan', 'HomeController@choose_reg_plan')->name('choose_reg_plan');
+Route::get('/update_registration_plan', 'HomeController@update_reg_plan')->name('update_reg_plan');
 
 Route::get('/tester', 'MarketTickerController@index');
 

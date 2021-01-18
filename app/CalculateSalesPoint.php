@@ -3,7 +3,7 @@
 namespace App;
 
 
-trait CalculateSalesBonus
+trait CalculateSalesPoint
 {
   /**
    * Check if User is ready for Bonus
@@ -15,8 +15,7 @@ trait CalculateSalesBonus
    */
   public function calculate_sales_bonus()
   {
-    if($this->children->count()<2){
-      
+    if ($this->children->count() < 2) {
     }
     $left_desc = static::withDepth()
       ->descendantsOf($this->children->first())->where('activated_at', now()->startOfDay());
@@ -26,7 +25,11 @@ trait CalculateSalesBonus
     $amount['right_amount'] = $right_desc->sum('membership_plan.point_value');
     $weak_amount = $amount['left_amount'] <= $amount['right_amount'] ? $amount['left_amount'] : $amount['right_amount'];
     if ($weak_amount > 0) {
-      $this->give_sales_bonus($weak_amount);
+      $this->give_active_sales_point(($weak_amount * 0.05));
+    }
+    $stong_amount = $amount['left_amount'] <= $amount['right_amount'] ? $amount['right_amount'] : $amount['left_amount'];
+    if ($stong_amount > 0) {
+      $this->give_dormant_sales_point(($weak_amount / 2));
     }
   }
 }

@@ -23,22 +23,21 @@
                 <th>#</th>
                 <th>AMOUNT</th>
                 <th>TYPE</th>
-                <th>TAG</th>
                 <th>DATE</th>
               </tr>
             </thead>
             <tbody>
-              @if (count($bonuses))
-              @foreach ($bonuses as $bonus)
-              <tr class="{{$bonus->amount<0?"red":"green"}} lighten-5">
+              @if (count($points))
+              @foreach ($points as $point)
+              <tr class="{{$point->amount<0?"red":"green"}} lighten-5">
                 <td><span class="uk-hidden@m uk-text-bold">#: </span>{{$loop->index +1}}</td>
-                <td><span class="uk-hidden@m uk-text-bold">Amount: </span>${{number_format($bonus->amount,2)}}</td>
+                <td><span class="uk-hidden@m uk-text-bold">Amount: </span>{{number_format($point->amount,2)}}</td>
                 <td>
                   <span class="uk-hidden@m uk-text-bold">Type: </span> <span class="uk-label cyan">
-                    {{str_replace("_"," ",$bonus->type)}}
+                    {{str_replace("_"," ",$point->type)}}
                   </span>
                 </td>
-                <td><span class="uk-hidden@m uk-text-bold">Date: </span>{{ $bonus->created_at->DiffForHumans()}}</td>
+                <td><span class="uk-hidden@m uk-text-bold">Date: </span>{{ $point->created_at->DiffForHumans()}}</td>
               </tr>
               @endforeach
               @else
@@ -49,9 +48,9 @@
             </tbody>
           </table>
         </div>
-        @if ($bonuses->hasPages())
+        @if ($points->hasPages())
         <div class="uk-text-center uk-card-footer">
-          {!! $bonuses->links() !!}
+          {!! $points->links() !!}
         </div>
         @endif
       </div>
