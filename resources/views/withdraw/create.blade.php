@@ -23,7 +23,7 @@
 
 
   const calc_service_fee = (fee)=>{
-    let user_max_withdraw_amount = {{(Auth()->user()->available_wallet * ((100-5) / 100))}};
+    let user_max_withdraw_amount = {{(Auth()->user()->wallet * ((100-5) / 100))}};
     let amount_warning = document.getElementById('amount_warning')
     if(fee > user_max_withdraw_amount){
       amount_warning.textContent = 'You Do Not Have Sufficent Funds';
@@ -167,14 +167,14 @@
               </label>
               <label for="amount" class="uk-form-label">
                 Min ${{number_format(100,0)}} - Max
-                ${{number_format((Auth()->user()->available_wallet * ((100-5) / 100)),2)}}
+                ${{number_format((Auth()->user()->wallet * ((100-5) / 100)),2)}}
               </label>
               <div class="uk-form-control">
                 <div class="uk-inline uk-width-1-1">
                   <span class="uk-form-icon">$</span>
                   <input onkeyup="calc_service_fee(this.value)"
                     class="uk-input @error('amount') uk-form-danger @enderror" name="amount" id="amount" type="number"
-                    max="{{(Auth()->user()->available_wallet * ((100-5) / 100))}}" min="100" value="{{ old('amount') }}"
+                    max="{{(Auth()->user()->wallet * ((100-5) / 100))}}" min="100" value="{{ old('amount') }}"
                     required>
                 </div>
                 <span id="amount_warning" class="uk-hidden"></span>

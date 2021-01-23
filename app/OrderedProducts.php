@@ -7,14 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class OrderedProducts extends Model
 {
   protected $fillable = [
-    'order_id', 'product_id',
-    'name', 'status',
+    'order_id', 'product_id', 'quantity',
   ];
 
   protected $cast = [
     'created_at' => 'datetime',
     'updated_at' => 'datetime',
-    'deleted_at' => 'datetime',
   ];
 
   protected $dateFormat = 'Y-m-d H:i:s.u';

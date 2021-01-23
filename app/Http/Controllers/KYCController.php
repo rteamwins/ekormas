@@ -39,7 +39,7 @@ class KYCController extends Controller
    */
   public function store(Request $request)
   {
-    $max = (Auth()->user()->available_wallet * ((100 - 5) / 100));
+    $max = (Auth()->user()->wallet * ((100 - 5) / 100));
 
     $this->validate($request, [
       'amount' => 'required|numeric|min:100|max:' . $max,

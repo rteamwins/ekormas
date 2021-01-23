@@ -41,7 +41,7 @@ class WithdrawController extends Controller
    */
   public function create()
   {
-    $agents = User::select("name", 'username')->get()->makeHidden(['available_wallet']);
+    $agents = User::select("name", 'username')->get()->makeHidden(['wallet']);
     return view('withdraw.create', ['agents' => $agents]);
   }
 
@@ -53,7 +53,7 @@ class WithdrawController extends Controller
    */
   public function store(Request $request)
   {
-    $max = (Auth()->user()->available_wallet * ((100 - 5) / 100));
+    $max = (Auth()->user()->wallet * ((100 - 5) / 100));
     $this->validate($request, [
       'withdraw_type' => 'required|string|in:bitcoin,kyc,local',
       'amount' => 'required|numeric|min:100|max:' . $max,

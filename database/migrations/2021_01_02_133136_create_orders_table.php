@@ -20,8 +20,10 @@ class CreateOrdersTable extends Migration
       $table->string('type');
       $table->decimal('total_amount', 14, 2);
       $table->string('status');
-      $table->string('delivery_state');
-      $table->text('delivery_address')->nullable();
+      $table->unsignedBigInteger('state_id');
+      $table->unsignedBigInteger('lga_id');
+      $table->char('country_code', 2);
+      $table->text('address')->nullable();
       $table->boolean('traded')->default(false);
       $table->unsignedBigInteger('trade_id')->default(null)->nullable();
       $table->timestamp('collected_at', 6)->nullable()->default(null);

@@ -20,6 +20,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::middleware('auth:api')->group(function () {
 
+  Route::get('agent/application/list', 'AgentApplicationController@index_json');
+
   Route::get('user/kyc/list', 'KYCController@index_json');
 
   Route::get('user/referal/tree_data/for/{id}', 'HomeController@get_ref_level')->where(['id' => '[0-9]+']);

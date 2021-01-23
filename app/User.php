@@ -36,6 +36,9 @@ class User extends Authenticatable
     'referer', 'role', 'activated_at', 'phone',
     'trading_capital', 'membership_plan_id',
     'last_profit_at', 'points', 'username',
+    'country_code',
+    'state_id',
+    'lga_id',
   ];
 
   /**
@@ -47,10 +50,8 @@ class User extends Authenticatable
     'password', 'remember_token',
   ];
 
-
-  protected $appends = ['available_wallet'];
-
   protected $with = ['membership_plan'];
+  // protected $withCount = ['downlines'];
   // protected $withCount = ['registration_credits'];
   /**
    * The attributes that should be cast to native types.
@@ -66,6 +67,20 @@ class User extends Authenticatable
 
   protected $dateFormat = 'Y-m-d H:i:s.u';
 
+  public function country()
+  {
+    return $this->belongsTo(Country::class, 'country_code');
+  }
+
+  public function state()
+  {
+    return $this->belongsTo(State::class, 'state_id');
+  }
+
+  public function lga()
+  {
+    return $this->belongsTo(Lga::class, 'lga_id');
+  }
 
   public function transactions()
   {
@@ -126,13 +141,6 @@ class User extends Authenticatable
   public function alerts()
   {
     return Alert::whereStatus('active')->get();
-  }
-
-  public function getAvailableWalletAttribute()
-  {
-
-    return $this->wallet - ($this->membership_plan()->fee ?? 0);
-    // return $this->wallet - 1000;
   }
 
   public function generate_placement_id()

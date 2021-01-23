@@ -56,7 +56,7 @@ class FundingController extends Controller
         $new_trx = new Transaction();
         $new_trx->amount = $request->funding_amount;
         $new_trx->status = 'created';
-        $new_trx->type = 'funding';
+        $new_trx->type = 'wallet_funding';
         $new_trx->user_id = Auth()->id();
         $new_trx->save();
 
@@ -74,7 +74,7 @@ class FundingController extends Controller
           'pricing_type' => 'fixed_price',
           'metadata' => [
             "user_id" => Auth()->user()->id,
-            "type" => "funding",
+            "type" => "user_wallet_funding",
             "trnx_id" => $new_trx->id,
           ],
           'redirect_url' => route('home'),
@@ -97,7 +97,7 @@ class FundingController extends Controller
         $new_trx = new Transaction();
         $new_trx->amount = $valid_kyc->amount;
         $new_trx->status = 'created';
-        $new_trx->type = 'funding';
+        $new_trx->type = 'wallet_funding';
         $new_trx->user_id = Auth()->id();
 
         $valid_kyc->used_by = Auth()->id();
@@ -119,7 +119,7 @@ class FundingController extends Controller
         $new_trx = new Transaction();
         $new_trx->amount = ($valid_kyc->fee / 2);
         $new_trx->status = 'created';
-        $new_trx->type = 'funding';
+        $new_trx->type = 'service_charge_bonus';
         $new_trx->user_id = $benefactor->id;
 
         $new_bonus_trx = new Bonus();

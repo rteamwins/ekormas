@@ -9,8 +9,8 @@ class Order extends Model
   protected $fillable = [
     'user_id', 'transaction_id', 'type',
     'total_amount', 'status', 'traded',
-    'delivery_address', 'delivery_state',
-    'trade_id', 'collected_at'
+    'country_code', 'address', 'state_id',
+    'trade_id', 'collected_at', 'lga_id'
   ];
 
   protected $cast = [
@@ -34,8 +34,8 @@ class Order extends Model
     return $this->belongsTo(User::class);
   }
 
-  public function product()
+  public function ordered_products()
   {
-    return $this->belongsTo(Product::class);
+    return $this->hasMany(OrderedProducts::class);
   }
 }

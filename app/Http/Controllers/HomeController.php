@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Alert;
 use App\Bonus;
 use App\CryptoTransaction;
+use App\Lga;
 use App\MembershipPlan;
 use App\Post;
 use App\Product;
 use App\Profit;
 use App\RegistrationCredit;
+use App\State;
 use App\Transaction;
 use App\User;
 use CoinbaseCommerce\ApiClient;
@@ -97,6 +99,7 @@ class HomeController extends Controller
       ->without('membership_plan')
       ->count();
   }
+
 
   public function potential_agents()
   {
@@ -211,7 +214,7 @@ class HomeController extends Controller
   {
 
     $date_ranges = [];
-    $first_date = Profit::whereDate('created_at', now()->subDays(2))->oldest()->first()->created_at;
+    $first_date = Profit::whereDate('created_at', now()->subDays())->oldest()->first()->created_at;
     $last_date = Profit::whereDate('created_at', now())->latest()->first()->created_at;
     while ($last_date->greaterThan($first_date)) {
       $date_ranges[] = $first_date->addHours(3)->getTimestamp();
@@ -228,7 +231,7 @@ class HomeController extends Controller
       $OHLC['open'] = $last_close ?: number_format($profits->avg('amount'), 4);
       $OHLC['high'] = number_format($profits->max('amount'), 4) ?? null;
       $OHLC['low'] = number_format($profits->min('amount'), 4) ?? null;
-      $OHLC['close'] = number_format($profits->last()->amount, 4) ?? null;
+      $OHLC['close'] = number_format($profits->last()->amount ?? 00, 4) ?? null;
       // $OHLC['volume'] = $profits->avg('volume') ?? null;
       $OHLCs[] = $OHLC;
       $last_close = $OHLC['close'];
@@ -238,7 +241,12 @@ class HomeController extends Controller
 
   public function index()
   {
-    return view('welcome');
+    $states = State::select('id', 'name')->whereCountryCode('cm')->get();
+    $lgas = Lga::select('id', 'name', 'state_id')->whereCountryCode('cm')->get();
+    return view('welcome', [
+      'states' => $states,
+      'lgas' => $lgas,
+    ]);
   }
 
   public function get_agent_stat()
@@ -255,7 +263,7 @@ class HomeController extends Controller
     return view('membership.register_plan');
   }
 
-   /**
+  /**
    * pay registraion fee.
    *
    * @return \Illuminate\Contracts\Support\Renderable
@@ -349,7 +357,7 @@ class HomeController extends Controller
         $new_trx = new Transaction();
         $new_trx->amount = $plan[$request->plan];
         $new_trx->status = 'created';
-        $new_trx->type = 'registration';
+        $new_trx->type = 'registration_fee';
         $new_trx->user_id = Auth()->id();
         $new_trx->save();
         // $new_crypto_trx = CryptoTransaction::find($new_crypto_trx->id)->first();
@@ -365,7 +373,7 @@ class HomeController extends Controller
           'pricing_type' => 'fixed_price',
           'metadata' => [
             "user_id" => Auth()->user()->id,
-            "type" => "rc_fee",
+            "type" => "user_registration_fee",
             "trnx_id" => $new_trx->id,
           ],
           'redirect_url' => route('home'),

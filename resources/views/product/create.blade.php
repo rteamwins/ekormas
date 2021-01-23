@@ -28,6 +28,64 @@
                 @enderror
               </div>
             </div>
+            <div class="uk-grid-small uk-child-width-1-2" uk-grid>
+              <div class="">
+                <label for="category" class="uk-form-label">
+                  {{ __('Category') }}
+                </label>
+                <div class="uk-form-control">
+                  <select id="category" class="uk-input @error('category') uk-form-danger @enderror" name="category"
+                    required>
+                    <option value="">-- Select Category --</option>
+                    @foreach ($categories as $cat)
+                    <option value="{{$cat->id}}">{{$cat->name}}</option>
+                    @endforeach
+                  </select>
+                  @error('category')
+                  <span class="uk-text-danger">{{ $message }}</span>
+                  @enderror
+                </div>
+              </div>
+              <div class="">
+                <label for="amount" class="uk-form-label">
+                  {{ __('Product Amount') }}
+                </label>
+                <div class="uk-form-control">
+                  <input name="amount" placeholder="Select Amount"
+                    class="uk-input @error('amount')  uk-form-danger @enderror" id="amount" type="number"
+                    value="{{ old('amount') }}" />
+                  @error('amount')
+                  <span class="uk-text-danger">{{ $message }}</span>
+                  @enderror
+                </div>
+              </div>
+              <div class="">
+                <label for="reward_level" class="uk-form-label">
+                  {{ __('Reward Level') }}
+                </label>
+                <div class="uk-form-control">
+                  <input type="number" min="1" max="99" id="reward_level"
+                    class="uk-input @error('reward_level') uk-form-danger @enderror" name="reward_level" required
+                    value="{{ old('reward_level') }}">
+                  @error('reward_level')
+                  <span class="uk-text-danger">{{ $message }}</span>
+                  @enderror
+                </div>
+              </div>
+              <div class="">
+                <label for="delivery_duration" class="uk-form-label">
+                  {{ __('Delivery Time') }}
+                </label>
+                <div class="uk-form-control">
+                  <input type="number" min="1" max="99" id="delivery_duration"
+                    class="uk-input @error('delivery_duration') uk-form-danger @enderror" name="delivery_duration"
+                    required value="{{ old('delivery_duration') }}">
+                  @error('delivery_duration')
+                  <span class="uk-text-danger">{{ $message }}</span>
+                  @enderror
+                </div>
+              </div>
+            </div>
             <div class="uk-margin">
               <label for="description" class="uk-form-label">
                 {{ __('Product description') }}
@@ -49,19 +107,6 @@
                   class="uk-input @error('image')  uk-form-danger @enderror" id="product_images" multiple
                   accept=".jpg, .png, .jpeg" type="file" />
                 @error('product_images')
-                <span class="uk-text-danger">{{ $message }}</span>
-                @enderror
-              </div>
-            </div>
-            <div class="uk-margin">
-              <label for="amount" class="uk-form-label">
-                {{ __('Product Amount') }}
-              </label>
-              <div class="uk-form-control">
-                <input name="amount" placeholder="Select Amount"
-                  class="uk-input @error('amount')  uk-form-danger @enderror" id="amount" type="number"
-                  value="{{ old('amount') }}" />
-                @error('amount')
                 <span class="uk-text-danger">{{ $message }}</span>
                 @enderror
               </div>

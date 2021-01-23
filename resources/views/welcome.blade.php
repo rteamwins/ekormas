@@ -11,5 +11,5 @@
 @section('title', 'Available Products')
 @section('content')
 
-<product-shop-list />
+<product-shop-list :states="{{$states}}" :lgas="{{$lgas}}"></product-shop-list>
 @endsection

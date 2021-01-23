@@ -98,48 +98,4 @@ class RegistrationCreditPurchaseController extends Controller
     }
   }
 
-  /**
-   * Display the specified resource.
-   *
-   * @param  \App\RegistrationCreditPurchase  $registrationCreditPurchase
-   * @return \Illuminate\Http\Response
-   */
-  public function show(RegistrationCreditPurchase $registrationCreditPurchase)
-  {
-    //
-  }
-
-  /**
-   * Show the form for editing the specified resource.
-   *
-   * @param  \App\RegistrationCreditPurchase  $registrationCreditPurchase
-   * @return \Illuminate\Http\Response
-   */
-  public function edit(RegistrationCreditPurchase $registrationCreditPurchase)
-  {
-    //
-  }
-
-  /**
-   * Update the specified resource in storage.
-   *
-   * @param  \Illuminate\Http\Request  $request
-   * @param  \App\RegistrationCreditPurchase  $registrationCreditPurchase
-   * @return \Illuminate\Http\Response
-   */
-  public function update(Request $request, RegistrationCreditPurchase $registrationCreditPurchase)
-  {
-    //
-  }
-
-  /**
-   * Remove the specified resource from storage.
-   *
-   * @param  \App\RegistrationCreditPurchase  $registrationCreditPurchase
-   * @return \Illuminate\Http\Response
-   */
-  public function destroy(RegistrationCreditPurchase $registrationCreditPurchase)
-  {
-    //
-  }
 }

@@ -54,7 +54,7 @@ class PointController extends Controller
    */
   public function store_convert_points_to_wallet_funds(Request $request)
   {
-    $max = (Auth()->user()->available_wallet);
+    $max = (Auth()->user()->wallet);
     request()->validate([
       'funding_amount' => 'required|numeric|min:100|max:' . $max,
     ]);

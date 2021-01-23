@@ -45,14 +45,14 @@
               </label>
               <label for="trade_amount" class="uk-form-label">
                 Min ${{number_format(Auth()->user()->membership_plan->min_trading_capital,0)}} - Max
-                ${{number_format(Auth()->user()->available_wallet >= Auth()->user()->membership_plan->max_trading_capital?Auth()->user()->membership_plan->max_trading_capital:Auth()->user()->available_wallet,0)}}
+                ${{number_format(Auth()->user()->wallet >= Auth()->user()->membership_plan->max_trading_capital?Auth()->user()->membership_plan->max_trading_capital:Auth()->user()->wallet,0)}}
               </label>
               <div class="uk-form-control">
                 <div class="uk-inline uk-width-1-1">
                   <span class="uk-form-icon">$</span>
                   <input class="uk-input @error('trade_amount') uk-form-danger @enderror" name="trade_amount"
                     id="trade_amount" type="number"
-                    max="{{Auth()->user()->available_wallet >= Auth()->user()->membership_plan->max_trading_capital?Auth()->user()->membership_plan->max_trading_capital:Auth()->user()->available_wallet}}"
+                    max="{{Auth()->user()->wallet >= Auth()->user()->membership_plan->max_trading_capital?Auth()->user()->membership_plan->max_trading_capital:Auth()->user()->wallet}}"
                     min="{{Auth()->user()->membership_plan->min_trading_capital}}"
                     value="{{ old('trade_amount')?:Auth()->user()->membership_plan->min_trading_capital }}" required
                     autofocus>

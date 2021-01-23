@@ -81,6 +81,10 @@ Route::group(['middleware' => ['verifyRegPayment']], function () {
     Route::get('/registration_credit/purchase', 'RegistrationCreditPurchaseController@create')->name('user_purchase_registration_credits');
     Route::post('/registration_credit/process', 'RegistrationCreditPurchaseController@store')->name('user_store_purchase_registration_credits');
     Route::get('/registration_credit/list', 'RegistrationCreditPurchaseController@index')->name('user_list_purchase_registration_credits');
+
+    Route::get('agent/application/list', 'AgentApplicationController@index')->name('agent_application_list');
+    Route::get('agent/application/new', 'AgentApplicationController@create')->name('agent_application_form');
+    Route::post('agent/application/store', 'AgentApplicationController@store')->name('agent_application_form_store');
   });
   Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
     Route::get('/', 'AdminController@index')->name('admin_home');

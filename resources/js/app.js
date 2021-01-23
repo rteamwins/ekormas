@@ -10,12 +10,13 @@ window.Vue = require("vue");
 import VueSweetalert2 from "vue-sweetalert2";
 import Paginate from "vuejs-paginate";
 import moment from "moment";
-import VueApexCharts from 'vue-apexcharts'
+import VueApexCharts from "vue-apexcharts";
 
-
-Vue.use(VueApexCharts)
+Vue.use(VueApexCharts);
 Vue.use(VueSweetalert2);
 Vue.prototype.moment = moment;
+
+import store from "./store/index";
 
 /**
  * The following block of code may be used to automatically register your
@@ -25,7 +26,7 @@ Vue.prototype.moment = moment;
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 
-Vue.component('apexchart', VueApexCharts)
+Vue.component("apexchart", VueApexCharts);
 Vue.component("paginate", Paginate);
 const files = require.context("./", true, /\.vue$/i);
 files.keys().map(key =>
@@ -47,5 +48,6 @@ files.keys().map(key =>
  */
 
 const app = new Vue({
-  el: "#app"
+  el: "#app",
+  store
 });

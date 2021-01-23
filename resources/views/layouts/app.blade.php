@@ -220,9 +220,9 @@
           </ul>
         </li>
         <li>
-          <div
-            class="uk-padding-small orange white-text @if(auth()->user()->downlines->count() <100) uk-disabled @endif">
-            <a href="/" class="uk-button-small  uk-text-bold uk-width-1-1" style="">MAKE ME AN AGENT
+          <div class="uk-padding-small orange white-text @if(auth()->user()->downlines->count() <100)  @endif">
+            <a href="{{route('agent_application_form')}}" class="uk-button-small  uk-text-bold uk-width-1-1"
+              style="">MAKE ME AN AGENT
             </a>
             <progress class="uk-progress uk-margin-remove" value="{{auth()->user()->downlines->count()}}"
               max="100"></progress>

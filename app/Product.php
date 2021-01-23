@@ -10,11 +10,18 @@ class Product extends Model
 {
   use SoftDeletes;
   protected $fillable = [
-    'code', 'title', 'slug','status',
+    'code', 'title', 'slug', 'status',
+    'category_id',
+    'reward_level', 'delivery_duration',
     'amount', 'images', 'description',
   ];
 
   protected $dateFormat = 'Y-m-d H:i:s.u';
+
+  public function category()
+  {
+    return $this->belongsTo(Category::class);
+  }
 
   public function orders()
   {

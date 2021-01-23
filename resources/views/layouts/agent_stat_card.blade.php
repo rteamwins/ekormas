@@ -44,7 +44,7 @@
         'title'=>'WALLET',
         'stat_data'=>[
         ['text'=>"TOTAL",'value'=>"$".number_format(Auth()->user()->wallet?:0,2)],
-        ['text'=>"AVAIL",'value'=>"$".number_format(Auth()->user()->available_wallet?:0,2)]
+        ['text'=>"AVAIL",'value'=>"$".number_format(Auth()->user()->wallet?:0,2)]
         ],
         'stat_link'=>[
         ['route'=>route('user_create_trade'),'name'=>'Fund','icon'=>'download'],
@@ -59,7 +59,7 @@
         ['text'=>"ROI",'value'=>"$".number_format(Auth()->user()->trading_capital?:0,2)]
         ],
         'stat_link'=>[
-        ['route'=>route('user_fund_wallet'),'name'=>'Start','icon'=>'cart'],
+        ['route'=>route('user_create_trade'),'name'=>'Start','icon'=>'cart'],
         ['route'=>route('user_trade_history'),'name'=>'History','icon'=>'list']
         ]
         ])
@@ -321,6 +321,9 @@
                       <a href="{{route('admin_list_potential_agents')}}"
                         class="uk-button uk-button-link uk-text-bold white-text"><span uk-icon="plus-circle"></span>
                         <span class="uk-visible@m">Potential</span> </a>
+                      <a href="{{route('agent_application_list')}}"
+                        class="uk-button uk-button-link uk-text-bold white-text"><span uk-icon="users"></span>
+                        <span class="uk-visible@m">Applications</span> </a>
                     </div>
                   </td>
               </tbody>

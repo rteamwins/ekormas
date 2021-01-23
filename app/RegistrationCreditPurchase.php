@@ -30,8 +30,6 @@ class RegistrationCreditPurchase extends Model
     return $this->hasOne(Transaction::class, 'transaction_id');
   }
 
-
-
   protected static function boot()
   {
     parent::boot();

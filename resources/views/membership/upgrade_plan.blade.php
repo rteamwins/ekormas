@@ -41,7 +41,7 @@
       <p class="uk-margin-remove-top">
         Upgrade to a higher membership plan for more benefits
       </p>
-      <form method="GET" action="#" class="uk-form-stacked">
+      <form method="POST" action="#" class="uk-form-stacked">
         @csrf
         <div class="uk-margin uk-width-1-1">
           <label for="plan" class="uk-form-label">

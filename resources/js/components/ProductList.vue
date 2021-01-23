@@ -10,6 +10,8 @@
           <th>CODE</th>
           <th>TITLE</th>
           <th>AMOUNT</th>
+          <th>REWARD LEVEL</th>
+          <th>DELIVERY DURATION</th>
           <th>STATUS</th>
           <th>DATE</th>
           <th>ACTION</th>
@@ -47,7 +49,14 @@
             <span class="uk-hidden@m uk-text-bold">Amount: </span>
             <span> ${{ number_format(product.amount) }} </span>
           </td>
-
+          <td>
+            <span class="uk-hidden@m uk-text-bold">Reward Level: </span>
+            <span> Level {{ product.reward_level }} </span>
+          </td>
+          <td>
+            <span class="uk-hidden@m uk-text-bold">Delivery Duration: </span>
+            <span> {{ product.delivery_duration }} Days </span>
+          </td>
           <td>
             <span class="uk-hidden@m uk-text-bold">Status: </span>
             <span class="uk-label green">
@@ -194,7 +203,6 @@ export default {
       let data = [];
       images.forEach((image, i) => {
         data.push({
-          title: "Image " + (i + 1),
           html: `<img data-src='${image}' width='400' height='200' style='height:50vh;object-fit:contain;' class='uk-width-1-1 uk-border-rounded' uk-img>`
         });
       });

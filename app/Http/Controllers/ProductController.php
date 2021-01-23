@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -27,7 +28,8 @@ class ProductController extends Controller
    */
   public function create()
   {
-    return view('product.create');
+    $categories = Category::select('id', 'name')->get();
+    return view('product.create', ['categories' => $categories]);
   }
 
   /**
@@ -40,8 +42,10 @@ class ProductController extends Controller
   {
     $this->validate($request, [
       'title' => 'required|string',
+      'category' => 'required|integer|exists:categories,id',
       'amount' => 'digits_between:1,10000000',
-      // 'reward_level' => 'required|integer|digits_between:1,20',
+      'reward_level' => 'required|integer|digits_between:1,20',
+      'delivery_duration' => 'required|integer|digits_between:1,99',
       'product_images' => 'required|array|min:1',
       'product_images.*' => 'required|image|mimes:png,jpg,jpeg',
       'description' => 'required|string',
@@ -49,7 +53,10 @@ class ProductController extends Controller
     $product_data = [
       'title' => $request->title,
       'amount' => $request->amount,
+      'category_id' => $request->category,
       'images' => '[]',
+      'reward_level' => $request->reward_level,
+      'delivery_duration' => $request->delivery_duration,
       'description' => $request->description,
       'status' => 'active'
     ];

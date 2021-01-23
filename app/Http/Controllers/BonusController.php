@@ -39,7 +39,7 @@ class BonusController extends Controller
    */
   public function store_convert_to_wallet_funds(Request $request)
   {
-    $max = (Auth()->user()->available_wallet);
+    $max = (Auth()->user()->wallet);
     request()->validate([
       'funding_amount' => 'required|numeric|min:100|max:' . $max,
     ]);
