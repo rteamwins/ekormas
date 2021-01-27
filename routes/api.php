@@ -31,6 +31,17 @@ Route::middleware('auth:api')->group(function () {
   Route::get('local-pay/request/decline/{id}', 'LocalPayController@decline')->where(['id' => '[0-9]+']);;
 
 
+  Route::get('category/list', 'CategoryController@index_json');
+  Route::get('category/delete/{id}', 'CategoryController@destroy')->where(['id' => '[0-9]+']);
+  Route::post('category/update/{id}', 'CategoryController@update')->where(['id' => '[0-9]+']);
+  Route::post('category/new', 'CategoryController@store');
+
+  Route::get('order/list', 'OrderController@index_json');
+  Route::get('admin/order/list', 'OrderController@admin_index_json');
+  Route::get('admin/order/mark-as/shipped/{id}', 'OrderController@mark_as_shipped')->where(['id' => '[0-9]+']);
+  Route::post('admin/order/mark-as/completed/{id}', 'OrderController@mark_as_completed')->where(['id' => '[0-9]+']);
+
+
   Route::get('alert/list', 'AlertController@index_json');
   Route::get('alert/enable/{id}', 'AlertController@enable')->where(['id' => '[0-9]+']);
   Route::get('alert/disable/{id}', 'AlertController@disable')->where(['id' => '[0-9]+']);
@@ -41,5 +52,8 @@ Route::middleware('auth:api')->group(function () {
   Route::get('product/enable/{id}', 'ProductController@enable')->where(['id' => '[0-9]+']);
   Route::get('product/disable/{id}', 'ProductController@disable')->where(['id' => '[0-9]+']);
   Route::get('product/{id}/delete_image/{image_name}', 'ProductController@disable')->where(['id' => '[0-9]+']);
+
+  Route::post('order/new', 'OrderController@store');
 });
 Route::get('product/list', 'ProductController@index_json');
+Route::get('product/home-list', 'ProductController@home_index_json');

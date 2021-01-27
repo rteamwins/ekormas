@@ -20,6 +20,7 @@
             level {{ Math.floor(level / 2) }}
           </li> -->
           <li
+            v-show="canAcceptChild"
             class="uk-text-small"
             title="Copy Placement Link"
             style="cursor:pointer;font-size:12px;"
@@ -56,7 +57,8 @@ export default {
     name: { type: String, required: true },
     phone: { type: String, required: true },
     username: { type: String, required: true },
-    placement_id: { type: Number, required: true }
+    placement_id: { type: Number, required: true },
+    canAcceptChild: { type: Boolean, required: true }
   },
   methods: {
     copyValueToClipboard() {

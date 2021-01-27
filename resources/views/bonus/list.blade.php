@@ -6,7 +6,7 @@
 @section('title', 'All Bonus Recieved')
 @section('content')
 <div class="uk-container uk-padding-remove uk-margin-bottom">
-  @include('layouts.user_stats_card')
+
   <div class="uk-margin-large-bottom" uk-grid>
     <div class="uk-width-1-1">
       <div class="uk-card uk-card-default uk-padding-remove uk-border-rounded">

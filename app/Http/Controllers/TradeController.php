@@ -30,12 +30,12 @@ class TradeController extends Controller
   {
     $user = Auth()->user();
     if (Trade::whereUserId($user->id)->where('closing_at', '>', now())->exists()) {
-      return back()->with('user-info', sprintf("You have a trade currently in session, you cant place any more trades during this period.", route('user_fund_wallet')));
+      return back()->with('info', sprintf("You have a trade currently in session, you cant place any more trades during this period.", route('user_fund_wallet')));
     }
     if ($user->wallet >= $user->membership_plan->max_trading_capital) {
       return view('trade.create');
     } else {
-      return back()->with('user-info', sprintf("You Do not have availble funds to trade with. Try funding you account and try again, <a href='%s'>Fund Account now</a>.", route('user_fund_wallet')));
+      return back()->with('info', sprintf("You Do not have availble funds to trade with. Try funding you account and try again, <a href='%s'>Fund Account now</a>.", route('user_fund_wallet')));
     }
   }
 

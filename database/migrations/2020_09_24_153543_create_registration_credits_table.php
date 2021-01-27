@@ -14,6 +14,7 @@ class CreateRegistrationCreditsTable extends Migration
   public function up()
   {
     Schema::create('registration_credits', function (Blueprint $table) {
+      $table->id();
       $table->string('code', 15)->unique();
       $table->string('status')->nullable()->default(null);
       $table->string('plan')->default('pearl');

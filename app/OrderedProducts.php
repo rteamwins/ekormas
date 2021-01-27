@@ -17,6 +17,8 @@ class OrderedProducts extends Model
 
   protected $dateFormat = 'Y-m-d H:i:s.u';
 
+  protected $appends = ['sub_total'];
+
   protected $hidden = [];
 
   public function order()
@@ -27,5 +29,10 @@ class OrderedProducts extends Model
   public function product()
   {
     return $this->belongsTo(Product::class);
+  }
+
+  public function getSubTotalAttribute()
+  {
+    return ($this->product->amount * $this->quantity) ?? 0;
   }
 }

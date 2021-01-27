@@ -41,7 +41,7 @@ class PointController extends Controller
   public function convert_points_to_wallet_funds()
   {
     if (auth()->user()->active_points < 102) {
-      return back()->with('user-info', "You Do not have enough points to convert, you need " . (102 - auth()->user()->active_points) . " more");
+      return back()->with('info', "You Do not have enough points to convert, you need " . (102 - auth()->user()->active_points) . " more");
     }
     return view('point.convert_to_wallet');
   }
@@ -119,9 +119,9 @@ class PointController extends Controller
         $new_trx->update();
         $admin->bonus += $new_trx->amount;
         $admin->update();
-        return redirect()->route('user_home')->with('user-success', "Your wallet was successfully funded with {$request->amount} from your points");
+        return redirect()->route('user_home')->with('success', "Your wallet was successfully funded with {$request->amount} from your points");
       } catch (\Exception $e) {
-        return back()->with('user-error', sprintf('Could not fund your wallet: %s', $e->getMessage()));
+        return back()->with('error', sprintf('Could not fund your wallet: %s', $e->getMessage()));
       }
     }
   }

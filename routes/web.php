@@ -29,16 +29,27 @@ Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail'
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
+Route::get('/about-us', 'HomeController@about_us')->name('about_us');
+Route::get('/faq', 'HomeController@faq')->name('faq');
+Route::get('/terms-and-conditions', 'HomeController@tac')->name('tac');
+Route::get('/disclaimer', 'HomeController@disclaimer')->name('disclaimer');
+Route::get('/store', 'ProductController@store_index')->name('product_store');
+
 Route::group(['middleware' => ['verifyRegPayment']], function () {
   Route::get('/', 'HomeController@index')->name('home');
   Route::group(['prefix' => 'user', 'middleware' => ['auth']], function () {
     Route::get('/dashboard', 'HomeController@user_dashboard')->name('user_home');
+    Route::get('/order', 'OrderController@index')->name('order_list');
+    Route::get('/order/{order_code}/payment-failed', 'OrderController@payment_failed')->name('order_payment_failed');
+    Route::get('/order/{order_code}/payment-success', 'OrderController@payment_success')->name('order_payment_success');
 
     Route::group(['prefix' => 'wallet'], function () {
       Route::group(['prefix' => 'fund'], function () {
         Route::get('create', 'FundingController@create')->name('user_fund_wallet');
         Route::post('save', 'FundingController@store')->name('user_fund_wallet_save');
         Route::get('history', 'FundingController@index')->name('user_fund_history');
+        Route::get('{amount}/payment-failed', 'FundingController@payment_failed')->name('user_fund_payment_failed');
+        Route::get('{amount}/payment-success', 'FundingController@payment_success')->name('user_fund_payment_success');
       });
     });
 
@@ -81,6 +92,8 @@ Route::group(['middleware' => ['verifyRegPayment']], function () {
     Route::get('/registration_credit/purchase', 'RegistrationCreditPurchaseController@create')->name('user_purchase_registration_credits');
     Route::post('/registration_credit/process', 'RegistrationCreditPurchaseController@store')->name('user_store_purchase_registration_credits');
     Route::get('/registration_credit/list', 'RegistrationCreditPurchaseController@index')->name('user_list_purchase_registration_credits');
+    Route::get('/registration_credit/{plan}/{quantity}/payment-failed', 'RegistrationCreditPurchaseController@payment_failed')->name('user_registration_credit_payment_failed');
+    Route::get('/registration_credit/{plan}/{quantity}/payment-success', 'RegistrationCreditPurchaseController@payment_success')->name('user_registration_credit_payment_success');
 
     Route::get('agent/application/list', 'AgentApplicationController@index')->name('agent_application_list');
     Route::get('agent/application/new', 'AgentApplicationController@create')->name('agent_application_form');
@@ -93,6 +106,7 @@ Route::group(['middleware' => ['verifyRegPayment']], function () {
     Route::get('/investor/list/active', 'HomeController@active_users')->name('admin_list_active_users');
     Route::get('/investor/list/potential', 'HomeController@non_active_users')->name('admin_list_non_active_users');
 
+    Route::get('/order', 'OrderController@admin_index')->name('admin_order_request_list');
 
     Route::group(['prefix' => 'post'], function () {
       Route::post('/process_new_post', 'PostController@store')->name('process_new_post');
@@ -114,11 +128,16 @@ Route::group(['middleware' => ['verifyRegPayment']], function () {
     });
   });
 });
+
 Route::post('/process_registration_plan', 'HomeController@process_reg_plan')->name('process_reg_plan');
 Route::get('/choose_registration_plan', 'HomeController@choose_reg_plan')->name('choose_reg_plan');
 Route::get('/update_registration_plan', 'HomeController@update_reg_plan')->name('update_reg_plan');
+Route::get('/registration_plan/{plan}/payment-failed', 'HomeController@payment_failed')->name('reg_plan_payment_failed');
+Route::get('/registration_plan/{plan}/payment-success', 'HomeController@payment_success')->name('reg_plan_payment_success');
+
 
 Route::get('/tester', 'MarketTickerController@index');
 
 
 Route::get('/alert/list', 'AlertController@index')->name('admin_list_alert');
+Route::get('/category/list', 'CategoryController@index')->name('admin_list_category');

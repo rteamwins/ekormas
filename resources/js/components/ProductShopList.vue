@@ -13,12 +13,12 @@
           :key="`product_${i}`"
         >
           <div
-            class="uk-card uk-card-default uk-padding-remove uk-margin-small uk-link-text"
+            class="uk-card uk-card-default uk-padding-remove uk-margin-small uk-link-text uk-border-rounded"
           >
             <div class="uk-card-body uk-text-center uk-padding-remove">
               <ul class="uk-child-width-expand uk-margin-remove-bottom" uk-tab>
-                <li><a href="#">Details</a></li>
-                <li><a href="#">Description</a></li>
+                <li><a class="uk-text-bold" href="#">Details</a></li>
+                <li><a class="uk-text-bold" href="#">Description</a></li>
               </ul>
               <ul class="uk-switcher uk-margin-bottom">
                 <li>

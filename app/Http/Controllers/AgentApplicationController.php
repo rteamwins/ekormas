@@ -50,7 +50,7 @@ class AgentApplicationController extends Controller
         'lgas' => $lgas,
         ]);
       }else{
-        return back()->with('user-info','Sorry you cannot apply at this time, you already have a pending or finalized application.');
+        return back()->with('info','Sorry you cannot apply at this time, you already have a pending or finalized application.');
       }
   }
 

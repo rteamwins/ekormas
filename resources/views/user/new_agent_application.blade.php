@@ -22,7 +22,7 @@
 @section('title', 'Prospective Agent')
 @section('content')
 <div class="uk-container uk-padding-remove">
-  @include('layouts.user_stats_card')
+
   <div class="uk-margin-large-bottom uk-flex-center" uk-grid>
     <div class="uk-width-1-1 uk-width-2-3@s uk-width-1-2@m">
       <div class="uk-card uk-card-default uk-border-rounded">

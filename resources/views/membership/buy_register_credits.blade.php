@@ -5,14 +5,16 @@
 @push('scripts_bottom')
 <script>
   var reg_type = true;
-  var current_plan = 'pearl'
-  const plan_map = (plan='pearl',plan_qty=1)=> {
+  var current_plan = 'onyx'
+  const plan_map = (plan='onyx',plan_qty=1)=> {
     if(plan_qty > 100){
       plan_qty = 100
     }else if(plan_qty <1){
       plan_qty = 1
     }
-    if(plan == 'pearl'){
+    if(plan == 'onyx'){
+      return `Membership Package: $${50*plan_qty} <br> Minimum Trading Capital: $${10*plan_qty} <br> Registration Fee: $${10*plan_qty} <br> Total: $${70*plan_qty}`;
+    }else if(plan == 'pearl'){
       return `Membership Package: $${100*plan_qty} <br> Minimum Trading Capital: $${20*plan_qty} <br> Registration Fee: $${10*plan_qty} <br> Total: $${130*plan_qty}`;
     }else if(plan == 'ruby'){
       return `Membership Package: $${250*plan_qty} <br> Minimum Trading Capital: $${50*plan_qty} <br> Registration Fee: $${10*plan_qty} <br> Total: $${310*plan_qty}`;
@@ -58,6 +60,7 @@
               <div class="uk-inline uk-width-1-1">
                 <select onchange="display_package_info(this)" class="uk-select uk-border-rounded" name="plan" required
                   id="plan">
+                  <option value="onyx">Onyx($50) </option>
                   <option value="pearl">Pearl($100) </option>
                   <option value="ruby">Ruby($250) </option>
                   <option value="gold">Gold($500) </option>
@@ -89,8 +92,8 @@
           </div>
           <div class="uk-margin uk-width-1-1">
             <div class="uk-alert-primary" id="plan_info_alert" uk-alert>
-              <p class="uk-text-center uk-text-bold" id="plan_info">Membership Package: $100 <br> Minimum
-                Trading Capital: $20 <br> Registration Fee: $10 <br> Total: $130</p>
+              <p class="uk-text-center uk-text-bold" id="plan_info">Membership Package: $50 <br> Minimum
+                Trading Capital: $10 <br> Registration Fee: $10 <br> Total: $70</p>
             </div>
           </div>
           <div class="uk-margin uk-width-1-1">

@@ -1,101 +1,126 @@
 <template>
-  <div>
-    <table
-      class="uk-table uk-table-small uk-table-striped uk-table-middle uk-table-responsive uk-table-divider"
-    >
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>MESSAGE</th>
-          <th>STATUS</th>
-          <th>DATE</th>
-          <th>ACTION</th>
-        </tr>
-      </thead>
-      <tbody v-if="Object.keys(alerts).length > 0">
-        <tr v-for="(alert, i) in alerts" :key="`alert_${i}`">
-          <td>
-            <span class="uk-hidden@m uk-text-bold">#: </span>
-            {{ i + 1 }}
-          </td>
-          <td>
-            <span class="uk-hidden@m uk-text-bold">Message: </span>
-            <span>
-              {{ alert.message }}
-            </span>
-          </td>
+  <div class="uk-container uk-padding-remove uk-margin-bottom">
+    <div class="uk-margin-large-bottom" uk-grid>
+      <div class="uk-width-1-1">
+        <div
+          class="uk-card uk-card-default uk-padding-remove uk-border-rounded"
+        >
+          <div class="uk-card-header uk-padding-small">
+            <h2 class="uk-h2 uk-margin-remove-bottom uk-text-bolder">
+              ALERTS
+            </h2>
+            <p class="uk-margin-remove-top">
+              All Alerts
+            </p>
+          </div>
+          <div class="uk-card-body uk-padding-remove">
+            <a
+              href="#"
+              @click="new_alert()"
+              class="uk-button uk-button-small uk-position-top-right uk-background-primary white-text"
+              uk-icon="plus"
+              >New Alert</a
+            >
+            <table
+              class="uk-table uk-table-small uk-table-striped uk-table-middle uk-table-responsive uk-table-divider"
+            >
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>MESSAGE</th>
+                  <th>STATUS</th>
+                  <th>DATE</th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody v-if="Object.keys(alerts).length > 0">
+                <tr v-for="(alert, i) in alerts" :key="`alert_${i}`">
+                  <td>
+                    <span class="uk-hidden@m uk-text-bold">#: </span>
+                    {{ i + 1 }}
+                  </td>
+                  <td>
+                    <span class="uk-hidden@m uk-text-bold">Message: </span>
+                    <span>
+                      {{ alert.message }}
+                    </span>
+                  </td>
 
-          <td>
-            <span class="uk-hidden@m uk-text-bold">Status: </span>
-            <span class="uk-label green">
-              {{ alert.status }}
-            </span>
-          </td>
-          <td>
-            <span class="uk-hidden@m uk-text-bold">Date: </span>
-            {{ moment(alert.created_at).fromNow() }}
-          </td>
-          <td>
-            <span class="uk-hidden@m uk-text-bold">Action: </span>
-            <span
-              v-show="alert.status == 'pending'"
-              title="Enable Alert"
-              style="cursor:pointer;"
-              @click="enable_alert(alert.id)"
-              class="uk-icon-button green-text"
-              uk-icon="check"
-            ></span>
-            <span
-              v-show="alert.status == 'active'"
-              title="Disable Alert"
-              style="cursor:pointer;"
-              @click="disable_alert(alert.id)"
-              class="uk-icon-button red-text text-lighten-2"
-              uk-icon="close"
-            ></span>
-            <span
-              title="Edit Alert"
-              style="cursor:pointer;"
-              @click="edit_alert(alert.id, i)"
-              class="uk-icon-button blue-text"
-              uk-icon="file-edit"
-            ></span>
-            <span
-              title="Delete Alert"
-              style="cursor:pointer;"
-              @click="delete_alert(alert.id)"
-              class="uk-icon-button red-text"
-              uk-icon="trash"
-            ></span>
-          </td>
-        </tr>
-      </tbody>
-      <tbody v-else>
-        <tr>
-          <td class="uk-text-center" colspan="5">
-            <span class="uk-label cyan"> No Data to Display</span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <div
-      v-show="alert_pagination_data.page_count > 1"
-      class="uk-flex-center"
-      uk-margin
-    >
-      <paginate
-        v-model="alert_pagination_data.current_page"
-        :page-count="alert_pagination_data.page_count"
-        :page-range="3"
-        :margin-pages="2"
-        :prev-text="'<span uk-pagination-previous></span>'"
-        :next-text="'<span uk-pagination-next></span>'"
-        :container-class="'uk-pagination uk-flex-center'"
-        :active-class="'uk-active'"
-        :disable-class="'uk-disabled'"
-        :click-handler="alert_page_swap"
-      >
-      </paginate>
+                  <td>
+                    <span class="uk-hidden@m uk-text-bold">Status: </span>
+                    <span class="uk-label green">
+                      {{ alert.status }}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="uk-hidden@m uk-text-bold">Date: </span>
+                    {{ moment(alert.created_at).fromNow() }}
+                  </td>
+                  <td>
+                    <span class="uk-hidden@m uk-text-bold">Action: </span>
+                    <span
+                      v-show="alert.status == 'pending'"
+                      title="Enable Alert"
+                      style="cursor:pointer;"
+                      @click="enable_alert(alert.id)"
+                      class="uk-icon-button green-text"
+                      uk-icon="check"
+                    ></span>
+                    <span
+                      v-show="alert.status == 'active'"
+                      title="Disable Alert"
+                      style="cursor:pointer;"
+                      @click="disable_alert(alert.id)"
+                      class="uk-icon-button red-text text-lighten-2"
+                      uk-icon="close"
+                    ></span>
+                    <span
+                      title="Edit Alert"
+                      style="cursor:pointer;"
+                      @click="edit_alert(alert.id, i)"
+                      class="uk-icon-button blue-text"
+                      uk-icon="file-edit"
+                    ></span>
+                    <span
+                      title="Delete Alert"
+                      style="cursor:pointer;"
+                      @click="delete_alert(alert.id)"
+                      class="uk-icon-button red-text"
+                      uk-icon="trash"
+                    ></span>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody v-else>
+                <tr>
+                  <td class="uk-text-center" colspan="5">
+                    <span class="uk-label cyan"> No Data to Display</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div
+              v-show="alert_pagination_data.page_count > 1"
+              class="uk-flex-center"
+              uk-margin
+            >
+              <paginate
+                v-model="alert_pagination_data.current_page"
+                :page-count="alert_pagination_data.page_count"
+                :page-range="3"
+                :margin-pages="2"
+                :prev-text="'<span uk-pagination-previous></span>'"
+                :next-text="'<span uk-pagination-next></span>'"
+                :container-class="'uk-pagination uk-flex-center'"
+                :active-class="'uk-active'"
+                :disable-class="'uk-disabled'"
+                :click-handler="alert_page_swap"
+              >
+              </paginate>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -296,6 +321,55 @@ export default {
           return axios
             .post(
               `${window.location.origin}/api/alert/update/${alert_id}`,
+              alert_data,
+              axios_config
+            )
+            .then(res => {
+              this.load_data(current_page);
+              this.$swal.fire({
+                title: `Success: ${res.statusText}`,
+                text: `${res.data}`,
+                icon: "success"
+              });
+              return;
+            })
+            .catch(err => {
+              this.load_data(current_page);
+              this.$swal.fire({
+                title: "Failed: " + `${err.response.statusText}`,
+                icon: "error",
+                text: `${err.response.data.message}`
+              });
+            });
+        }
+      });
+    },
+    new_alert() {
+      let current_page = this.alert_pagination_data.current_page;
+      const axios_config = {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        }
+      };
+
+      this.$swal.fire({
+        title: "Create New Alert?",
+        showCloseButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Create",
+        cancelButtonText: "Cancel",
+        input: "text",
+        inputPlaceholder: "Type your message here...",
+        inputValue: "",
+        showLoaderOnConfirm: true,
+        preConfirm: msg => {
+          let alert_data = {
+            message: msg
+          };
+          return axios
+            .post(
+              `${window.location.origin}/api/alert/new`,
               alert_data,
               axios_config
             )

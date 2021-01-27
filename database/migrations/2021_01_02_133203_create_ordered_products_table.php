@@ -17,6 +17,7 @@ class CreateOrderedProductsTable extends Migration
       $table->id();
       $table->unsignedBigInteger('order_id');
       $table->unsignedBigInteger('product_id');
+      $table->integer('quantity');
       $table->timestamp('created_at', 6)->useCurrent();
       $table->timestamp('updated_at', 6)->useCurrent()->nullable();
     });

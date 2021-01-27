@@ -18,7 +18,6 @@ class CreateOrdersTable extends Migration
       $table->unsignedBigInteger('transaction_id')->default(null)->nullable();
       $table->unsignedBigInteger('user_id');
       $table->string('type');
-      $table->decimal('total_amount', 14, 2);
       $table->string('status');
       $table->unsignedBigInteger('state_id');
       $table->unsignedBigInteger('lga_id');

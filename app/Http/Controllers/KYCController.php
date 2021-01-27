@@ -51,7 +51,7 @@ class KYCController extends Controller
     $new_kyc->created_by = $request->user()->id;
     $new_kyc->status = 'created';
     $new_kyc->save();
-    return redirect()->route('list_all_kycs')->with('user-success', "Your {$request->amount} KYC has been created")->setStatusCode(201);
+    return redirect()->route('list_all_kycs')->with('success', "Your {$request->amount} KYC has been created")->setStatusCode(201);
   }
 
 

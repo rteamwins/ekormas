@@ -6,21 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
-  protected $with = ['method','payable'];
+  protected $with = ['method'];
 
 
 
   protected $fillable = [
     'amount', 'status',
-    'user_id','type'
+    'user_id', 'type'
   ];
 
   public function method()
-  {
-    return $this->morphTo();
-  }
-
-  public function payable()
   {
     return $this->morphTo();
   }

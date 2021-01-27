@@ -1,7 +1,10 @@
 <template>
-  <div >
-    <div style="overflow-x: auto;height:60vh;"
-      class="uk-width-1-1 uk-text-center" id="ref_root">
+  <div>
+    <div
+      style="overflow-x: auto;height:60vh;"
+      class="uk-width-1-1 uk-text-center"
+      id="ref_root"
+    >
       <vue2-org-tree
         name="Referals"
         :data="data"
@@ -55,7 +58,6 @@ export default {
         .then(res => {
           this.data = { ...res.data };
           this.toggleExpand(this.data, this.expandAll);
-          console.log(res.data);
           this.Toast.fire({
             icon: "success",
             title: "Data loaded..."
@@ -79,7 +81,8 @@ export default {
           name: data.name,
           phone: data.phone,
           username: this.user_name,
-          placement_id: data.placement_id
+          placement_id: data.placement_id,
+          canAcceptChild: data.children?this.checkCanAcceptChild(data.children):true
         }
       });
     },
@@ -111,6 +114,17 @@ export default {
     expandChange: function() {
       this.toggleExpand(this.data, this.expandAll);
     },
+    checkCanAcceptChild(data) {
+      if (Array.isArray(data)) {
+        if (data.length < 2) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    },
     toggleExpand: function(data, val) {
       var _this = this;
       if (Array.isArray(data)) {
@@ -119,7 +133,6 @@ export default {
           if (item.children) {
             _this.toggleExpand(item.children, val);
           }
-
         });
       } else {
         this.$set(data, "expand", val);
@@ -137,7 +150,7 @@ export default {
       required: true,
       type: Number
     },
-    user_name:{
+    user_name: {
       required: true,
       type: String
     }
@@ -150,7 +163,7 @@ export default {
 </script>
 <style scoped>
 @import "~vue2-org-tree/dist/style.css";
-#ref_root /deep/ .org-tree-node-label .org-tree-node-label-inner{
+#ref_root /deep/ .org-tree-node-label .org-tree-node-label-inner {
   padding: 2px;
 }
 </style>

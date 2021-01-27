@@ -32,7 +32,7 @@ class User extends Authenticatable
   protected $fillable = [
     'parent_id', 'placement_id', 'name',
     'active_points', 'dormant_points',
-    'wallet', 'bounus', 'email', 'password',
+    'wallet', 'bonus', 'email', 'password',
     'referer', 'role', 'activated_at', 'phone',
     'trading_capital', 'membership_plan_id',
     'last_profit_at', 'points', 'username',

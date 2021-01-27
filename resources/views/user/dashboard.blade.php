@@ -11,7 +11,6 @@
 @section('title', 'Member\'s Dashboard')
 @section('content')
 <div class="uk-container uk-padding-remove uk-margin-bottom uk-margin-large-bottom">
-  @include('layouts.user_stats_card')
   @include('layouts.agent_stat_card')
   <div class="uk-grid-small" uk-grid>
     <div class="uk-width-1-1 uk-width-1-2@m">

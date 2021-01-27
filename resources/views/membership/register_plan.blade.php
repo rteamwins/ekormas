@@ -4,15 +4,17 @@
 @endpush
 @push('scripts_bottom')
 <script>
-  var btc_input = '<label for="plan" class="uk-form-label">Plan <span class="red-text uk-text-bold">*</span></label><div class="uk-form-control"><div class="uk-inline uk-width-1-1"><select onchange="display_package_info(this)" class="uk-select uk-border-rounded" name="plan" required id="plan"><option value="pearl">Pearl($100) </option><option value="ruby">Ruby($250) </option><option value="gold">Gold($500) </option><option value="sapphire">Sapphire($1000) </option><option value="emerald">Emerald($3000) </option><option value="diamond">Diamond($5000) </option></select></div>@error('plan')<span class="uk-text-danger">{{ $message }}</span>@enderror</div>'
+  var btc_input = '<label for="plan" class="uk-form-label">Plan <span class="red-text uk-text-bold">*</span></label><div class="uk-form-control"><div class="uk-inline uk-width-1-1"><select onchange="display_package_info(this)" class="uk-select uk-border-rounded" name="plan" required id="plan"><option value="oynx">Oynx($50) </option><option value="pearl">Pearl($100) </option><option value="ruby">Ruby($250) </option><option value="gold">Gold($500) </option><option value="sapphire">Sapphire($1000) </option><option value="emerald">Emerald($3000) </option><option value="diamond">Diamond($5000) </option></select></div>@error('plan')<span class="uk-text-danger">{{ $message }}</span>@enderror</div>'
   var rc_input ='<label for="rc_code" class="uk-form-label">RC Code <span class="red-text uk-text-bold">*</span></label><div class="uk-form-control uk-width-1-1"><div class="uk-inline uk-width-1-1"><span class="uk-form-icon" uk-icon="hashtag"></span><input class="uk-input uk-border-rounded @error('rc_code') uk-form-danger @enderror" name="rc_code" type="text" value="{{ old('rc_code') }}" required></div>@error('rc_code')<span class="uk-text-danger">{{ $message }}</span>@enderror</div>'
   var rc_submit = '<span class="uk-text-large">R</span>egister Now';
   var btc_submit = '<span class="uk-text-large">P</span>ay Registration Fee';
   var reg_type = true;
-  var current_plan = 'pearl'
-  const plan_map = (plan='pearl')=> {
+  var current_plan = 'onyx'
+  const plan_map = (plan='onyx')=> {
     let plan_qty = 1
-    if(plan == 'pearl'){
+    if(plan == 'onyx'){
+      return `Membership Package: $${50*plan_qty} <br> Minimum Trading Capital: $${10*plan_qty} <br> Registration Fee: $${10*plan_qty} <br> Total: $${70*plan_qty}`;
+    }else if(plan == 'pearl'){
       return `Membership Package: $${100*plan_qty} <br> Minimum Trading Capital: $${20*plan_qty} <br> Registration Fee: $${10*plan_qty} <br> Total: $${130*plan_qty}`;
     }else if(plan == 'ruby'){
       return `Membership Package: $${250*plan_qty} <br> Minimum Trading Capital: $${50*plan_qty} <br> Registration Fee: $${10*plan_qty} <br> Total: $${310*plan_qty}`;
@@ -77,6 +79,7 @@
                 <div class="uk-inline uk-width-1-1">
                   <select onchange="display_package_info(this)" class="uk-select uk-border-rounded" name="plan" required
                     id="plan">
+                    <option value="oynx">Oynx($50) </option>
                     <option value="pearl">Pearl($100) </option>
                     <option value="ruby">Ruby($250) </option>
                     <option value="gold">Gold($500) </option>
@@ -93,8 +96,8 @@
           </div>
           <div class="uk-margin uk-width-1-1">
             <div class="uk-alert-primary" id="plan_info_alert" uk-alert>
-              <p class="uk-text-center uk-text-bold" id="plan_info">Membership Package: $100 <br> Minimum
-                Trading Capital: $20 <br> Registration Fee: $10 <br> Total: $130</p>
+              <p class="uk-text-center uk-text-bold" id="plan_info">Membership Package: $50 <br> Minimum
+                Trading Capital: $10 <br> Registration Fee: $10 <br> Total: $70</p>
             </div>
           </div>
           <div class="uk-margin uk-width-1-1">

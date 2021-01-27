@@ -8,6 +8,7 @@ class RegistrationCreditPurchase extends Model
 {
 
   private const RC_PACKAGES = [
+    'onyx' => 70,
     'pearl' => 130,
     'ruby' => 310,
     'gold' => 610,
@@ -34,7 +35,7 @@ class RegistrationCreditPurchase extends Model
   {
     parent::boot();
     static::saving(function (RegistrationCreditPurchase $model) {
-      $model->attributes['amount'] = ($model->getAttribute('quantity') * self::RC_PACKAGES[$model->getAttribute('package')]);
+      $model->attributes['amount'] = ($model->getAttribute('quantity') * static::RC_PACKAGES[$model->getAttribute('package')]);
     });
   }
 }

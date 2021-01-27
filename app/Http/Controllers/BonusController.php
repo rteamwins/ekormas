@@ -66,9 +66,9 @@ class BonusController extends Controller
         $user->wallet += $new_trx->amount;
         $user->update();
 
-        return redirect()->route('user_home')->with('user-success', "Your wallet was successfully funded with {$request->amount} from your bonus");
+        return redirect()->route('user_home')->with('success', "Your wallet was successfully funded with {$request->amount} from your bonus");
       } catch (\Exception $e) {
-        return back()->with('user-error', sprintf('Could not fund your wallet: %s', $e->getMessage()));
+        return back()->with('error', sprintf('Could not fund your wallet: %s', $e->getMessage()));
       }
     }
   }

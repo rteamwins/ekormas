@@ -6,7 +6,7 @@
 @section('title', 'Fund Wallet')
 @section('content')
 <div class="uk-container uk-padding-remove">
-  @include('layouts.user_stats_card')
+
   <div class="uk-margin-large-bottom uk-flex-center" uk-grid>
     <div class="uk-width-1-1">
       <div class="uk-card uk-card-default uk-border-rounded">
@@ -63,7 +63,7 @@
                 <kyc-code-scanner old_value="{{ old('funding_kyc_code') }}" @error('funding_kyc_code')
                   :old_error="{status:true,message:'{{$message}}'}" @enderror></kyc-code-scanner>
 
-                  
+
                 <div class="uk-margin-remove-top uk-width-1-1 uk-width-2-3@s uk-width-1-2@m  uk-align-center">
                   <div class="uk-form-control">
                     <button type="submit"

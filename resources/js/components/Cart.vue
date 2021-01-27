@@ -1,13 +1,13 @@
 <template>
   <div>
-    <a v-show="cart_item_count > 0" href="#cart_details" uk-toggle>
+    <a v-show="cart_item_count > 0" class="uk-box-shadow-large" href="#cart_details" uk-toggle>
       <div
-        class="uk-card uk-card-default
-  uk-margin-small uk-card-body
-  uk-padding-small uk-border-pill
-  uk-position-fixed uk-position-bottom-right uk-position-z-index"
+        class="uk-card uk-card-default uk-background-primary
+              uk-margin-small uk-card-body uk-box-shadow-medium
+              uk-padding-small uk-border-pill
+              uk-position-fixed uk-position-bottom-right uk-position-z-index"
       >
-        <span class="green-text" uk-icon="icon:cart;ratio:1.5"></span>
+        <span class="white-text" uk-icon="icon:cart;ratio:1.5"></span>
         <div class="uk-position-top-right uk-label">{{ cart_item_count }}</div>
       </div>
     </a>
@@ -128,7 +128,7 @@
             </div>
         </div>
         <div class="uk-modal-footer uk-text-right">
-          <a  class="uk-button uk-button-primary" href="#">
+          <a :disabled="loading" @click="checkout()" class="uk-button uk-button-primary" href="#">
             Checkout |
             <span class="uk-text-bold">${{ number_format(total_price) }}</span>
             <span uk-icon="arrow-right"></span>
@@ -145,7 +145,15 @@ export default {
     return {
       sel_state: '',
       sel_lga: '',
-      address: ''
+      address: '',
+      loading: false,
+      axios_config: {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        }
+      },
+      y:["quantity","id"],
     };
   },
   computed: {
@@ -171,7 +179,68 @@ export default {
     },
     delete_item(x) {
       this.$store.commit('removeCartItem',x)
+    },
+    checkout(){
+      this.loading = !this.loading
+      const {sel_lga,sel_state,address, y ,axios_config} = this
+
+      if(sel_lga && sel_state && address){
+        if(window.Laravel.userId){
+          const form_data  = {
+        state: sel_state,
+        lga: sel_lga,
+        address: address,
+        cart_items: this.cart_items.map(({name,
+        amount,
+        image,...y})=>y)
+      }
+    console.log(form_data)
+    axios.post(
+      `${window.location.origin}/api/order/new`,
+      form_data,axios_config
+    ).then(res=>{
+      this.$swal.fire({
+                title: `Success: ${res.statusText}`,
+                text: `${res.data.message}`,
+                icon: "success"
+              });
+              setTimeout(() => {
+                window.location.href = res.data.payment_url
+              }, 2000);
+    }).catch(err => {
+      if(err.response.code == 401){
+this.$swal.fire({
+                title: "Not Logged In",
+                icon: "error",
+                text: 'Please login first before proceeding'
+              });
+      }else{
+              this.$swal.fire({
+                title: "Failed: " + `${err.response.statusText}`,
+                icon: "error",
+                text: `${err.response.data.message}`
+            });}
+              });
+        }else{
+          this.$swal.fire({
+                title: "Not Logged In",
+                icon: "error",
+                text: 'Please login first before proceeding'
+              });
+        }
+
+        }else{
+          this.$swal.fire({
+                  title: 'All Field Required',
+                  text: 'One or more fields is empty',
+                  icon: "error"
+                });
+              return
+
+      }
+      this.loading = !this.loading
     }
+
   },
   props: {
     states: {

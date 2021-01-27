@@ -77,8 +77,8 @@ class FundingController extends Controller
             "type" => "user_wallet_funding",
             "trnx_id" => $new_trx->id,
           ],
-          'redirect_url' => route('home'),
-          'cancel_url' => route('home'),
+          'redirect_url' => route('user_fund_payment_success', ['amount' => $request->funding_amount]),
+          'cancel_url' => route('user_fund_payment_failed', ['amount' => $request->funding_amount]),
         ]);
 
         $new_crypto_trx->charge_id = $new_charge['data']['hosted_url'];
@@ -139,5 +139,14 @@ class FundingController extends Controller
         return back()->with('error', sprintf('Could not fund your wallet: %s', $e->getMessage()));
       }
     }
+  }
+  public function payment_failed($amount)
+  {
+    return view('payment_status.wallet_fund_failed', ['amount' => $amount]);
+  }
+
+  public function payment_success($amount)
+  {
+    return view('payment_status.wallet_fund_success', ['amount' => $amount]);
   }
 }

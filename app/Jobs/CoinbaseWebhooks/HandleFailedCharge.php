@@ -36,30 +36,23 @@ class HandleFailedCharge implements ShouldQueue
    */
   public function handle()
   {
-    try{
-    $payload_obj = $this->webhookCall->payload;
-    $transaction = Transaction::updateOrCreate(
-      [
-        'investment_id' => $payload_obj['event']['data']['metadata']['investment_id'],
-        'type' => $payload_obj['event']['data']['metadata']['type']
-      ],
-      [
-        'amount' => $payload_obj['event']['data']['pricing']['local']['amount'],
-        'status' => 'failed',
-        'charge_id' => $payload_obj['event']['data']['id'],
-        'charge_code' => $payload_obj['event']['data']['code'],
-        'unresolved_context' => '',
-        'recieving_wallet_address' => $payload_obj['event']['data']['addresses']['bitcoin'],
-        'created_at' => $payload_obj['event']['data']['created_at']
-      ],
-    );
-    Log::info($transaction);
-    $investment = Investment::find($payload_obj['event']['data']['metadata']['investment_id']);
-    $investment->status = 'failed';
-    $investment->save();
-    Log::info(sprintf('handled Failed Charged: ', $payload_obj['event']['data']['id']));
-  }catch(\Exception $e){
-    Log::error(sprintf('Error handling Failed Charged: ',$e->getMessage()));
-  }
+    try {
+      $payload_obj = $this->webhookCall->payload;
+      $transaction = Transaction::updateOrCreate(
+        [
+          'id' => $payload_obj['event']['data']['metadata']['trnx_id'],
+          'user_id' => $payload_obj['event']['data']['metadata']['user_id']
+        ],
+        [
+          'status' => 'failed',
+        ],
+
+      );
+      $crypto_transaction = $transaction->method();
+      $crypto_transaction->status = 'failed';
+      $crypto_transaction->update();
+    } catch (\Exception $e) {
+      Log::error(sprintf('Error handling Failed Charged: ', $e->getMessage()));
+    }
   }
 }

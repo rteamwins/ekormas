@@ -35,26 +35,24 @@ class HandleCreatedCharge implements ShouldQueue
    */
   public function handle()
   {
-    try{
-    $payload_obj = $this->webhookCall->payload;
-    $transaction = Transaction::updateOrCreate(
-      [
-        'investment_id' => $payload_obj['event']['data']['metadata']['investment_id'],
-        'type' => $payload_obj['event']['data']['metadata']['type']
-      ],
-      [
-        'amount' => $payload_obj['event']['data']['pricing']['local']['amount'],
-        'status' => 'created',
-        'charge_id' => $payload_obj['event']['data']['id'],
-        'charge_code' => $payload_obj['event']['data']['code'],
-        'unresolved_context' => '',
-        'recieving_wallet_address' => $payload_obj['event']['data']['addresses']['bitcoin'],
-        'created_at' => $payload_obj['event']['data']['created_at']
-      ],
-    );
-    Log::info(sprintf('handled Created Charged: ', $payload_obj['event']['data']['id']));
-  }catch(\Exception $e){
-    Log::error(sprintf('Error handling Created Charge: ',$e->getMessage()));
-  }
+    try {
+      $payload_obj = $this->webhookCall->payload;
+      $transaction = Transaction::updateOrCreate(
+        [
+          'id' => $payload_obj['event']['data']['metadata']['trnx_id'],
+          'user_id' => $payload_obj['event']['data']['metadata']['user_id']
+        ],
+        [
+          'status' => 'created',
+        ],
+
+      );
+      $crypto_transaction = $transaction->method();
+      $crypto_transaction->status = 'created';
+      $crypto_transaction->update();
+      // Log::info(sprintf('Handled Created Charged: ', $payload_obj['event']['data']['id']));
+    } catch (\Exception $e) {
+      Log::error(sprintf('Error handling Created Charge: ', $e->getMessage()));
+    }
   }
 }

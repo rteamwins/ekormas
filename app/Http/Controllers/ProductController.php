@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Lga;
 use App\Product;
+use App\State;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
@@ -16,9 +18,25 @@ class ProductController extends Controller
     return view('product.list');
   }
 
+  function store_index()
+  {
+    $states = State::select('id', 'name')->whereCountryCode('cm')->get();
+    $lgas = Lga::select('id', 'name', 'state_id')->whereCountryCode('cm')->get();
+    return view('store', [
+      'states' => $states,
+      'lgas' => $lgas,
+    ]);
+  }
+
   function index_json()
   {
     $products = Product::paginate(10);
+    return response()->json($products, Response::HTTP_OK);
+  }
+
+  function home_index_json()
+  {
+    $products = Product::latest()->limit(4)->get();
     return response()->json($products, Response::HTTP_OK);
   }
   /**
@@ -74,7 +92,7 @@ class ProductController extends Controller
       $new_product = Product::find($new_product->id);
       $new_product->images = $images;
       $new_product->update();
-      return redirect()->route('list_product')->with('user-success', 'Product Created successfully!');
+      return redirect()->route('list_product')->with('success', 'Product Created successfully!');
     }
   }
 
@@ -105,5 +123,10 @@ class ProductController extends Controller
     $product->status = 'pending';
     $product->update();
     $response = 'Product Disabled';
+    return response()->json($response, Response::HTTP_OK);
   }
+
 }
+
+
+

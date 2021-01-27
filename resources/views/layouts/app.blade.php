@@ -25,6 +25,10 @@
     @endif
   </script>
   <style>
+    .navbar_bg {
+      background: linear-gradient(to bottom, #5ab995, #3ba77d);
+    }
+
     .scrolling_news {
       color: white;
       white-space: nowrap;
@@ -48,6 +52,64 @@
         transform: translate(-100%, 0);
       }
     }
+
+    .tl {
+      font-size: 2em;
+      font-weight: 800;
+      color: #7ed957;
+    }
+
+    .fwu {
+      font-weight: bold;
+      line-height: 2em;
+      text-align: justify;
+    }
+
+    .why-bg {
+      background-color: #1d7151;
+
+    }
+
+    .why-tl {
+      padding-top: 50px;
+      font-size: 2em;
+      font-weight: 800;
+      color: white;
+    }
+
+    .why-text {
+      font-weight: bold;
+      line-height: 2em;
+      text-align: justify;
+      color: white;
+      opacity: 0.6;
+    }
+
+    .footer-bg {
+      background-color: #131416;
+
+    }
+
+    .footer-about-tl {
+      padding-top: 50px;
+      font-size: 1.5em;
+      font-weight: 800;
+      color: #1d7151;
+      opacity: 0.7;
+    }
+
+    .footer-tl {
+      padding-top: 50px;
+      font-size: 1.2em;
+      font-weight: 800;
+      color: white;
+      opacity: 0.7;
+    }
+
+    .footer-text {
+      color: white;
+      opacity: 0.3;
+    }
   </style>
   @stack('style_top')
   @stack('scripts_top')
@@ -65,11 +127,17 @@
             <a href="{{route('user_home')}}" class="uk-button-small uk-text-bold uk-text-left uk-width-1-1">HOME</a>
           </div>
         </li>
+        <li>
+          <div class="uk-padding-small green accent-2">
+            <a href="{{route('product_store')}}" class="uk-button-small uk-text-bold uk-text-left uk-width-1-1">PRODUCT
+              STORE</a>
+          </div>
+        </li>
         @guest
         <li>
           <div class="uk-padding-small green accent-2">
             <a href="{{route('login')}}"
-              class="uk-button-small  white green-text  text-accent-2 uk-text-bold uk-text-left uk-width-1-1">LOGIN</a>
+              class="uk-button-small white-text  text-accent-2 uk-text-bold uk-text-left uk-width-1-1">LOGIN</a>
           </div>
         </li>
         {{-- <li>
@@ -188,7 +256,8 @@
             <li>
               <div class="uk-padding-small green accent-2">
                 <a href="{{route('user_withdraw_local_history')}}"
-                  class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">LOCAL WITHDRAW HISTORY</a>
+                  class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">LOCAL WITHDRAW
+                  HISTORY</a>
               </div>
             </li>
             <li>
@@ -220,14 +289,37 @@
           </ul>
         </li>
         <li>
-          <div class="uk-padding-small orange white-text @if(auth()->user()->downlines->count() <100)  @endif">
-            <a href="{{route('agent_application_form')}}" class="uk-button-small  uk-text-bold uk-width-1-1"
+          <div class="uk-padding-small  @if(auth()->user()->downlines->count() <100) uk-disabled grey-text @endif">
+            <a href="{{route('agent_application_form')}}" class="uk-button-small green-text uk-text-bold uk-width-1-1"
               style="">MAKE ME AN AGENT
             </a>
             <progress class="uk-progress uk-margin-remove" value="{{auth()->user()->downlines->count()}}"
               max="100"></progress>
           </div>
         </li>
+        @endauth
+        <li>
+          <div class="uk-padding-small green accent-2">
+            <a href="{{route('faq')}}" class="uk-button-small uk-text-bold uk-text-left uk-width-1-1">FAQ</a>
+          </div>
+        </li>
+        <li>
+          <div class="uk-padding-small green accent-2">
+            <a href="{{route('about_us')}}" class="uk-button-small uk-text-bold uk-text-left uk-width-1-1">ABOUT US</a>
+          </div>
+        </li>
+        <li>
+          <div class="uk-padding-small green accent-2">
+            <a href="{{route('disclaimer')}}"
+              class="uk-button-small uk-text-bold uk-text-left uk-width-1-1">DISCLAIMER</a>
+          </div>
+        </li>
+        <li>
+          <div class="uk-padding-small green accent-2">
+            <a href="{{route('tac')}}" class="uk-button-small uk-text-bold uk-text-left uk-width-1-1">TERMS OF USE</a>
+          </div>
+        </li>
+        @auth
         <li>
           <div class="uk-padding-small red white-text">
             <a href="#" onclick="event.preventDefault(); document.getElementById('sidebar-logout-form').submit();"
@@ -358,8 +450,7 @@
   </div>
   </div>
   @else --}}
-  <div class=" uk-background-cover uk-light" data-src="{{ asset("images/misc/slider1.png") }}" uk-img
-    style="height: 80px">
+  <div class="uk-light navbar_bg" style="height: 80px" uk-sticky="bottom: #offset">
     <div class="uk-postion-top">
       <nav class="uk-navbar-container uk-padding-remove-horizontal uk-navbar-transparent" uk-navbar>
         <div class="uk-navbar-left">
@@ -374,19 +465,23 @@
 
 
         <div class="uk-navbar-right uk-visible@m ">
-          <ul class="uk-navbar-nav uk-flex uk-flex-middle green accent-2 uk-margin-small-right">
+          <ul class="uk-navbar-nav uk-flex uk-flex-middle uk-background-primary uk-margin-small-right">
             <li class="">
-              <a href="{{route('user_create_trade')}}"
+              <a href="{{route('product_store')}}"
                 class="uk-button uk-button-text uk-width-1-1 btn-bg-none uk-text-bold"
-                style="color:white;min-height:50px !important">Trade Now</a>
+                style="color:white;min-height:50px !important">Shop Now</a>
+            </li>
+            <li class="">
+              <a href="{{route('about_us')}}" class="uk-button uk-button-text uk-width-1-1 btn-bg-none uk-text-bold"
+                style="color:white;min-height:50px !important">About Us</a>
             </li>
             <li>
-              <a href="{{route('user_fund_wallet')}}" class="uk-button uk-button-text uk-width-1-1  uk-text-bold"
-                style="color:white;min-height:50px !important">Fund Wallet</a>
+              <a href="{{route('faq')}}" class="uk-button uk-button-text uk-width-1-1  uk-text-bold"
+                style="color:white;min-height:50px !important">FAQ</a>
             </li>
             <li>
-              <a href="#" class="uk-button uk-button-text uk-width-1-1 btn-bg-none uk-text-bold"
-                style="color:white;min-height:50px !important">Contact Us</a>
+              <a href="#contact_us" class="uk-button uk-button-text uk-width-1-1 btn-bg-none uk-text-bold"
+                style="color:white;min-height:50px !important" uk-scroll>Contact Us</a>
             </li>
             @guest
             <li>
@@ -410,14 +505,14 @@
             @endauth
           </ul>
         </div>
-        <div class="uk-navbar-right uk-margin-small-right uk-hidden@m">
+        <div class="uk-navbar-right uk-margin-small-right">
           <ul class="uk-navbar-nav">
             <li>
               <button class="uk-navbar-toggle uk-button uk-button-text white-text" type="button"
                 uk-toggle="target: #side_menu">
                 <span>
                   <i class=" uk-display-block" uk-icon="icon: menu; ratio:1.5;"></i>
-                  <span class="uk-text-small">MENU</span>
+                  <span class="uk-text-small uk-text-bolder">MENU</span>
                 </span>
               </button>
             </li>
@@ -427,94 +522,58 @@
       </nav>
     </div>
   </div>
-  {{-- @endif --}}
-  <!-----session message start here----->
-  @if (Session::get('error') || Session::get('success') || Session::get('info') || Session::get('warning'))
-  <div class="uk-container uk-margin-medium-top">
-    <div class=" uk-margin-bottom" uk-grid>
-      <div class="uk-width-1-1 uk-flex uk-flex-around">
-        @if ($message = Session::get('error'))
-        <div class="uk-width-1-1 uk-width-2-3@s uk-width-3-5@m red-text text-lighten-1 red lighten-4 uk-border-rounded"
-          uk-alert>
-          <a class="uk-alert-close grey-text" uk-close></a>
-          <h4 class="uk-h4 uk-text-bold">Error</h4>
-          <p>{{$message}}</p>
+
+  @include('layouts.user_alert_card')
+  <div id="app">
+    @yield('content')
+  </div>
+  <footer>
+    <div class="footer-bg uk-margin-top">
+      <div class="uk-container">
+        <div uk-grid>
+          <div class="uk-width-1-1 uk-width-1-3@s">
+            <div class="uk-margin">
+              <h5 class="footer-about-tl">About</h5>
+            </div>
+            <p class="footer-text uk-margin-bottom">
+              T.G.L.M stands for The Green Life Market. It is an ecommerce site. Just like the others,
+              Alibaba, Aliexpress, Amazon etc., it’s a powerful ecommerce site that combines shopping and
+              network marketing together in a platform.
+            </p>
+          </div>
+          <div class="uk-width-1-1 uk-width-1-3@s">
+            <div class="uk-margin">
+              <h5 class="footer-tl">Useful Links</h5>
+            </div>
+            <ul class="uk-list uk-list-collapse">
+              <li><a href="{{route('about_us')}}" class="uk-link-reset white-text">About</a></li>
+              <li><a href="{{route('faq')}}" class="uk-link-reset white-text">FAQ</a></li>
+              <li><a href="{{route('disclaimer')}}" class="uk-link-reset white-text">Disclaimer</a></li>
+              <li><a href="{{route('tac')}}" class="uk-link-reset white-text">Terms of Use</a></li>
+            </ul>
+          </div>
+          <div class="uk-width-1-1 uk-width-1-3@s" id="contact_us">
+            <div class="uk-margin">
+              <h5 class="footer-tl">Contact Us</h5>
+            </div>
+
+            <p>
+              <span class="uk-text-bold">Calling Hours: Weekday: 8:00 - 19:00</span> during this time our physical
+              service at various branch can be offered to you
+              <br>
+              <a href="tel:+443233223322" class="uk-link-reset uk-text-bolder">+44-323-322-3322</a>
+            </p>
+            <div class="uk-margin-bottom">
+              <a href="" class="uk-icon-button uk-margin-small-right" uk-icon="twitter" style="color: aqua;"></a>
+              <a href="" class="uk-icon-button  uk-margin-small-right" uk-icon="facebook" style="color:blue"></a>
+              <a href="" class="uk-icon-button" uk-icon="whatsapp" style="color:green; background-color: white;"></a>
+            </div>
+          </div>
         </div>
-        @elseif ($message = Session::get('success'))
-        <div
-          class="uk-width-1-1 uk-width-2-3@s uk-width-3-5@m green-text text-lighten-1 green lighten-4 uk-border-rounded"
-          uk-alert>
-          <a class="uk-alert-close grey-text" uk-close></a>
-          <h4 class="uk-h4 uk-text-bold">Success</h4>
-          <p>{{$message}}</p>
-        </div>
-        @elseif ($message = Session::get('warning'))
-        <div
-          class="uk-width-1-1 uk-width-2-3@s uk-width-3-5@m yellow-text text-darken-2 yellow lighten-4 uk-border-rounded"
-          uk-alert>
-          <a class="uk-alert-close grey-text" uk-close></a>
-          <h4 class="uk-h4 uk-text-bold">Notice</h4>
-          <p>{{$message}}</p>
-        </div>
-        @elseif ($message = Session::get('info'))
-        <div
-          class="uk-width-1-1 uk-width-2-3@s uk-width-3-5@m cyan-text text-lighten-1 cyan lighten-4 uk-border-rounded"
-          uk-alert>
-          <a class="uk-alert-close grey-text" uk-close></a>
-          <h4 class="uk-h4 uk-text-bold">Info</h4>
-          <p>{{$message}}</p>
-        </div>
-        @endif
+
       </div>
     </div>
-  </div>
-  <!-----session message ends here----->
-  @endif
-  <div id="app">
-    <main>
-      @yield('content')
-    </main>
-  </div>
-  {{-- <footer id="footer" class="grey darken-2">
-    <div class="uk-container uk-margin-small-bottom">
-      <div class=" uk-margin-top uk-grid-divider" uk-grid>
-        <div class="uk-width-1-3@m uk-width-1-1">
-          <a class="uk-logo" href="{{route('home')}}"><img src="{{asset("/images/misc/zhio_banner.png")}}"
-    style="height: 100px; border-radius:10px; "></a>
-  <p class="white-text">
-    <span class=" uk-margin-small-right" uk-icon="icon:location;"></span>72B ShengT Avenue, Shanghai China
-  </p>
-  </div>
-  <div class="uk-width-1-3@m uk-width-1-1">
-    <h4 class="white-text uk-text-bolder">ABOUT</h4>
-    <ul class="uk-list uk-list-hyphen white-text uk-margin-remove-left">
-      <li><a class="uk-link-reset" href="#">Contact Us</a></li>
-      <li><a class="uk-link-reset" href="#">Our Services</a></li>
-      <li><a class="uk-link-reset" href="#">Careers at Zhio Logistics</a></li>
-    </ul>
-  </div>
-  <div class="uk-width-1-3@m uk-width-1-1">
-    <form>
-      <h4 class="white-text uk-text-bolder">NEWSLETTER</h4>
-      <div class="uk-margin-top ">
-        <div class="uk-inline">
-          <button style="border: none; " class="uk-form-icon green accent-2 uk-form-icon-flip remove-highlight"
-            type="submit"><i class="white-text" uk-icon="icon:forward"></i></button>
-          <input class="uk-input" type="email" placeholder="Email Address">
-        </div>
-      </div>
-      <li style="color: white; font-size:0.8em"> Get recent updates from us...</li>
-    </form>
-  </div>
-  </div>
-  </div>
-  <div class="uk-text-center grey darken-3 uk-padding-small" style="color: white;">
-    <p class=" uk-margin-remove-vertical"> ZhioCourier &reg; 2020. All rights reserved.</p>
-    <p class="uk-text-small uk-margin-remove-vertical">Please note: All images, texts, and videos on
-      this site are properties of ZhioCourier.com</p>
-  </div>
-
-  </footer> --}}
+  </footer>
 
   <script src="{{mix('/js/manifest.js')}}" defer></script>
   <script src="{{mix('/js/vendor.js')}}" defer></script>

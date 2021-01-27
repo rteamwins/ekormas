@@ -119,7 +119,7 @@ class RegisterController extends Controller
       return User::create($data);
     } catch (\Exception $e) {
       Log::info("regError: " . $e->getMessage());
-      return redirect()->back()->withInput($data)->with(['user-error' => 'Error Saving User']);
+      return redirect()->back()->withInput($data)->with(['error' => 'Error Saving User']);
     }
   }
 }

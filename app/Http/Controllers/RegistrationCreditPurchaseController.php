@@ -43,7 +43,7 @@ class RegistrationCreditPurchaseController extends Controller
   public function store(Request $request)
   {
     $this->validate($request, [
-      'plan' => 'required|in:pearl,ruby,gold,sapphire,emerald,diamond',
+      'plan' => 'required|in:onyx,pearl,ruby,gold,sapphire,emerald,diamond',
       'plan_quantity' => 'required|integer|digits_between:1,100',
     ]);
 
@@ -81,9 +81,10 @@ class RegistrationCreditPurchaseController extends Controller
           "user_id" => Auth()->user()->id,
           "type" => "registration_credit_purchase",
           "trnx_id" => $new_trx->id,
+          "rcp_id" => $rc_purchase->id,
         ],
-        'redirect_url' => route('user_list_purchase_registration_credits'),
-        'cancel_url' => route('user_purchase_registration_credits'),
+        'redirect_url' => route('user_registration_credit_payment_success', ['plan' => $request->plan, 'quantity' => $request->plan_quantity]),
+        'cancel_url' => route('user_registration_credit_payment_failed', ['plan' => $request->plan, 'quantity' => $request->plan_quantity]),
       ]);
 
       $new_crypto_trx->charge_id = $new_charge['data']['hosted_url'];
@@ -98,4 +99,13 @@ class RegistrationCreditPurchaseController extends Controller
     }
   }
 
+  public function payment_failed($plan, $quantity)
+  {
+    return view('payment_status.registration_credit_failed', ['plan' => $plan, 'quantity' => $quantity]);
+  }
+
+  public function payment_success($plan, $quantity)
+  {
+    return view('payment_status.registration_credit_success', ['plan' => $plan, 'quantity' => $quantity]);
+  }
 }

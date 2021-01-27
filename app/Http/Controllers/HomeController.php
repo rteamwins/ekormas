@@ -7,6 +7,7 @@ use App\Bonus;
 use App\CryptoTransaction;
 use App\Lga;
 use App\MembershipPlan;
+use App\Order;
 use App\Post;
 use App\Product;
 use App\Profit;
@@ -41,8 +42,8 @@ class HomeController extends Controller
     if ($id === null) {
       $id = Auth()->user()->id;
     }
-    $node = User::select('id', '_rgt', '_lft', 'parent_id', 'placement_id', 'username', 'name', 'total_points', 'phone')->where('id', $id)->firstOrFail();
-    $nodes = User::descendantsOf($id, ['id', '_rgt', '_lft', 'parent_id', 'placement_id', 'username', 'name', 'total_points', 'phone']);
+    $node = User::select('id', '_rgt', '_lft', 'parent_id', 'placement_id', 'username', 'name', 'dormant_points', 'phone')->where('id', $id)->firstOrFail();
+    $nodes = User::descendantsOf($id, ['id', '_rgt', '_lft', 'parent_id', 'placement_id', 'username', 'name', 'dormant_points', 'phone']);
     $node->children = $nodes->toTree();
     return response()->json($node, Response::HTTP_OK);
   }
@@ -207,6 +208,8 @@ class HomeController extends Controller
       'potential_agent_count' => $this->potential_agents_count(),
       'active_user_count' => $this->active_user_count(),
       'non_active_user_count' => $this->non_active_user_count(),
+      'open_order' => Order::whereIn('status', ['confirmed', 'shipped'])->count(),
+      'closed_order' => Order::where('status', 'completed')->count(),
     ]);
   }
 
@@ -285,7 +288,7 @@ class HomeController extends Controller
       'plan' => 'required_without:rc_code|in:oynx,pearl,ruby,gold,sapphire,emerald,diamond',
     ]);
 
-    $plan = ['pearl' => 130, 'ruby' => 310, 'gold' => 610, 'sapphire' => 1210, 'emerald' => 3610, 'diamond' => 6010];
+    $plan = ['oynx' => 70, 'pearl' => 130, 'ruby' => 310, 'gold' => 610, 'sapphire' => 1210, 'emerald' => 3610, 'diamond' => 6010];
     if (Auth::user()->membership_plan_id == null) {
       if ($request->has('rc_code')) {
         $rc_code = $request->rc_code;
@@ -375,9 +378,10 @@ class HomeController extends Controller
             "user_id" => Auth()->user()->id,
             "type" => "user_registration_fee",
             "trnx_id" => $new_trx->id,
+            "membership_plan" => $request->plan
           ],
-          'redirect_url' => route('home'),
-          'cancel_url' => route('home'),
+          'redirect_url' => route('reg_plan_payment_success', ['plan' => $request->plan]),
+          'cancel_url' => route('reg_plan_payment_failed', ['plan' => $request->plan]),
         ]);
 
         $new_crypto_trx->charge_id = $new_charge['data']['hosted_url'];
@@ -426,5 +430,35 @@ class HomeController extends Controller
         $ancestor->calculate_matching_bonus($leg_count[$ancestor->username]['left'] + $leg_count[$ancestor->username]['right']);
       }
     }
+  }
+
+  public function about_us()
+  {
+    return view('about');
+  }
+
+  public function faq()
+  {
+    return view('faq');
+  }
+
+  public function tac()
+  {
+    return view('tac');
+  }
+
+  public function disclaimer()
+  {
+    return view('disclaimer');
+  }
+
+  public function payment_failed($plan)
+  {
+    return view('payment_status.registration_plan_failed', ['plan' => $plan]);
+  }
+
+  public function payment_success($plan)
+  {
+    return view('payment_status.registration_plan_success', ['plan' => $plan]);
   }
 }

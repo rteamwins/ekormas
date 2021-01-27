@@ -5,6 +5,10 @@ namespace App\Jobs\CoinbaseWebhooks;
 use Illuminate\Bus\Queueable;
 use App\Transaction;
 use App\Investment;
+use App\MembershipPlan;
+use App\Order;
+use App\RegistrationCredit;
+use App\RegistrationCreditPurchase;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -41,74 +45,92 @@ class HandleResolvedCharge implements ShouldQueue
   {
     try {
       $payload_obj = $this->webhookCall->payload;
-      $amount_resolved = 0;
-      $payments= $payload_obj['event']['data']['payments'];
+      $amount_confirmed = 0;
+      $payments = $payload_obj['event']['data']['payments'];
       foreach ($payments as $payment) {
-          $amount_resolved += $payment['value']['local']['amount'];
-        }
+        $amount_confirmed += $payment['value']['local']['amount'];
+      }
+      $user = User::whereUserId($payload_obj['event']['data']['metadata']['user_id'])->first();
+
       $transaction = Transaction::updateOrCreate(
         [
-          'investment_id' => $payload_obj['event']['data']['metadata']['investment_id'],
-          'type' => $payload_obj['event']['data']['metadata']['type']
+          'id' => $payload_obj['event']['data']['metadata']['trnx_id'],
+          'user_id' => $payload_obj['event']['data']['metadata']['user_id']
         ],
         [
-          'amount' => $amount_resolved,
           'status' => 'confirmed',
-          'charge_id' => $payload_obj['event']['data']['id'],
-          'charge_code' => $payload_obj['event']['data']['code'],
-          'unresolved_context' => '',
-          'recieving_wallet_address' => $payload_obj['event']['data']['addresses']['bitcoin'],
-          'created_at' => $payload_obj['event']['data']['created_at']
         ],
+
       );
-      $investment = Investment::find($payload_obj['event']['data']['metadata']['investment_id']);
-      if($investment->status != 'confirmed'){
-      $investment->total_amount = $amount_resolved;
-      $investment->status = 'confirmed';
-      $investment->update();
-      $investor = User::find($payload_obj['event']['data']['metadata']['user_id']);
-      $investor->wallet_amount = $investor->wallet_amount + $amount_resolved;
-      $investor->update();
-      Log::info(sprintf('handled confirmed Charged: ', $payload_obj['event']['data']['id']));
-      if ($investor->activated == null) {
-        $investor->wallet_amount = $investor->wallet_amount + 5;
-        $investor->update();
-        try {
-          $lv_1_ref = User::where('id', $investor->sponsor)->firstOrFail();
-          $lv_1_ref->bonus_amount += ($investment->total_amount * 0.05);
-          $lv_1_ref->update();
-        } catch (ModelNotFoundException $e) {
-          Log::error(sprintf("Unable to give out Level 1 bonus: couldn't find  a sponsor user with id: %s", $investor->sponsor));
+      $crypto_transaction = $transaction->method();
+      $crypto_transaction->status = 'confirmed';
+      $crypto_transaction->update();
+      if ($transaction->type == 'user_registration_fee') {
+        $membership_plan = MembershipPlan::whereSlug($payload_obj['event']['data']['metadata']['membership_plan'])->first();
+        $user->membership_plan_id = $membership_plan->id;
+        $user->wallet += $membership_plan->min_trading_capital;
+        $user->update();
+        $user->give_referal_bonus();
+        if ($user->parent->children->count() == 2) {
+          $this->check_for_bonus_eligible_ancestors($user);
         }
-        try {
-          $lv_2_ref = User::where('id', $lv_1_ref->sponsor)->firstOrFail();
-          $lv_2_ref->bonus_amount += ($investment->total_amount * 0.03);
-          $lv_2_ref->update();
-        } catch (ModelNotFoundException $e) {
-          Log::error(sprintf("Unable to give out Level 2 bonus: couldn't find  a sponsor user with id: %s", $lv_1_ref->sponsor));
+      } else if ($transaction->type == 'user_wallet_funding') {
+        $transaction->update(['amount' => $amount_confirmed]);
+        $user->wallet += $amount_confirmed;
+        $user->update();
+      } else if ($transaction->type == 'registration_credit_purchase') {
+        $rc_purchase = RegistrationCreditPurchase::whereId($payload_obj['event']['data']['metadata']['rcp_id'])->first();
+        $membership_plan = MembershipPlan::whereSlug($rc_purchase->plan)->first();
+        for ($i = 0; $i < $rc_purchase->quantity; $i++) {
+          RegistrationCredit::create([
+            'status' => 'created',
+            'user_id' => $user->id,
+            'amount' => ($membership_plan->fee + $membership_plan->min_trading_capital + 10),
+            'plan' => $rc_purchase->plan,
+          ]);
         }
-        try {
-          $lv_3_ref = User::where('id', $lv_2_ref->sponsor)->firstOrFail();
-          $lv_3_ref->bonus_amount += ($investment->total_amount * 0.01);
-          $lv_3_ref->update();
-        } catch (ModelNotFoundException $e) {
-          Log::error(sprintf("Unable to give out Level 3 bonus: couldn't find  a sponsor user with id: %s", $lv_2_ref->sponsor));
-        }
-        try {
-          $lv_4_ref = User::where('id', $lv_3_ref->sponsor)->firstOrFail();
-          $lv_4_ref->bonus_amount += ($investment->total_amount * 0.01);
-          $lv_4_ref->update();
-        } catch (ModelNotFoundException $e) {
-          Log::error(sprintf("Unable to give out Level 4 bonus: couldn't find  a sponsor user with id: %s", $lv_3_ref->sponsor));
-        }
-        $investor->activated_at = Carbon::now();
-        $investor->update();
-      }
-      }else{
-          Log::info(sprintf('handled confirmed Charged: ', $payload_obj['event']['data']['id']));
+      } else if ($transaction->type == 'product_order') {
+        $order = Order::whereCode($payload_obj['event']['data']['metadata']['order_code'])->whereStatus('created')->first();
+        $order->status = 'confirmed';
+        $order->update();
       }
     } catch (\Exception $e) {
-      Log::error(sprintf('Error handling confirmed Charged: ', $e->getMessage()));
+      Log::error(sprintf('Error handling resolved Charged: ', $e->getMessage()));
+    }
+  }
+  public function check_for_bonus_eligible_ancestors(User $user)
+  {
+    $ancestors = User::defaultOrder()->with(['membership_plan:id,fee,name'])
+      ->ancestorsOf($user->id, ['id', '_rgt', '_lft', 'parent_id', 'placement_id', 'username', 'name', 'total_points', 'phone', 'membership_plan_id', 'created_at', 'activated_at']);
+    foreach ($ancestors as $ancestor) {
+      $ancestor_directline_count = $ancestor->children->count();
+      $leg_count[$ancestor->username]['name'] = $ancestor->name;
+      if ($ancestor_directline_count > 0) {
+        if ($ancestor_directline_count == 2) {
+          $leg_count[$ancestor->username]['left'] = $leg_count[$ancestor->username]['right'] = 1;
+          $leg_count[$ancestor->username]['left_amount'] = $ancestor->children->first()->membership_plan->fee ?? 0;
+          $leg_count[$ancestor->username]['right_amount'] = $ancestor->children->last()->membership_plan->fee ?? 0;
+        } else {
+          $leg_count[$ancestor->username]['left'] = 1;
+          $leg_count[$ancestor->username]['right'] = 0;
+          $leg_count[$ancestor->username]['left_amount'] = $ancestor->children->first()->membership_plan->fee ?? 0;
+          $leg_count[$ancestor->username]['right_amount'] = 0;
+        }
+      } else {
+        $leg_count[$ancestor->username]['left'] = $leg_count[$ancestor->username]['right'] = 1;
+        $leg_count[$ancestor->username]['left_amount'] = $leg_count[$ancestor->username]['right_amount'] = 0;
+      }
+      $left_desc = User::descendantsOf($ancestor->children->first());
+      $right_desc = User::descendantsOf($ancestor->children->last());
+
+      $leg_count[$ancestor->username]['left'] += $left_desc->count();
+      $leg_count[$ancestor->username]['right'] += $right_desc->count();
+
+      $leg_count[$ancestor->username]['left_amount'] += $left_desc->sum('membership_plan.fee');
+      $leg_count[$ancestor->username]['right_amount'] += $right_desc->sum('membership_plan.fee');
+      if ($leg_count[$ancestor->username]['left'] == $leg_count[$ancestor->username]['right']) {
+        $ancestor->calculate_matching_bonus($leg_count[$ancestor->username]['left'] + $leg_count[$ancestor->username]['right']);
+      }
     }
   }
 }
