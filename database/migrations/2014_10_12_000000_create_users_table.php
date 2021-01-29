@@ -28,7 +28,7 @@ class CreateUsersTable extends Migration
       $table->decimal('last_award_point')->default(0);
       $table->decimal('trading_capital', 14, 2)->default(0);
       $table->decimal('bonus', 14, 2)->default(0);
-      $table->string('address');
+      $table->string('address')->nullable()->default(null);
       $table->char('country_code', 2)->nullable()->default(null);
       $table->unsignedBigInteger('state_id')->nullable()->default(null);
       $table->unsignedBigInteger('lga_id')->nullable()->default(null);
