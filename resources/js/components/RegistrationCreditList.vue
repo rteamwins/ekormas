@@ -6,57 +6,43 @@
       <thead>
         <tr>
           <th>#</th>
-          <th>Address</th>
           <th>CODE</th>
           <th>AMOUNT</th>
-          <th>FEE</th>
+          <th>PLAN</th>
           <th>STATUS</th>
           <th>DATE</th>
           <th>ACTION</th>
         </tr>
       </thead>
-      <tbody v-if="Object.keys(kycs).length > 0">
-        <tr v-for="(kyc, i) in kycs" :key="`kyc_${i}`">
+      <tbody v-if="Object.keys(reg_credits).length > 0">
+        <tr v-for="(reg_credit, i) in reg_credits" :key="`reg_credit_${i}`">
           <td>
             <span class="uk-hidden@m uk-text-bold">#: </span>
             {{ i + 1 }}
           </td>
           <td>
-            <span class="uk-hidden@m uk-text-bold">Address: </span>
-            <span class="uk-text-bold">
-              {{ kyc.address }}
-            </span>
-            <span
-              style="cursor:pointer;"
-              title="Copy Kyc Address to Clipboard"
-              @click="copyValueToClipboard(kyc.code)"
-              class="uk-icon-button"
-              uk-icon="copy"
-            ></span>
-          </td>
-          <td>
             <span class="uk-hidden@m uk-text-bold">Code: </span>
             <span
               style="cursor:pointer;padding:2px 5px;"
-              v-show="kyc.show == true"
-              @click.self="kycs[i].show = false"
+              v-show="reg_credit.show == true"
+              @click.self="reg_credits[i].show = false"
               class="grey lighten-2 uk-text-bold"
             >
-              {{ kyc.code }}
+              {{ reg_credit.code }}
             </span>
             <span
               style="cursor:pointer;padding:3px 6px;"
-              @click.self="kycs[i].show = true"
-              v-show="kyc.show == false"
+              @click.self="reg_credits[i].show = true"
+              v-show="reg_credit.show == false"
               class="grey lighten-2 uk-text-bold"
             >
-              *******Click****To****Show******
+              ****Click**To**Show****
             </span>
 
             <span
-              title="Copy Kyc Code to Clipboard"
+              title="Copy Code to Clipboard"
               style="cursor:pointer;"
-              @click="copyValueToClipboard(kyc.code)"
+              @click="copyValueToClipboard(reg_credit.code)"
               class="uk-icon-button"
               uk-icon="copy"
             >
@@ -64,45 +50,44 @@
           </td>
           <td>
             <span class="uk-hidden@m uk-text-bold">Amount: </span>
-            ${{ number_format(kyc.amount, 2) }}
+            ${{ number_format(rc_plans[reg_credit.plan], 2) }}
           </td>
           <td>
-            <span class="uk-hidden@m uk-text-bold">Fee: </span>
-            ${{ number_format(kyc.fee, 2) }}
+            <span class="uk-hidden@m uk-text-bold">Plan: </span>
+            <span class="uk-label green">
+              {{ reg_credit.plan.toUpperCase() }}
+            </span>
           </td>
           <td>
             <span class="uk-hidden@m uk-text-bold">Status: </span>
             <span class="uk-label green">
-              {{ kyc.status }}
+              {{ reg_credit.status }}
             </span>
           </td>
           <td>
             <span class="uk-hidden@m uk-text-bold">Requested: </span>
-            {{ moment(kyc.created_at).fromNow() }}
+            {{ moment(reg_credit.created_at).fromNow() }}
           </td>
           <td>
             <span class="uk-hidden@m uk-text-bold">Action: </span>
             <span
-              v-show="kyc.consumer"
+              v-show="reg_credit.consumer"
               title="Edit Local Pay Request"
               style="cursor:pointer;"
-              @click="view_user(kyc.consumer)"
+              @click="view_user(reg_credit.consumer)"
               class="uk-icon-button blue-text"
               uk-icon="user"
             ></span>
             <span
-              title="View KYC QR Codes"
+              title="View reg_credit QR Codes"
               style="cursor:pointer;"
-              @click="view_kyc_qrcode(kyc)"
+              @click="view_reg_credit_qrcode(reg_credit.code)"
               class="uk-icon-button"
               uk-icon="grid"
             ></span>
             <div v-show="false">
-              <div :ref="kyc.address">
-                <vue-qrcode :width="200" :value="kyc.address" />
-              </div>
-              <div :ref="kyc.code">
-                <vue-qrcode :width="200" :value="kyc.code" />
+              <div :ref="reg_credit.code">
+                <vue-qrcode :width="200" :value="reg_credit.code" />
               </div>
             </div>
           </td>
@@ -110,20 +95,20 @@
       </tbody>
       <tbody v-else>
         <tr>
-          <td class="uk-text-center" colspan="6">
+          <td class="uk-text-center" colspan="7">
             <span class="uk-label cyan"> No Data to Display</span>
           </td>
         </tr>
       </tbody>
     </table>
     <div
-      v-show="kyc_pagination_data.page_count > 1"
+      v-show="reg_credit_pagination_data.page_count > 1"
       class="uk-flex-center"
       uk-margin
     >
       <paginate
-        v-model="kyc_pagination_data.current_page"
-        :page-count="kyc_pagination_data.page_count"
+        v-model="reg_credit_pagination_data.current_page"
+        :page-count="reg_credit_pagination_data.page_count"
         :page-range="3"
         :margin-pages="2"
         :prev-text="'<span uk-pagination-previous></span>'"
@@ -131,7 +116,7 @@
         :container-class="'uk-pagination uk-flex-center'"
         :active-class="'uk-active'"
         :disable-class="'uk-disabled'"
-        :click-handler="kyc_page_swap"
+        :click-handler="reg_credit_page_swap"
       >
       </paginate>
     </div>
@@ -143,11 +128,20 @@ export default {
   data() {
     return {
       loading: false,
-      kycs: [],
+      rc_plans: {
+        onyx: 70,
+        pearl: 130,
+        ruby: 310,
+        gold: 610,
+        sapphire: 1210,
+        emerald: 3160,
+        diamond: 6010
+      },
+      reg_credits: [],
       address_qrcode_value: "",
       code_qrcode_value: "",
       base_url: window.location.origin,
-      kyc_pagination_data: {
+      reg_credit_pagination_data: {
         record_count: 0,
         page_count: 0,
         current_page: 1
@@ -169,10 +163,10 @@ export default {
     load_data(page = 1) {
       this.loading = !this.loading;
       axios
-        .get(`${this.base_url}/api/user/kyc/list?page=${page}`)
+        .get(`${this.base_url}/api/user/reg_credit/list?page=${page}`)
         .then(res => {
-          this.kycs = res.data.data.map(x => ({ ...x, show: false }));
-          this.load_kyc_pagination_data(
+          this.reg_credits = res.data.data.map(x => ({ ...x, show: false }));
+          this.load_reg_credit_pagination_data(
             res.data.last_page,
             res.data.current_page,
             res.data.total
@@ -191,15 +185,15 @@ export default {
           this.loading = !this.loading;
         });
     },
-    load_kyc_pagination_data(last_page, current_page, total_records) {
-      this.kyc_pagination_data = {
+    load_reg_credit_pagination_data(last_page, current_page, total_records) {
+      this.reg_credit_pagination_data = {
         page_count: last_page,
         current_page: current_page,
         record_count: total_records
       };
     },
-    kyc_page_swap(page = this.kyc_pagination_data.current_page) {
-      if (page > this.kyc_pagination_data.page_count || page < 1) {
+    reg_credit_page_swap(page = this.reg_credit_pagination_data.current_page) {
+      if (page > this.reg_credit_pagination_data.page_count || page < 1) {
         let page = 1;
       }
       this.load_data(page);
@@ -207,13 +201,6 @@ export default {
     },
     number_format(x) {
       return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-    },
-    view_user(user) {
-      this.$swal.fire({
-        title: user.name,
-        html: `<b>Phone:</b> ${user.phone}<br><b>Username:</b> ${user.username}<br><b>Email:</b> ${user.email}<br><b>Wallet:</b>`,
-        confirmButtonText: "Close"
-      });
     },
     copyValueToClipboard(x) {
       let tt = this.Toast;
@@ -232,49 +219,48 @@ export default {
         }
       );
     },
-    view_kyc_qrcode(kyc) {
-      let addressQR = this.$refs[`${kyc.address}`][0].innerHTML;
-      let codeQR = this.$refs[`${kyc.code}`][0].innerHTML;
+    view_reg_credit_qrcode(reg_credit_code) {
+      let codeQR = this.$refs[`${reg_credit_code}`][0].innerHTML;
 
       this.$swal
-        .mixin({
+        .fire({
           reverseButtons: true,
-          confirmButtonText: "Next",
+          confirmButtonText: "Ok",
           showCancelButton: true,
-          progressSteps: ["1", "2"]
+          html: `<h3 class="uk-text-bold">${reg_credit_code}</h3>${codeQR}`
         })
-        .queue([
-          {
-            title: "KYC Address",
-            html: addressQR
-          },
-          {
-            title: "KYC Code",
-            html: codeQR
-          }
-        ])
         .then(result => {
           if (result.value) {
             this.$swal.fire({
               icon: "info",
               title: "Information",
               text:
-                "Do not share your KYC code with anyone except in events of financial exchange.",
+                "Do not share your Registration Credit code with anyone except in events of financial exchange.",
               confirmButtonText: "Okay!"
             });
           }
         });
+    },
+    view_user(user) {
+      this.$swal.fire({
+        title: user.name,
+        html: `<b>Phone:</b> ${user.phone}<br><b>Username:</b> ${user.username}<br><b>Email:</b> ${user.email}<br><b>`,
+        confirmButtonText: "Close"
+      });
     }
   },
   created() {
-    if (this.init_kycs !== null) {
-      this.kycs = this.init_kycs.map(x => ({ ...x, show: false }));
+    if (this.init_reg_credits !== null) {
+      this.reg_credits = this.init_reg_credits.map(x => ({
+        ...x,
+        show: false
+      }));
     } else {
       this.load_data(1);
     }
   },
   props: {
-    init_kycs: {
+    init_reg_credits: {
       required: false,
       type: Array,
       default: null

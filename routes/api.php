@@ -24,6 +24,8 @@ Route::middleware('auth:api')->group(function () {
 
   Route::get('user/kyc/list', 'KYCController@index_json');
 
+  Route::get('user/reg_credit/list', 'RegistrationCreditController@index_json');
+
   Route::get('user/referal/tree_data/for/{id}', 'HomeController@get_ref_level')->where(['id' => '[0-9]+']);
 
   Route::get('local-pay/request/list/open', 'LocalPayController@index_json');

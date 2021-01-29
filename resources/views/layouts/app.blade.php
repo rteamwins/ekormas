@@ -11,6 +11,7 @@
     content="{{ config('app.name', 'Ekormas') }} - Frieght, Truck and Shipping Service for packages, with Express Tracking and range of parcel delivery service">
   <meta name="title" content="{{ config('app.name', 'Ekormas') }} - @yield('title')">
 
+  <link rel="shortcut icon" href="{{asset('images/misc/favicon.jpg')}}" type="image/x-icon">
   <title>{{ config('app.name', 'Ekormas') }} | @yield('title')</title>
 
   <!-- Styles -->
@@ -148,6 +149,49 @@
         </li> --}}
         @endguest
         @auth
+        @if(in_array(auth()->user()->role,['user','agent','admin','buyer']))
+        <li class="uk-parent uk-padding-remove">
+          <a href="#"
+            class="uk-button-small cyan-text text-darken-1 uk-text-bold uk-text-right uk-width-1-1 uk-margin-small-top uk-margin-small-bottom">
+            #ORDER
+          </a>
+          <ul class="uk-nav-sub uk-padding-remove">
+            <li>
+              <div class="uk-padding-small green accent-2">
+                <a href="{{route('order_list')}}"
+                  class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">HISTORY</a>
+              </div>
+            </li>
+            @if(in_array(auth()->user()->role,['admin']))
+            <li>
+              <div class="uk-padding-small green accent-2">
+                <a href="{{route('admin_order_request_list')}}"
+                  class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">NEW ORDERS</a>
+              </div>
+            </li>
+            @endif
+          </ul>
+        </li>
+        <li class="uk-parent uk-padding-remove">
+          <a href="#"
+            class="uk-button-small cyan-text text-darken-1 uk-text-bold uk-text-right uk-width-1-1 uk-margin-small-top uk-margin-small-bottom">
+            #PROFILE
+          </a>
+          <ul class="uk-nav-sub uk-padding-remove">
+            <li>
+              <div class="uk-padding-small green accent-2">
+                <a href="#" class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">VIEW</a>
+              </div>
+            </li>
+            <li>
+              <div class="uk-padding-small green accent-2">
+                <a href="#" class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">EDIT</a>
+              </div>
+            </li>
+          </ul>
+        </li>
+        @endif
+        @if(in_array(auth()->user()->role,['user','agent','admin']))
         <li class="uk-parent uk-padding-remove">
           <a href="#"
             class="uk-button-small cyan-text text-darken-1 uk-text-bold uk-text-right uk-width-1-1 uk-margin-small-top uk-margin-small-bottom">
@@ -226,13 +270,14 @@
                   class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">POINT HISTORY</a>
               </div>
             </li>
+            @if(in_array(auth()->user()->role,['admin']))
             <li>
               <div class="uk-padding-small green accent-2">
                 <a href="{{route('admin_list_point_nominees')}}"
                   class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">NOMINEES</a>
               </div>
             </li>
-
+            @endif
           </ul>
         </li>
         <li class="uk-parent uk-padding-remove">
@@ -260,12 +305,14 @@
                   HISTORY</a>
               </div>
             </li>
+            @if(in_array(auth()->user()->role,['agent','admin']))
             <li>
               <div class="uk-padding-small green accent-2">
                 <a href="{{route('local_pay_requests')}}"
                   class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">LOCAL PAY REQUEST</a>
               </div>
             </li>
+            @endif
           </ul>
         </li>
         <li class="uk-parent uk-padding-remove">
@@ -282,7 +329,8 @@
             </li>
             <li>
               <div class="uk-padding-small green accent-2">
-                <a href="#" class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">REGISTRATION
+                <a href="{{route('user_list_purchase_registration_credits')}}"
+                  class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">REGISTRATION
                   CREDITS</a>
               </div>
             </li>
@@ -297,6 +345,7 @@
               max="100"></progress>
           </div>
         </li>
+        @endif
         @endauth
         <li>
           <div class="uk-padding-small green accent-2">
@@ -455,11 +504,11 @@
       <nav class="uk-navbar-container uk-padding-remove-horizontal uk-navbar-transparent" uk-navbar>
         <div class="uk-navbar-left">
           @auth
-          <a class="uk-navbar-item uk-logo" href="{{route('user_home')}}"><img
-              src="{{asset("/images/misc/zhio_banner.png")}}" style="height:70px;border-radius:10px;"></a>
+          <a class="uk-navbar-item uk-logo" href="{{route('user_home')}}"><img src="{{asset("/images/misc/logo.png")}}"
+              style="height:70px;border-radius:10px;"></a>
           @else
-          <a class="uk-navbar-item uk-logo" href="{{route('home')}}"><img
-              src="{{asset("/images/misc/zhio_banner.png")}}" style="height:70px;border-radius:10px;"></a>
+          <a class="uk-navbar-item uk-logo" href="{{route('home')}}"><img src="{{asset("/images/misc/logo.png")}}"
+              style="height:70px;border-radius:10px;"></a>
           @endauth
         </div>
 
@@ -562,6 +611,10 @@
               service at various branch can be offered to you
               <br>
               <a href="tel:+443233223322" class="uk-link-reset uk-text-bolder">+44-323-322-3322</a>
+              <br>
+              <a target="_blank"
+                href="mailto:support@thegreenlifemarket.shop?subject={{str_replace(' ','%20',"A Suitable Email Title")}}&body={{str_replace(' ','%20',"write your message here")}}"
+                class="uk-link-reset uk-text-bolder">support@thegreenlifemarket.shop</a>
             </p>
             <div class="uk-margin-bottom">
               <a href="" class="uk-icon-button uk-margin-small-right" uk-icon="twitter" style="color: aqua;"></a>

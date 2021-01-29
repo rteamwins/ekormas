@@ -114,6 +114,7 @@ class RegisterController extends Controller
 
       $parent_node = User::select('id')->where('placement_id', $data['placement_id'])->first();
       $data['parent_id'] = $parent_node->id;
+      $data['role'] = 'user';
       unset($data['placement_id']);
       $data['password'] = Hash::make($data['password']);
       return User::create($data);

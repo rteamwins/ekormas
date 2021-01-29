@@ -1,8 +1,9 @@
 <div class="uk-grid-small" uk-grid>
   <div class="uk-width-1-1">
     <div
-      class="uk-grid-collapse uk-grid-match uk-child-width-1-6@xl uk-child-width-1-5@xl uk-child-width-1-4@m uk-child-width-1-3@s uk-child-width-1-2"
+      class="uk-grid-collapse uk-grid-match uk-flex uk-flex-center uk-child-width-1-6@xl uk-child-width-1-5@xl uk-child-width-1-4@m uk-child-width-1-3@s uk-child-width-1-2"
       uk-grid>
+      @if(in_array(auth()->user()->role,['user','agent','admin']))
       <div style="padding:3px;">
         <div class="uk-border-rounded uk-card uk-background-primary uk-light uk-padding-remove">
           <h4 class="uk-margin-remove-bottom uk-padding-small uk-padding-remove-vertical uk-text-truncate">MEMBERSHIP
@@ -34,9 +35,38 @@
           </div>
         </div>
       </div>
-
+      @else
+      <div style="padding:3px;">
+        <div class="uk-border-rounded uk-card uk-background-primary uk-light uk-padding-remove">
+          <h4 class="uk-margin-remove-bottom uk-padding-small uk-padding-remove-vertical uk-text-truncate">PROFILE
+          </h4>
+          <table class="uk-table uk-table-small uk-table-divider uk-margin-remove-top uk-margin-bottom">
+            <tbody class="uk-text-small">
+              <tr>
+              <td class="uk-text-bold uk-text-truncate uk-width-1-3">USERNAME: </td>
+              <td class="uk-text-right uk-text-bold white-text">{{Auth()->user()->username}}</td>
+              </tr>
+              <tr>
+                <td class="uk-text-bold uk-text-truncate uk-width-1-3">JOINED: </td>
+                <td class="uk-text-right uk-text-bold white-text">{{Auth()->user()->created_at->diffForHumans()}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="uk-position-bottom black">
+            <div class="uk-width-1-1 uk-flex uk-flex-around">
+              <a href="{{route('update_reg_plan')}}" class="uk-button uk-button-link uk-text-bold white-text"><span
+                  uk-icon="upload"></span> <span class="uk-visible@m">Become Investor</span> </a>
+              <a href="{{route('user_fund_history')}}" class="uk-button uk-button-link uk-text-bold white-text"><span
+                  uk-icon="folder"></span> <span class="uk-visible@m">Profile</span> </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      @endif
 
       @include('layouts.stat_card',[
+      'roles' => ['admin','user','agent'],
       'title'=>'WALLET WITHDRAW',
       'stat_data'=>[
       ['text'=>"TODAY",'value'=>"$".number_format(Auth()->user()->bonus?:0,2)],
@@ -49,6 +79,7 @@
       ])
 
       @include('layouts.stat_card',[
+      'roles' => ['admin','user','agent'],
       'title'=>'WALLET FUNDING',
       'stat_data'=>[
       ['text'=>"TODAY",'value'=>"$".number_format(Auth()->user()->bonus?:0,2)],
@@ -61,6 +92,7 @@
       ])
 
       @include('layouts.stat_card',[
+      'roles' => ['admin','user','agent',],
       'title'=>'TRADE CAPITAL',
       'stat_data'=>[
       ['text'=>"TOTAL",'value'=>"$".number_format(Auth()->user()->trading_capital?:0,2)],
@@ -73,6 +105,7 @@
       ])
 
       @include('layouts.stat_card',[
+      'roles' => ['admin','user','agent',],
       'title'=>'BONUS',
       'stat_data'=>[
       ['text'=>"TOTAL",'value'=>"$".number_format(Auth()->user()->bonus?:0,2)],
@@ -84,6 +117,7 @@
       ])
 
       @include('layouts.stat_card',[
+      'roles' => ['admin',],
       'title'=>'POINTS',
       'stat_data'=>[
       ['text'=>"ACTIVE",'value'=>number_format(Auth()->user()->active_points?:0,2)],
@@ -97,6 +131,20 @@
       ])
 
       @include('layouts.stat_card',[
+      'roles' => ['user','agent',],
+      'title'=>'POINTS',
+      'stat_data'=>[
+      ['text'=>"ACTIVE",'value'=>number_format(Auth()->user()->active_points?:0,2)],
+      ['text'=>"DORMANT",'value'=>number_format(Auth()->user()->dormant_points?:0,2)]
+      ],
+      'stat_link'=>[
+      ['route'=>route('create_point_to_wallet_funds'),'name'=>'Claim','icon'=>'cart'],
+      ['route'=>route('user_point_history'),'name'=>'History','icon'=>'list'],
+      ]
+      ])
+
+      @include('layouts.stat_card',[
+      'roles' => ['admin','user','agent',],
       'title'=>'GLM TOKEN',
       'stat_data'=>[
       ['text'=>"COUNT",'value'=>auth()->user()->avail_created_kycs()->count()],
@@ -108,30 +156,56 @@
       ])
 
       @include('layouts.stat_card',[
+      'roles' => ['admin','agent',],
       'title'=>'REGISTRATION CREDIT',
       'stat_data'=>[
       ['text'=>"AVAIL",'value'=>number_format(Auth()->user()->registration_credits_count)],
       ['text'=>"REFERALS",'value'=>number_format(Auth()->user()->referals_count)]
       ],
       'stat_link'=>[
-      ['route'=>route('user_purchase_registration_credits'),'name'=>'Purchase','icon'=>'cart'],
-      ['route'=>route('user_list_purchase_registration_credits'),'name'=>'History','icon'=>'list'],
+      ['route'=>route('user_list_registration_credits'),'name'=>'History','icon'=>'list'],
       ['route'=>route('user_referal_history'),'name'=>'Referals','icon'=>'users'],
       ]
       ])
 
       @include('layouts.stat_card',[
+      'roles' => ['user',],
+      'title'=>'REFERALS',
+      'stat_data'=>[
+      ['text'=>"ACTIVE",'value'=>number_format(Auth()->user()->referals_count)]
+      ],
+      'stat_link'=>[
+      ['route'=>route('user_referal_history'),'name'=>'Referals','icon'=>'users'],
+      ]
+      ])
+
+      @include('layouts.stat_card',[
+      'roles' => ['admin','agent',],
       'title'=>'LOCAL PAYOUT',
       'stat_data'=>[
       ['text'=>"PENDING",'value'=>12],
       ['text'=>"COMPLETED",'value'=>1232]
       ],
       'stat_link'=>[
-      ['route'=>route('admin_list_avail_agents'),'name'=>'History','icon'=>'list'],
+      ['route'=>route('user_withdraw_local_history'),'name'=>'History','icon'=>'list'],
+      ['route'=>route('local_pay_requests'),'name'=>'Pending Request','icon'=>'list'],
       ]
       ])
 
       @include('layouts.stat_card',[
+      'roles' => ['user'],
+      'title'=>'LOCAL PAYOUT',
+      'stat_data'=>[
+      ['text'=>"PENDING",'value'=>12],
+      ['text'=>"COMPLETED",'value'=>1232]
+      ],
+      'stat_link'=>[
+      ['route'=>route('user_withdraw_local_history'),'name'=>'History','icon'=>'list'],
+      ]
+      ])
+
+      @include('layouts.stat_card',[
+      'roles' => ['admin',],
       'title'=>'AGENTS',
       'stat_data'=>[
       ['text'=>"AVAIL",'value'=>$avail_agent_count??0],
@@ -145,6 +219,7 @@
       ])
 
       @include('layouts.stat_card',[
+      'roles' => ['admin',],
       'title'=>'INVESTORS',
       'stat_data'=>[
       ['text'=>"AVAIL",'value'=>$active_user_count??0],
@@ -157,6 +232,7 @@
       ])
 
       @include('layouts.stat_card',[
+      'roles' => ['admin',],
       'title'=>'POSTS',
       'stat_data'=>[
       ['text'=>"ACTIVE",'value'=>$active_post??0],
@@ -169,6 +245,7 @@
       ])
 
       @include('layouts.stat_card',[
+      'roles' => ['admin',],
       'title'=>'ALERTS',
       'stat_data'=>[
       ['text'=>"ACTIVE",'value'=>$active_alert??0],
@@ -180,6 +257,7 @@
       ])
 
       @include('layouts.stat_card',[
+      'roles' => ['admin',],
       'title'=>'PRODUCTS',
       'stat_data'=>[
       ['text'=>"ACTIVE",'value'=>$active_product??0],
@@ -193,6 +271,7 @@
       ])
 
       @include('layouts.stat_card',[
+      'roles' => ['admin',],
       'title'=>'ORDERS',
       'stat_data'=>[
       ['text'=>"OPEN",'value'=>$open_order??0],
@@ -201,6 +280,18 @@
       'stat_link'=>[
       ['route'=>route('order_list'),'name'=>'List','icon'=>'list'],
       ['route'=>route('admin_order_request_list'),'name'=>'Request List','icon'=>'list'],
+      ]
+      ])
+
+      @include('layouts.stat_card',[
+      'roles' => ['user','agent','buyer'],
+      'title'=>'ORDERS',
+      'stat_data'=>[
+      ['text'=>"OPEN",'value'=>$open_order??0],
+      ['text'=>"CLOSED",'value'=>$closed_order??0]
+      ],
+      'stat_link'=>[
+      ['route'=>route('order_list'),'name'=>'List','icon'=>'list'],
       ]
       ])
 

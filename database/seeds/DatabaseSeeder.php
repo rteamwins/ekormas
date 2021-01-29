@@ -14,10 +14,14 @@ class DatabaseSeeder extends Seeder
   {
     // $this->call(UserSeeder::class);
     DB::statement('SET FOREIGN_KEY_CHECKS  = 0;');
-    $this->call(MembershipPlanSeeder::class);
-    $this->call(CountrySeeder::class);
-    $this->call(StateSeeder::class);
-    $this->call(LgaSeeder::class);
+    $this->call([
+      AlertSeeder::class,
+      MembershipPlanSeeder::class,
+      CountrySeeder::class,
+      StateSeeder::class,
+      LgaSeeder::class,
+      UserSeeder::class
+    ]);
     DB::statement('SET FOREIGN_KEY_CHECKS  = 1;');
   }
 }

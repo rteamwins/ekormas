@@ -13,7 +13,20 @@ const mix = require("laravel-mix");
 
 mix
   .js("resources/js/app.js", "public/js")
-  .extract(["vue"])
+  .extract([
+    "vue",
+    "uikit",
+    "vuex",
+    "vuex-persist",
+    "vuejs-paginate",
+    "vue2-org-tree",
+    "vue-sweetalert2",
+    "vue-qrcode-reader",
+    "vue-qrcode",
+    "vue-apexcharts",
+    "moment",
+    "apexcharts"
+  ])
   .version()
   .sass("resources/sass/app.scss", "public/css");
 mix.browserSync("localhost:8055");

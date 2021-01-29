@@ -66,7 +66,7 @@
           <td>
             <span class="uk-hidden@m uk-text-bold">Action: </span>
             <span
-              title="Edit Local Pay Request"
+              title="View Requester Detail"
               style="cursor:pointer;"
               @click="view_lpr_user(lpr.user)"
               class="uk-icon-button blue-text"
@@ -226,7 +226,6 @@ export default {
         });
     },
     view_lpr_user(lpr_user) {
-      let current_page = this.lpr_pagination_data.current_page;
       this.$swal.fire({
         title: lpr_user.name,
         text: lpr_user.phone,

@@ -89,11 +89,14 @@ Route::group(['middleware' => ['verifyRegPayment']], function () {
     Route::get('/kyc/list', 'KYCController@index')->name('user_list_kyc');
     Route::get('/referal/history', 'HomeController@show_referal')->name('user_referal_history');
 
-    Route::get('/registration_credit/purchase', 'RegistrationCreditPurchaseController@create')->name('user_purchase_registration_credits');
-    Route::post('/registration_credit/process', 'RegistrationCreditPurchaseController@store')->name('user_store_purchase_registration_credits');
-    Route::get('/registration_credit/list', 'RegistrationCreditPurchaseController@index')->name('user_list_purchase_registration_credits');
-    Route::get('/registration_credit/{plan}/{quantity}/payment-failed', 'RegistrationCreditPurchaseController@payment_failed')->name('user_registration_credit_payment_failed');
-    Route::get('/registration_credit/{plan}/{quantity}/payment-success', 'RegistrationCreditPurchaseController@payment_success')->name('user_registration_credit_payment_success');
+    Route::group(['prefix' => 'registration_credit'], function () {
+      Route::get('purchase', 'RegistrationCreditPurchaseController@create')->name('user_purchase_registration_credits');
+      Route::post('process', 'RegistrationCreditPurchaseController@store')->name('user_store_purchase_registration_credits');
+      Route::get('list', 'RegistrationCreditController@index')->name('user_list_registration_credits');
+      Route::get('/purchase/list', 'RegistrationCreditPurchaseController@index')->name('user_list_purchase_registration_credits');
+      Route::get('{plan}/{quantity}/payment-failed', 'RegistrationCreditPurchaseController@payment_failed')->name('user_registration_credit_payment_failed');
+      Route::get('{plan}/{quantity}/payment-success', 'RegistrationCreditPurchaseController@payment_success')->name('user_registration_credit_payment_success');
+    });
 
     Route::get('agent/application/list', 'AgentApplicationController@index')->name('agent_application_list');
     Route::get('agent/application/new', 'AgentApplicationController@create')->name('agent_application_form');

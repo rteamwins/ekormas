@@ -16,8 +16,7 @@ class KYCController extends Controller
    */
   public function index()
   {
-    $all_kycs = KYC::where('user_id', Auth()->user()->id)->paginate(10);
-    return view('kyc.list', ['kycs' => $all_kycs]);
+    return view('kyc.list');
   }
 
   /**
@@ -27,7 +26,7 @@ class KYCController extends Controller
    */
   public function index_json()
   {
-    $kycs = KYC::where('user_id', auth()->user()->id)->paginate(10);
+    $kycs = KYC::with(['consumer:id,name,username,phone,email'])->where('user_id', auth()->user()->id)->paginate(10);
     return response()->json($kycs, Response::HTTP_OK);
   }
 
@@ -53,6 +52,4 @@ class KYCController extends Controller
     $new_kyc->save();
     return redirect()->route('list_all_kycs')->with('success', "Your {$request->amount} KYC has been created")->setStatusCode(201);
   }
-
-
 }

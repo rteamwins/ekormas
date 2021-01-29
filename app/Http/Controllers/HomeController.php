@@ -160,7 +160,7 @@ class HomeController extends Controller
   public function user_dashboard()
   {
     $profits = Profit::whereUserId(Auth()->user()->id)->whereDate('created_at', now())->latest()->get();
-    $candle_sticks = $this->market_candlestick_bar();
+    // $candle_sticks = $this->market_candlestick_bar();
     $plabels = [];
     $pdata = [];
     $series = [];
@@ -169,24 +169,24 @@ class HomeController extends Controller
       $pdata[] = number_format($profit->amount, 3);
     }
 
-    foreach ($candle_sticks as $candle_stick) {
-      $series[] = [
-        "x" => $candle_stick['date'] * 1000,
-        "y" => [
-          $candle_stick['open'],
-          $candle_stick['high'],
-          $candle_stick['low'],
-          $candle_stick['close']
-        ]
-      ];
-    }
-    $mdata = [
+    // foreach ($candle_sticks as $candle_stick) {
+    //   $series[] = [
+    //     "x" => $candle_stick['date'] * 1000,
+    //     "y" => [
+    //       $candle_stick['open'],
+    //       $candle_stick['high'],
+    //       $candle_stick['low'],
+    //       $candle_stick['close']
+    //     ]
+    //   ];
+    // }
+    // $mdata = [
 
-      "series" => [[
-        "data" => $series,
-        // "backgroundColor" => '#00C853',
-      ]]
-    ];
+    //   "series" => [[
+    //     "data" => $series,
+    //     // "backgroundColor" => '#00C853',
+    //   ]]
+    // ];
     $pdata = [
       "series" => [[
         "name" => 'Trade Profits',
@@ -197,7 +197,8 @@ class HomeController extends Controller
     ];
     return view('user.dashboard', [
       'pdata' => $pdata,
-      'mdata' => $mdata,
+      // 'mdata' => $mdata,
+      'role' => auth()->user()->role,
       'active_post' => Post::count(),
       'deleted_post' => Post::withTrashed()->whereNotNull('deleted_at')->count(),
       'active_alert' => Alert::whereStatus('active')->count(),

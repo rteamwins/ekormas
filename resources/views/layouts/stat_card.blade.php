@@ -1,3 +1,4 @@
+@if(in_array($role,$roles))
 <div style="padding:3px;">
   <div class="uk-border-rounded uk-card uk-background-primary uk-light uk-padding-remove">
     <h4 class="uk-margin-remove-bottom uk-padding-small uk-padding-remove-vertical uk-text-truncate uk-text-bolder">
@@ -22,3 +23,4 @@
     </div>
   </div>
 </div>
+@endif
