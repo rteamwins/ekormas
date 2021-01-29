@@ -3,10 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class MembershipPlan extends Model
 {
+  use SoftDeletes;
   protected $fillable = [
     'fee', 'slug', 'name', 'min_trading_capital', 'max_trading_capital',
     'weekly_membership_percent', 'weekly_trading_percent', 'membership_cancellation_percent',
