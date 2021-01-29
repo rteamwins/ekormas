@@ -36,7 +36,7 @@ class User extends Authenticatable
     'referer', 'role', 'activated_at', 'phone',
     'trading_capital', 'membership_plan_id',
     'last_profit_at', 'points', 'username',
-    'country_code',
+    'country_code', 'last_login',
     'state_id',
     'lga_id',
   ];
@@ -62,6 +62,7 @@ class User extends Authenticatable
     'email_verified_at' => 'datetime',
     'activated_at' => 'datetime',
     'last_profit_at' => 'datetime',
+    'last_login' => 'datetime',
   ];
 
 

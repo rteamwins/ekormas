@@ -49,7 +49,7 @@ class LoginController extends Controller
     // Auth::user()->tokens->each(function ($token, $key) {
     //   $token->revoke();
     // });
-    Auth::User()->createToken('ekormas')->accessToken;
+    Auth::User()->createToken('tglm')->accessToken;
   }
 
   protected function redirectTo()
