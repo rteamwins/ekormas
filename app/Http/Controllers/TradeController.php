@@ -67,8 +67,9 @@ class TradeController extends Controller
     $new_trade->amount = $request->trade_amount;
     $new_trade->user_id = Auth()->user()->id;
 
-    // $new_trade->earning = (($request->trade_amount * (2 / 100)) * ($trade_duration / 7));
-    $new_trade->profit_percent = (($trader->membership_plan->weekly_trading_percent + ($trader->membership_plan->fee * .03)) * ($trade_duration / 7));
+
+    $new_trade->earning = $this->calc_earn($trader, $request->trade_amount, $trade_duration);
+    $new_trade->profit_percent = (($new_trade->earning / $new_trade->amount) * 100);
     $new_trade->completed = false;
     $days_duration = now()->addDays($trade_duration);
     $new_trade->closing_at = $days_duration;
@@ -79,6 +80,7 @@ class TradeController extends Controller
     } else {
       $new_trade->method = "manual";
     }
+    return dd($trader->membership_plan, $new_trade);
     $new_trade->save();
     $trader->wallet -= $request->trade_amount;
     $trader->trading_capital += $request->trade_amount;
@@ -115,6 +117,17 @@ class TradeController extends Controller
     }
     $profits = [];
     return redirect()->route('user_trade_history');
+  }
+
+  public function calc_earn($trader, $amount, $duration)
+  {
+    $tr_amt = $amount;
+    $tr_per = ($trader->membership_plan->weekly_trading_percent / 100);
+    $tr_ern = ($tr_amt * $tr_per);
+    $wk_tr_amt = $trader->membership_plan->fee;
+    $wk_tr_per = ($trader->membership_plan->weekly_membership_percent / 100);
+    $wk_ern = ($wk_tr_amt * $wk_tr_per);
+    return (($tr_ern + $wk_ern) * ($duration / 7));
   }
   function RandArrayToSum($numvalues, $total)
   {
