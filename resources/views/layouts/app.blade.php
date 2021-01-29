@@ -8,11 +8,11 @@
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta name="description"
-    content="{{ config('app.name', 'Ekormas') }} - Frieght, Truck and Shipping Service for packages, with Express Tracking and range of parcel delivery service">
-  <meta name="title" content="{{ config('app.name', 'Ekormas') }} - @yield('title')">
+    content="{{ config('app.name', 'TGLM') }} - TGLM is a network marketing created long side the ecommerce platform, for investors, buyers and entreprenuer.">
+  <meta name="title" content="{{ config('app.name', 'TGLM') }} - @yield('title')">
 
   <link rel="shortcut icon" href="{{asset('images/misc/favicon.jpg')}}" type="image/x-icon">
-  <title>{{ config('app.name', 'Ekormas') }} | @yield('title')</title>
+  <title>{{ config('app.name', 'TGLM') }} | @yield('title')</title>
 
   <!-- Styles -->
   <link href="{{ asset('css/app.css') }}" rel="stylesheet">
