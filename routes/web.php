@@ -23,6 +23,7 @@ Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('register/ref/{ref_code}/pos/{placement_id}', 'Auth\RegisterController@showRegistrationForm')->name('register')->where(['ref_code' => '[A-Za-z0-9_-]+', 'placement_id' => '[0-9]+']);
 Route::post('register/new', 'Auth\RegisterController@register')->name('register_save');
 
+
 // Password Reset Routes...
 Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
 Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
@@ -38,6 +39,7 @@ Route::get('/store', 'ProductController@store_index')->name('product_store');
 Route::group(['middleware' => ['verifyRegPayment']], function () {
   Route::get('/', 'HomeController@index')->name('home');
   Route::group(['prefix' => 'user', 'middleware' => ['auth']], function () {
+    Route::get('/user/profile', 'HomeController@view_profile')->name('user_profile');
     Route::get('/dashboard', 'HomeController@user_dashboard')->name('user_home');
     Route::get('/order', 'OrderController@index')->name('order_list');
     Route::get('/order/{order_code}/payment-failed', 'OrderController@payment_failed')->name('order_payment_failed');

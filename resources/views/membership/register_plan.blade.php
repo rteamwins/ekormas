@@ -63,8 +63,8 @@
   <div class="uk-margin-large-bottom uk-flex-center" uk-grid>
     <div class="uk-width-1-1 uk-width-1-2@m">
       <ul class="uk-subnav uk-subnav-pill uk-text-bold uk-text-center uk-child-width-expand" uk-switcher>
-        <li><a href="#" onclick="toggle_reg_mode(true)"><span></span> VIA &#8383;itcoin</a></li>
-        <li><a href="#" onclick="toggle_reg_mode(false)"> With REGISTRATION CREDIT</a></li>
+        <li><a href="#" onclick="toggle_reg_mode(true)"><span></span> &#8383;BTC</a></li>
+        <li><a href="#" onclick="toggle_reg_mode(false)">REGISTRATION CREDIT</a></li>
       </ul>
       <div class="uk-divider-icon"></div>
       <div>

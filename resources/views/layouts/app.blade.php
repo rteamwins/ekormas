@@ -180,12 +180,8 @@
           <ul class="uk-nav-sub uk-padding-remove">
             <li>
               <div class="uk-padding-small green accent-2">
-                <a href="#" class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">VIEW</a>
-              </div>
-            </li>
-            <li>
-              <div class="uk-padding-small green accent-2">
-                <a href="#" class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">EDIT</a>
+                <a href="{{route('user_profile')}}"
+                  class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">VIEW</a>
               </div>
             </li>
           </ul>
@@ -610,7 +606,7 @@
               <span class="uk-text-bold">Calling Hours: Weekday: 8:00 - 19:00</span> during this time our physical
               service at various branch can be offered to you
               <br>
-              <a href="tel:+443233223322" class="uk-link-reset uk-text-bolder">+44-323-322-3322</a>
+              <a href="tel:+441277887553" class="uk-link-reset uk-text-bolder">+441277887553</a>
               <br>
               <a target="_blank"
                 href="mailto:support@thegreenlifemarket.shop?subject={{str_replace(' ','%20',"A Suitable Email Title")}}&body={{str_replace(' ','%20',"write your message here")}}"

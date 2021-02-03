@@ -24,6 +24,9 @@ Route::middleware('auth:api')->group(function () {
 
   Route::get('user/kyc/list', 'KYCController@index_json');
 
+  Route::post('user/profile/update', 'HomeController@update_profile');
+  Route::get('user/profile/view', 'HomeController@get_profile');
+
   Route::get('user/reg_credit/list', 'RegistrationCreditController@index_json');
 
   Route::get('user/referal/tree_data/for/{id}', 'HomeController@get_ref_level')->where(['id' => '[0-9]+']);

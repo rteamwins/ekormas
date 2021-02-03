@@ -70,8 +70,6 @@ class RegisterController extends Controller
    */
   protected function validator(array $data)
   {
-    $bool = User::isBroken();
-    Log::info("Tree Broken: " . $bool);
     User::fixTree();
     if (array_key_exists('placement_id', $data) && $data['placement_id'] != (null || "")) {
       $parent_node = User::select('id')->where('placement_id', $data['placement_id'])->first();
@@ -104,23 +102,18 @@ class RegisterController extends Controller
    */
   protected function create(array $data)
   {
-    try {
-      if (array_key_exists('referer', $data) && $data['referer'] != (null || "")) {
-        $referer = User::select('id')->whereUsername($data['referer'])->firstOrFail();
-        $data['referer'] = $referer->id;
-      } else {
-        unset($data['referer']);
-      }
-
-      $parent_node = User::select('id')->where('placement_id', $data['placement_id'])->first();
-      $data['parent_id'] = $parent_node->id;
-      $data['role'] = 'user';
-      unset($data['placement_id']);
-      $data['password'] = Hash::make($data['password']);
-      return User::create($data);
-    } catch (\Exception $e) {
-      Log::info("regError: " . $e->getMessage());
-      return redirect()->back()->withInput($data)->with(['error' => 'Error Saving User']);
+    if (array_key_exists('referer', $data) && $data['referer'] != (null || "")) {
+      $referer = User::select('id')->whereUsername($data['referer'])->firstOrFail();
+      $data['referer'] = $referer->id;
+    } else {
+      unset($data['referer']);
     }
+
+    $parent_node = User::select('id')->where('placement_id', $data['placement_id'])->first();
+    $data['parent_id'] = $parent_node->id;
+    $data['role'] = 'user';
+    unset($data['placement_id']);
+    $data['password'] = Hash::make($data['password']);
+    return User::create($data);
   }
 }

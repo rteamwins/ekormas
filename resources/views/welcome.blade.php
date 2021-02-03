@@ -17,7 +17,13 @@
 
   <ul class="uk-slideshow-items">
     <li>
-      <img src="{{asset('images/misc/WE\'RE the green life mar.png')}}" alt="">
+      <img src="{{asset('images/misc/slider1.jpeg')}}" alt="Homeslider Image 1">
+    </li>
+    <li>
+      <img src="{{asset('images/misc/slider2.jpeg')}}" alt="Homeslider Image 2">
+    </li>
+    <li>
+      <img src="{{asset('images/misc/slider3.jpeg')}}" alt="Homeslider Image 3">
     </li>
   </ul>
 

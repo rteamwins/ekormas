@@ -37,6 +37,71 @@ class HomeController extends Controller
   {
   }
 
+  public function view_profile()
+  {
+    $states = State::select('id', 'name')->whereCountryCode('cm')->get();
+    $lgas = Lga::select('id', 'name', 'state_id')->whereCountryCode('cm')->get();
+    return view('user.profile', [
+      'states' => $states,
+      'lgas' => $lgas,
+    ]);
+  }
+  public function update_profile(Request $request)
+  {
+    $this->validate($request, [
+      'state_id' => 'sometimes|nullable|exists:states,id',
+      'lga_id' => 'sometimes|nullable|exists:lgas,id',
+      'name' => 'sometimes|nullable|string|',
+      'phone' => 'sometimes|nullable|unique:users,phone,' . auth()->user()->id,
+      'email' => 'sometimes|nullable|unique:users,email,' . auth()->user()->id,
+    ]);
+
+    $user = User::where('id', auth()->user()->id)->firstOrFail();
+    $attribs = [
+      'state_id',
+      'lga_id',
+      'name',
+      'phone',
+      'email',
+    ];
+
+    foreach ($attribs as $attrib) {
+      if ($request->has($attrib) && $request->{$attrib} != (null || '')) {
+        $user->{$attrib} = $request->{$attrib};
+      }
+    }
+
+
+    $user->update();
+
+    $userx['id'] = $user->id;
+    $userx['name'] = $user->name;
+    $userx['state_id'] = $user->state_id;
+    $userx['lga_id'] = $user->lga_id;
+    $userx['phone'] = $user->phone;
+    $userx['username'] = $user->username;
+    $userx['email'] = $user->email;
+    $response['status'] = 'success';
+    $response['message'] = 'Profile has been updated';
+    $response['details'] = $userx;
+    return response()->json($response, Response::HTTP_OK);
+  }
+
+  public function get_profile()
+  {
+    $user['id'] = auth()->user()->id;
+    $user['name'] = auth()->user()->name;
+    $user['state_id'] = auth()->user()->state_id;
+    $user['lga_id'] = auth()->user()->lga_id;
+    $user['phone'] = auth()->user()->phone;
+    $user['username'] = auth()->user()->username;
+    $user['email'] = auth()->user()->email;
+    $response['status'] = 'success';
+    $response['message'] = 'Profile Details';
+    $response['details'] = $user;
+    return response()->json($response, Response::HTTP_OK);
+  }
+
   public function get_ref_level($id = null)
   {
     if ($id === null) {
