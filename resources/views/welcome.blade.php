@@ -45,7 +45,7 @@
     Hora do Monte in Brava, Cape Verde. It was launched in November 2020 and it has been a platform that has
     being tested and trusted by many customers, with new millionaire emerging every week. </p>
 
-  <button class="uk-button uk-button-secondary uk-button-large uk-margin"><b>Know More</b></button>
+  <a href="{{route('about_us')}}" class="uk-button uk-button-secondary uk-button-large uk-margin"><b>Know More</b></a>
 </div>
 <!--========= ============================ -->
 

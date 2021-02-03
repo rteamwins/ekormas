@@ -102,7 +102,7 @@
               <div class="uk-form-control">
                 <select v-model="sel_state" class="uk-select" id="intending_state" name="intending_state">
                   <option value="">Select State</option>
-                  <option v-for="(state) in states" :key="state.id+'_state'"  :value="state.id">{{state.name}}</option>
+                  <option v-for="(state,x) in states" :key="x"  :value="state.id">{{state.name}}</option>
                 </select>
               </div>
             </div>
@@ -113,7 +113,7 @@
               <div class="uk-form-control">
                 <select class="uk-select" v-model="sel_lga" id="intending_lga" name="intending_lga">
                   <option value="">Select Lga</option>
-                <option v-for="(lga) in sel_state_lga" :key="lga.id+'_lga'"  :value="lga.id">{{lga.name}}</option>
+                <option v-for="(lga,y) in sel_state_lgas" :key="y"  :value="lga.id">{{lga.name}}</option>
                 </select>
               </div>
             </div>
@@ -162,7 +162,7 @@ export default {
       cart_items: "retrieveCartItems",
       cart_item_count: "retrieveCartItemsCount",
     }),
-    sel_state_lga(){
+    sel_state_lgas(){
       this.sel_lga =''
       return this.lgas.filter(x=>x.state_id === this.sel_state);
     }
