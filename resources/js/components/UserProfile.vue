@@ -201,7 +201,7 @@ export default {
   computed: {
     sel_state_lgas() {
       this.edit_data.lga_id = "";
-      return this.lgas.filter(x => x.state_id === this.edit_data.state_id);
+      return this.lgas.filter(x => x.state_id == this.edit_data.state_id);
     }
   },
   methods: {

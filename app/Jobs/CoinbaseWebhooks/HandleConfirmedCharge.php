@@ -66,7 +66,9 @@ class HandleConfirmedCharge implements ShouldQueue
       $crypto_transaction->status = 'confirmed';
       $crypto_transaction->update();
       if ($transaction->type == 'user_registration_fee') {
+        Log::info('handling...user reg payment');
         $membership_plan = MembershipPlan::whereSlug($payload_obj['event']['data']['metadata']['membership_plan'])->first();
+        Log::info('process...user reg payment: ' . $user->username);
         $user->membership_plan_id = $membership_plan->id;
         $user->wallet += $membership_plan->min_trading_capital;
         $user->update();
@@ -74,10 +76,14 @@ class HandleConfirmedCharge implements ShouldQueue
         if ($user->parent->children->count() == 2) {
           $this->check_for_bonus_eligible_ancestors($user);
         }
+        Log::info('handling...user reg payment...completed');
       } else if ($transaction->type == 'user_wallet_funding') {
+        Log::info('handling...user wallet fund');
         $transaction->update(['amount' => $amount_confirmed]);
+        Log::info('handling...user wallet fund trnx_id: ' . $user->username);
         $user->wallet += $amount_confirmed;
         $user->update();
+        Log::info('handling...user wallet fund...completed');
       } else if ($transaction->type == 'registration_credit_purchase') {
         $rc_purchase = RegistrationCreditPurchase::whereId($payload_obj['event']['data']['metadata']['rcp_id'])->first();
         $membership_plan = MembershipPlan::whereSlug($rc_purchase->plan)->first();
