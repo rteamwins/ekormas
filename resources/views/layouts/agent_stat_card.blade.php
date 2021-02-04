@@ -28,10 +28,10 @@
           </table>
           <div class="uk-position-bottom black">
             <div class="uk-width-1-1 uk-flex uk-flex-around">
-              <a href="{{route('update_reg_plan')}}" class="uk-button uk-button-link uk-text-bold white-text"><span
-                  uk-icon="upload"></span> <span class="uk-visible@m">Upgrade</span> </a>
-              <a href="{{route('user_fund_history')}}" class="uk-button uk-button-link uk-text-bold white-text"><span
-                  uk-icon="folder"></span> <span class="uk-visible@m">Profile</span> </a>
+              <a href="{{route('update_reg_plan')}}" class="uk-button uk-button-link uk-text-bold white-text"
+                style="font-size:0.8em"><span class="uk-visible@m" uk-icon="icon:upload;ratio:0.8"></span> Upgrade</a>
+              <a href="{{route('user_profile')}}" class="uk-button uk-button-link uk-text-bold white-text"
+                style="font-size:0.8em"><span class="uk-visible@m" uk-icon="icon:folder;ratio:0.8"></span> Profile</a>
             </div>
           </div>
         </div>
@@ -58,10 +58,10 @@
           </table>
           <div class="uk-position-bottom black">
             <div class="uk-width-1-1 uk-flex uk-flex-around">
-              <a href="{{route('update_reg_plan')}}" class="uk-button uk-button-link uk-text-bold white-text"><span
-                  uk-icon="upload"></span> <span class="uk-visible@m">Become Investor</span> </a>
-              <a href="{{route('user_fund_history')}}" class="uk-button uk-button-link uk-text-bold white-text"><span
-                  uk-icon="folder"></span> <span class="uk-visible@m">Profile</span> </a>
+              <a href="{{route('update_reg_plan')}}" class="uk-button uk-button-link uk-text-bold white-text"
+                style="font-size:0.8em"><span class="uk-visible@m" uk-icon="icon:upload;ratio:0.8"></span> Upgrade</a>
+              <a href="{{route('user_profile')}}" class="uk-button uk-button-link uk-text-bold white-text"
+                style="font-size:0.8em"><span class="uk-visible@m" uk-icon="icon:folder;ratio:0.8"></span> Profile</a>
             </div>
           </div>
         </div>
