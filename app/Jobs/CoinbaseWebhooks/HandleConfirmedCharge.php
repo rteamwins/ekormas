@@ -63,6 +63,7 @@ class HandleConfirmedCharge implements ShouldQueue
         ],
 
       );
+      
       $crypto_transaction = $transaction->method();
       $crypto_transaction->status = 'confirmed';
       $crypto_transaction->update();
