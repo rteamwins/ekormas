@@ -3115,10 +3115,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     sel_state_lgas: function sel_state_lgas() {
       var _this = this;
 
+      console.log(this.sel_state);
       this.sel_lga = '';
-      return this.lgas.filter(function (x) {
+      var xlga = this.lgas.filter(function (x) {
         return x.state_id === _this.sel_state;
       });
+      console.log(xlga);
+      return xlga;
     }
   }),
   methods: {
@@ -37130,10 +37133,10 @@ var render = function() {
                       _vm._v("Select Lga")
                     ]),
                     _vm._v(" "),
-                    _vm._l(_vm.sel_state_lgas, function(lga, y) {
+                    _vm._l(_vm.sel_state_lgas, function(lga, yz) {
                       return _c(
                         "option",
-                        { key: y, domProps: { value: lga.id } },
+                        { key: yz, domProps: { value: lga.id } },
                         [_vm._v(_vm._s(lga.name))]
                       )
                     })

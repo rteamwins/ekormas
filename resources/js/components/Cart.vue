@@ -113,7 +113,7 @@
               <div class="uk-form-control">
                 <select class="uk-select" v-model="sel_lga" id="intending_lga" name="intending_lga">
                   <option value="">Select Lga</option>
-                <option v-for="(lga,y) in sel_state_lgas" :key="y"  :value="lga.id">{{lga.name}}</option>
+                <option v-for="(lga,yz) in sel_state_lgas" :key="yz"  :value="lga.id">{{lga.name}}</option>
                 </select>
               </div>
             </div>
@@ -163,8 +163,11 @@ export default {
       cart_item_count: "retrieveCartItemsCount",
     }),
     sel_state_lgas(){
+      console.log(this.sel_state)
       this.sel_lga =''
-      return this.lgas.filter(x=>x.state_id === this.sel_state);
+      let xlga = this.lgas.filter(x=>x.state_id === this.sel_state);
+      console.log(xlga)
+      return xlga
     }
   },
   methods: {
