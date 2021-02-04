@@ -126,7 +126,10 @@ class TradeController extends Controller
     $wk_tr_amt = $trader->membership_plan->fee;
     $wk_tr_per = ($trader->membership_plan->weekly_membership_percent / 100);
     $wk_ern = ($wk_tr_amt * $wk_tr_per);
-    return (($tr_ern + $wk_ern) * ($duration / 7));
+    $ttl_ern = ($tr_ern + $wk_ern);
+    $new_duration = ($duration / 7);
+    $real_earning = $ttl_ern * $new_duration;
+    return $real_earning;
   }
   function RandArrayToSum($numvalues, $total)
   {
