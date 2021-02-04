@@ -41,7 +41,7 @@ class WithdrawController extends Controller
    */
   public function create()
   {
-    $agents = User::select("name", 'username')->get()->makeHidden(['wallet']);
+    $agents = User::select("name", 'username')->where('role', 'agent')->get()->makeHidden(['wallet']);
     return view('withdraw.create', ['agents' => $agents]);
   }
 

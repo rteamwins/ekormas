@@ -80,7 +80,7 @@ class TradeController extends Controller
     } else {
       $new_trade->method = "manual";
     }
-    return dd($trader->membership_plan, $new_trade);
+    
     $new_trade->save();
     $trader->wallet -= $request->trade_amount;
     $trader->trading_capital += $request->trade_amount;
