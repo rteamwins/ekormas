@@ -43,6 +43,7 @@ class HandleConfirmedCharge implements ShouldQueue
    */
   public function handle()
   {
+    Log::info('handling...charge confirmed starting');
     try {
       $payload_obj = $this->webhookCall->payload;
       $amount_confirmed = 0;
@@ -50,7 +51,7 @@ class HandleConfirmedCharge implements ShouldQueue
       foreach ($payments as $payment) {
         $amount_confirmed += $payment['value']['local']['amount'];
       }
-      $user = User::where('id',$payload_obj['event']['data']['metadata']['user_id'])->first();
+      $user = User::where('id', $payload_obj['event']['data']['metadata']['user_id'])->first();
 
       $transaction = Transaction::updateOrCreate(
         [
@@ -103,6 +104,7 @@ class HandleConfirmedCharge implements ShouldQueue
     } catch (\Exception $e) {
       Log::error(sprintf('Error handling confirmed Charged: ', $e->getMessage()));
     }
+    Log::info('handling...charge confirmed completed');
   }
   public function check_for_bonus_eligible_ancestors(User $user)
   {

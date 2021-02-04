@@ -107,9 +107,8 @@ class TradeController extends Controller
         'trade_id' => $new_trade->id,
       ];
       $iter++;
-      Log::info($profit);
       $profits[] = $profit;
-      Log::info("iter: {$iter}....Tradecount: {$tradeable_counts_per_week}");
+      // Log::info("iter: {$iter}....Tradecount: {$tradeable_counts_per_week}");
       if ($iter % $tradeable_counts_per_week == 0) {
         Profit::insert($profits);
         $profits = [];
