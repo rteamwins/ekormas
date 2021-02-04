@@ -163,11 +163,8 @@ export default {
       cart_item_count: "retrieveCartItemsCount",
     }),
     sel_state_lgas(){
-      console.log(this.sel_state)
       this.sel_lga =''
-      let xlga = this.lgas.filter(x=>x.state_id === this.sel_state);
-      console.log(xlga)
-      return xlga
+      return this.lgas.filter(x=>x.state_id == this.sel_state);
     }
   },
   methods: {
