@@ -62,7 +62,7 @@ class TradeController extends Controller
     } else {
       $trade_duration = 7;
     }
-    $trader = User::find(Auth()->user()->id)->first();
+    $trader = User::where('id', Auth()->user()->id)->first();
     $new_trade = new Trade();
     $new_trade->amount = $request->trade_amount;
     $new_trade->user_id = Auth()->user()->id;
@@ -80,7 +80,7 @@ class TradeController extends Controller
     } else {
       $new_trade->method = "manual";
     }
-    
+
     $new_trade->save();
     $trader->wallet -= $request->trade_amount;
     $trader->trading_capital += $request->trade_amount;

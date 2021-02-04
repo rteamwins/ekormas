@@ -36,7 +36,7 @@
               <tr>
                 <td><span class="uk-hidden@m uk-text-bold">#: </span>{{$loop->index +1}}</td>
                 <td><span class="uk-hidden@m uk-text-bold">Amount: </span>${{number_format($trade->amount,2)}}</td>
-                <td><span class="uk-hidden@m uk-text-bold">Earning: </span>${{number_format($trade->profit_percent,2)}}</td>
+                <td><span class="uk-hidden@m uk-text-bold">Earning: </span>${{number_format($trade->earning,2)}}</td>
                 <td><span class="uk-hidden@m uk-text-bold">Method: </span><span
                     class="uk-label {{$trade->method !== 'manual'?"green":"cyan"}}">{{$trade->method}}
                   </span></td>
