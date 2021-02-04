@@ -6,22 +6,23 @@
       @if(in_array(auth()->user()->role,['user','agent','admin']))
       <div style="padding:3px;">
         <div class="uk-border-rounded uk-card uk-background-primary uk-light uk-padding-remove">
-          <h4 class="uk-margin-remove-bottom uk-padding-small uk-padding-remove-vertical uk-text-truncate">MEMBERSHIP
-          </h4>
+          <h5 class="uk-margin-remove-bottom uk-text-bold uk-padding-small uk-padding-remove-vertical uk-text-truncate">
+            MEMBERSHIP
+          </h5>
           <table class="uk-table uk-table-small uk-table-divider uk-margin-remove-top uk-margin-bottom">
-            <tbody class="uk-text-small">
+            <tbody style="font-size:0.8em">
               <tr>
                 <td class="uk-text-bold uk-text-truncate uk-width-1-3"><img class="uk-preserve-width" width="20"
                     height="20"
                     src="{{asset(sprintf("images/misc/%s.svg",strtolower(Auth()->user()->membership_plan->name)))}}"
-                    alt="{{Auth()->user()->membership_plan->name . "Badge"}}"></td>
-                <td class="uk-text-right uk-text-bold white-text">
-                  {{ucfirst(Auth()->user()->membership_plan->name)}}</td>
+                    alt="{{Auth()->user()->membership_plan->name . "Badge"}}">
+                  <span class="uk-text-right uk-text-bold white-text">
+                    {{ucfirst(Auth()->user()->membership_plan->name)}}</span></td>
               </tr>
               <tr>
-                <td class="uk-text-bold uk-text-truncate uk-width-1-3">WALLET</td>
-                <td class="uk-text-right uk-text-bold white-text">${{number_format(Auth()->user()->wallet?:0,2)}}
-                </td>
+                <td class="uk-text-bold uk-text-truncate uk-width-1-3">WALLET
+                  <span class="uk-text-right uk-text-bold white-text">${{number_format(Auth()->user()->wallet?:0,2)}}
+                  </span> </td>
               </tr>
             </tbody>
           </table>
@@ -38,17 +39,19 @@
       @else
       <div style="padding:3px;">
         <div class="uk-border-rounded uk-card uk-background-primary uk-light uk-padding-remove">
-          <h4 class="uk-margin-remove-bottom uk-padding-small uk-padding-remove-vertical uk-text-truncate">PROFILE
-          </h4>
+          <h5 class="uk-margin-remove-bottom uk-text-bold uk-padding-small uk-padding-remove-vertical uk-text-truncate">
+            PROFILE
+          </h5>
           <table class="uk-table uk-table-small uk-table-divider uk-margin-remove-top uk-margin-bottom">
-            <tbody class="uk-text-small">
+            <tbody style="font-size:0.8em">
               <tr>
-              <td class="uk-text-bold uk-text-truncate uk-width-1-3">USERNAME: </td>
-              <td class="uk-text-right uk-text-bold white-text">{{Auth()->user()->username}}</td>
+                <td class="uk-text-bold uk-text-truncate">USERNAME:
+                  <span class="uk-text-right uk-text-bold white-text">{{Auth()->user()->username}}</span></td>
               </tr>
               <tr>
-                <td class="uk-text-bold uk-text-truncate uk-width-1-3">JOINED: </td>
-                <td class="uk-text-right uk-text-bold white-text">{{Auth()->user()->created_at->diffForHumans()}}
+                <td class="uk-text-bold uk-text-truncate uk-width-1-3">JOINED:
+                  <span
+                    class="uk-text-right uk-text-bold white-text">{{Auth()->user()->created_at->diffForHumans()}}</span>
                 </td>
               </tr>
             </tbody>
@@ -188,7 +191,7 @@
       ],
       'stat_link'=>[
       ['route'=>route('user_withdraw_local_history'),'name'=>'History','icon'=>'list'],
-      ['route'=>route('local_pay_requests'),'name'=>'Pending Request','icon'=>'list'],
+      ['route'=>route('local_pay_requests'),'name'=>'Pending','icon'=>'list'],
       ]
       ])
 
@@ -213,8 +216,8 @@
       ],
       'stat_link'=>[
       ['route'=>route('user_withdraw_local_history'),'name'=>'Avail','icon'=>'git-branch'],
-      ['route'=>route('admin_list_potential_agents'),'name'=>'Potential','icon'=>'plus-circle'],
-      ['route'=>route('agent_application_list'),'name'=>'Applications','icon'=>'users'],
+      // ['route'=>route('admin_list_potential_agents'),'name'=>'Potential','icon'=>'plus-circle'],
+      ['route'=>route('agent_application_list'),'name'=>'Request','icon'=>'users'],
       ]
       ])
 
@@ -279,7 +282,7 @@
       ],
       'stat_link'=>[
       ['route'=>route('order_list'),'name'=>'List','icon'=>'list'],
-      ['route'=>route('admin_order_request_list'),'name'=>'Request List','icon'=>'list'],
+      ['route'=>route('admin_order_request_list'),'name'=>'Request','icon'=>'list'],
       ]
       ])
 
