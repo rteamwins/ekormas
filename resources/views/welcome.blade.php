@@ -20,10 +20,10 @@
       <img src="{{asset('images/misc/slider1.jpeg')}}" alt="Homeslider Image 1">
     </li>
     <li>
-      <img src="{{asset('images/misc/slider2.jpeg')}}" alt="Homeslider Image 2">
+      <img src="{{asset('images/misc/slider2.1.jpeg')}}" alt="Homeslider Image 2">
     </li>
     <li>
-      <img src="{{asset('images/misc/slider3.jpeg')}}" alt="Homeslider Image 3">
+      <img src="{{asset('images/misc/slider3.1.jpeg')}}" alt="Homeslider Image 3">
     </li>
   </ul>
 
