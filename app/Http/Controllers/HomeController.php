@@ -355,7 +355,7 @@ class HomeController extends Controller
     ]);
 
     $plan = ['oynx' => 70, 'pearl' => 130, 'ruby' => 310, 'gold' => 610, 'sapphire' => 1210, 'emerald' => 3610, 'diamond' => 6010];
-    if (Auth::user()->membership_plan_id == null) {
+    if (Auth()->user()->membership_plan_id == null) {
       if ($request->has('rc_code')) {
         $rc_code = $request->rc_code;
         $new_rc_trx = RegistrationCredit::where('code', $rc_code)->first();
@@ -426,7 +426,7 @@ class HomeController extends Controller
         $new_trx = new Transaction();
         $new_trx->amount = $plan[$request->plan];
         $new_trx->status = 'created';
-        $new_trx->type = 'registration_fee';
+        $new_trx->type = 'user_registration_fee';
         $new_trx->user_id = Auth()->id();
         $new_trx->save();
         // $new_crypto_trx = CryptoTransaction::find($new_crypto_trx->id)->first();
