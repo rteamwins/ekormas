@@ -75,7 +75,7 @@ class HandleResolvedCharge implements ShouldQueue
         $user->membership_plan_id = $membership_plan->id;
         $user->wallet += $membership_plan->min_trading_capital;
         $user->update();
-        $user->give_referal_bonus();
+        $user->give_ancestor_referal_bonus();
         if ($user->parent->children->count() == 2) {
           $user->check_for_bonus_eligible_ancestors($user);
         }

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Alert;
 use App\Bonus;
 use App\CryptoTransaction;
+use App\Funding;
+use App\KYC;
 use App\Lga;
 use App\LocalPay;
 use App\MembershipPlan;
@@ -14,12 +16,15 @@ use App\Product;
 use App\Profit;
 use App\RegistrationCredit;
 use App\State;
+use App\Trade;
 use App\Transaction;
 use App\User;
+use App\Withdraw;
 use CoinbaseCommerce\ApiClient;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Shakurov\Coinbase\Facades\Coinbase;
 
@@ -108,7 +113,7 @@ class HomeController extends Controller
     if ($id === null) {
       $id = Auth()->user()->id;
     }
-    $node = User::select('id', '_rgt', '_lft', 'parent_id', 'placement_id', 'username', 'name', 'dormant_points','referer','phone')->where('id', $id)->firstOrFail();
+    $node = User::select('id', '_rgt', '_lft', 'parent_id', 'placement_id', 'username', 'name', 'dormant_points', 'referer', 'phone')->where('id', $id)->firstOrFail();
     $nodes = User::descendantsOf($id, ['id', '_rgt', '_lft', 'parent_id', 'placement_id', 'username', 'name', 'dormant_points', 'referer', 'phone']);
     $node->children = $nodes->toTree();
     return response()->json($node, Response::HTTP_OK);
@@ -266,6 +271,11 @@ class HomeController extends Controller
       'pdata' => $pdata,
       // 'mdata' => $mdata,
       'role' => auth()->user()->role,
+      'trade_roi' => Trade::whereUserId(auth()->user()->id)->where('completed', false)->first()->earning ?? 0,
+      'today_funding' => Funding::whereUserId(auth()->user()->id)->whereDate('created_at', now())->latest()->sum('amount'),
+      'week_funding' => Funding::whereUserId(auth()->user()->id)->whereDate('created_at', '>=', now()->startOfWeek())->latest()->sum('amount'),
+      'today_withdraw' => $this->withdraw_amount_today(),
+      'week_widthdraw' => $this->withdraw_amount_week(),
       'downlines_count' => auth()->user()->downlines()->whereNotNull('membership_plan_id')->count(),
       'active_post' => Post::count(),
       'deleted_post' => Post::withTrashed()->whereNotNull('deleted_at')->count(),
@@ -284,6 +294,39 @@ class HomeController extends Controller
       'local_pay_pending' => LocalPay::whereUserId(auth()->user()->id)->whereStatus('creeated')->count(),
       'local_pay_completed' => LocalPay::whereAgentId(auth()->user()->id)->whereStatus('completed')->count(),
     ]);
+  }
+
+  /**
+   * Display a listing of the resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function withdraw_amount_today()
+  {
+    $kyc = KYC::select('id', 'status', 'amount', 'fee', 'created_at', 'updated_at', 'deleted_at', DB::raw("'kyc' as type"))
+      ->where('user_id', Auth()->user()->id)->whereDate('created_at', now());
+    $withdrawals = Withdraw::select('id', 'status', 'amount', 'fee', 'created_at', 'updated_at', 'deleted_at', DB::raw("'bitcoin' as type"))
+      ->where('user_id', Auth()->user()->id)->whereDate('created_at', now());
+    return LocalPay::select('id', 'status', 'amount', 'fee', 'created_at', 'updated_at', 'deleted_at', DB::raw("'local' as type"))
+      ->where('user_id', Auth()->user()->id)->whereDate('created_at', now())
+      ->union($withdrawals)
+      ->union($kyc)
+      ->latest()
+      ->sum('amount');
+  }
+
+  public function withdraw_amount_week()
+  {
+    $kyc = KYC::select('id', 'status', 'amount', 'fee', 'created_at', 'updated_at', 'deleted_at', DB::raw("'kyc' as type"))
+      ->where('user_id', Auth()->user()->id)->whereDate('created_at', '>=', now()->startOfWeek());
+    $withdrawals = Withdraw::select('id', 'status', 'amount', 'fee', 'created_at', 'updated_at', 'deleted_at', DB::raw("'bitcoin' as type"))
+      ->where('user_id', Auth()->user()->id)->whereDate('created_at', '>=', now()->startOfWeek());
+    return LocalPay::select('id', 'status', 'amount', 'fee', 'created_at', 'updated_at', 'deleted_at', DB::raw("'local' as type"))
+      ->where('user_id', Auth()->user()->id)->whereDate('created_at', '>=', now()->startOfWeek())
+      ->union($withdrawals)
+      ->union($kyc)
+      ->latest()
+      ->sum('amount');
   }
 
   public function market_candlestick_bar()
@@ -370,7 +413,7 @@ class HomeController extends Controller
         $new_rc_trx->used_by = Auth()->user()->id;
         $new_rc_trx->save();
 
-        $membership_plan = MembershipPlan::whereSlug($new_rc_trx->plan)->first();
+        $membership_plan = MembershipPlan::where('slug', $new_rc_trx->plan)->first();
         $referer = User::where('id', $new_rc_trx->user_id)->first();
 
         $new_trx = new Transaction();
@@ -424,7 +467,7 @@ class HomeController extends Controller
         if ($user->parent->children->count() == 2) {
           $user->check_for_bonus_eligible_ancestors($user);
         }
-        return redirect()->route('home');
+        return redirect()->route('user_home');
       } else {
 
         $new_crypto_trx = new CryptoTransaction();

@@ -41,8 +41,30 @@ trait GiveReferalBonus
 
   public function give_ancestor_referal_bonus()
   {
-    $percent = [10, 4, 2, 1, 0.5, 0.25];
+    $percent = [4, 2, 1, 0.5, 0.25];
     $ancestors = User::latest()->limit(5)->ancestorsOf($this->id);
+    $referer =  static::where('id', $this->referer)->first();
+
+    $new_trx = new Transaction();
+    $new_trx->amount = (($this->membership_plan->fee ?? 0) * 0.10);
+    $new_trx->status = 'created';
+    $new_trx->type = 'bonus';
+    $new_trx->user_id = $referer->id;
+
+    $new_bonus_trx = new Bonus();
+    $new_bonus_trx->user_id = $this->referer;
+    $new_bonus_trx->amount = (($this->membership_plan->fee ?? 0) * 0.10);
+    $new_bonus_trx->status = 'created';
+    Log::info('Giving Direct Referal Bonus to user: ' . $referer->id);
+    $new_bonus_trx->type = 'referal_direct';
+
+    $new_bonus_trx->save();
+    $new_bonus_trx->transaction()->save($new_trx);
+    $new_trx->status = 'completed';
+    $new_trx->update();
+    $referer->bonus += $new_trx->amount;
+    $referer->update();
+    Log::info('Giving Direct Referal Bonus: $' . $new_bonus_trx->amount . ' to user: ' . $referer->id . " completed");
 
     foreach ($ancestors as $key => $ancestor) {
       Log::info('Giving Ancestor Referal Bonus to user: ' . $ancestor->id);
@@ -56,13 +78,10 @@ trait GiveReferalBonus
       $new_bonus_trx->user_id = $ancestor->id;
       $new_bonus_trx->amount = (($this->membership_plan->fee ?? 0) * ($percent[$key] / 100));
       $new_bonus_trx->status = 'created';
-      if ($key == 0) {
-        Log::info('Giving Direct Referal Bonus to user: ' . $ancestor->id);
-        $new_bonus_trx->type = 'referal_direct';
-      } else {
-        Log::info('Giving Ancestor Referal Bonus to user: ' . $ancestor->id);
-        $new_bonus_trx->type = 'referal_indirect';
-      }
+
+      Log::info('Giving Ancestor Referal Bonus to user: ' . $ancestor->id);
+      $new_bonus_trx->type = 'referal_indirect';
+
       $new_bonus_trx->save();
       $new_bonus_trx->transaction()->save($new_trx);
       $new_trx->status = 'completed';
