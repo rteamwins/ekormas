@@ -1,4 +1,37 @@
 @extends('layouts.app')
+@push('scripts_bottom')
+<script>
+  const axios_config = {
+    headers: {
+      'content-type': 'application/json',
+      'Accept': 'application/json'
+    }
+  }
+function delete_old_image(x,y,z) {
+      axios
+        .get(
+          `${location.origin}/api/product/${x}/delete_image/${y}`, axios_config
+        )
+        .then(res => {
+          // console.log(res.data)
+          if(res.data.message =='deleted'){
+            var img_itm = document.getElementById(z);
+            img_itm.parentNode.removeChild(img_itm);
+          }
+        })
+        .catch(err => {
+          const { status } = err.response;
+          if (status === 401) {
+            console.log(err.response.data);
+          } else if (status === 422) {
+            console.log(err.response.data);
+          } else {
+            console.log(err.response);
+          }
+        });
+    }
+</script>
+@endpush
 @section('title', 'Editing '.$product->title)
 @section('content')
 <div class="uk-container uk-padding-remove">
@@ -106,7 +139,7 @@
                 <li class="uk-active" id="pkimg_{{$key}}">
                   <img src="{{$img}}" width="150" class=" uk-display-block" style="object-fit:cover;height:150px;"
                     alt="" /><button type="button"
-                    onclick="delete_old_image('{{$product->id}}','{{$img}}','pkimg_{{$key}}')"
+                    onclick="delete_old_image('{{$product->id}}','{{pathinfo($img)['basename']}}','pkimg_{{$key}}')"
                     class="uk-button uk-button-small uk-button-danger uk-width-1-1">
                     Remove</span>
                   </button>

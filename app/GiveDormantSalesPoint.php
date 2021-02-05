@@ -4,6 +4,7 @@ namespace App;
 
 use App\point;
 use App\Transaction;
+use Illuminate\Support\Facades\Log;
 
 trait GiveDormantSalesPoint
 {
@@ -14,6 +15,7 @@ trait GiveDormantSalesPoint
    */
   public function give_dormant_sales_point($amount)
   {
+    Log::info("Preparing Daily Dormant Sale Bonus for User: " . $this->id . " Starting...");
     // $parent =  static::where('id', $model->parent_id)->first();
     $new_trx = new Transaction();
     $new_trx->amount =  $amount;
@@ -32,5 +34,7 @@ trait GiveDormantSalesPoint
     $new_trx->update();
     $this->dormant_point += $new_trx->amount;
     $this->update();
+    Log::info("Awarded Daily Dormant Sale Bonus: " . $amount . "PV to User: " . $this->id . " Starting...");
+    Log::info("Preparing Daily Dormant Sale Bonus for User: " . $this->id . " Completed");
   }
 }

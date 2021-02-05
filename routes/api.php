@@ -56,7 +56,7 @@ Route::middleware('auth:api')->group(function () {
 
   Route::get('product/enable/{id}', 'ProductController@enable')->where(['id' => '[0-9]+']);
   Route::get('product/disable/{id}', 'ProductController@disable')->where(['id' => '[0-9]+']);
-  Route::get('product/{id}/delete_image/{image_name}', 'ProductController@disable')->where(['id' => '[0-9]+']);
+  Route::get('product/{id}/delete_image/{image_name}', 'ProductController@delete_product_image')->where(['id' => '[0-9]+']);
 
   Route::post('order/new', 'OrderController@store');
 });

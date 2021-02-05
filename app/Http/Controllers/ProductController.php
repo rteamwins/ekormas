@@ -8,6 +8,7 @@ use App\Product;
 use App\State;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
@@ -133,12 +134,11 @@ class ProductController extends Controller
       'reward_level' => $request->reward_level,
       'delivery_duration' => $request->delivery_duration,
       'description' => $request->description,
-      'status' => 'active'
     ];
+    $product = Product::whereId($id)->firstOrFail();
+    $product->update($product_data);
     if ($request->hasFile('product_images') && count($product_images = $request->file('product_images'))) {
       $request->images = [];
-      $product = Product::whereId($id)->firstOrFail();
-      $product->update($product_data);
       $images = [];
       foreach ($product_images as $image) {
         $image_ext = $image->getClientOriginalExtension();
@@ -147,12 +147,45 @@ class ProductController extends Controller
         $image->move($image_path, $image_name);
         $images[] = $image_name;
       }
-      $product->images = array_merge($images, $product->images);
+      $product->images = array_merge($images, array_map(function ($imgx) {
+        return pathinfo($imgx)['basename'];
+      }, $product->images));
       $product->update();
     }
     return redirect()->route('list_product')->with('success', 'Product Updated successfully!');
   }
 
+  /**
+   * Remove the specified resource from storage.
+   *
+   * @param  \App\Product  $product
+   * @return \Illuminate\Http\Response
+   */
+  public function delete_product_image($id, $img_name)
+  {
+    $product = Product::where('id', $id)->firstOrFail();
+    try {
+      if (File::exists(public_path(sprintf("images/product/%s", $img_name)))) {
+        File::delete(public_path(sprintf("images/product/%s", $img_name)));
+        $new_links = array_filter($product->images, function ($imgx) use ($img_name) {
+          return pathinfo($imgx)['basename'] != $img_name;
+        });
+        $new_links = array_map(function ($imgx) {
+          return pathinfo($imgx)['basename'];
+        }, $new_links);
+
+        $product->images = $new_links;
+        $product->update();
+      }
+      return response()->json(['message' => 'deleted'], 200);
+    } catch (\Exception $e) {
+      $message = $e->getLine();
+      return response()->json(
+        $message,
+        Response::HTTP_INTERNAL_SERVER_ERROR
+      );
+    }
+  }
 
 
   /**

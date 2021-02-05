@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\Log;
 
 trait CalculateSalesPoint
 {
@@ -15,6 +16,7 @@ trait CalculateSalesPoint
    */
   public function calculate_sales_bonus()
   {
+    Log::info("Calculating Daily Sale Bonus for User: " . $this->id . " Starting...");
     if ($this->children->count() < 2) {
     }
     $left_desc = static::withDepth()
@@ -31,5 +33,6 @@ trait CalculateSalesPoint
     if ($stong_amount > 0) {
       $this->give_dormant_sales_point(($weak_amount / 2));
     }
+    Log::info("Calculating Daily Sale Bonus for User: " . $this->id . " Completed");
   }
 }
