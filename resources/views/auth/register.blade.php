@@ -127,6 +127,19 @@
             </div>
           </div>
           <div class="uk-width-1-1 uk-width-2-3@s uk-width-1-2@m  uk-margin-top uk-align-center">
+            <div class="uk-form-control">
+              <input class="uk-checkbox" type="checkbox" name="terms_of_use_and_disclaimer"
+                id="terms_of_use_and_disclaimer">
+              <label for="terms_of_use_and_disclaimer">
+                I Agree to <a href="{{route('tac')}}">Terms of use</a> & <a
+                  href="{{route('disclaimer')}}">Disclaimer</a>
+              </label>
+            </div>
+            @error('terms_of_use_and_disclaimer')
+            <span class="uk-text-danger">{{ $message }}</span>
+            @enderror
+          </div>
+          <div class="uk-width-1-1 uk-width-2-3@s uk-width-1-2@m  uk-margin-top uk-align-center">
             <div class="uk-form-control ">
               <button type="submit"
                 class="uk-button uk-border-rounded green accent-2 white-text uk-text-bolder uk-width-1-1">

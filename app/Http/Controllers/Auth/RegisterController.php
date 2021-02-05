@@ -95,6 +95,7 @@ class RegisterController extends Controller
       'email' => 'required|email|max:150|min:5|unique:users,email',
       'password' => 'required|string',
       'confirm_password' => 'required|same:password',
+      "terms_of_use_and_disclaimer" => "accepted",
     ]);
   }
 
@@ -119,6 +120,7 @@ class RegisterController extends Controller
     $data['parent_id'] = $parent_node->id;
     $data['role'] = 'user';
     unset($data['placement_id']);
+    unset($data['terms_of_use_and_disclaimer']);
     $data['password'] = Hash::make($data['password']);
     return User::create($data);
   }
