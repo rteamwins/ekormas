@@ -51,6 +51,18 @@ class ProductController extends Controller
   }
 
   /**
+   * Show the form for creating a new resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function edit($id)
+  {
+    $product = Product::whereId($id)->first();
+    $categories = Category::select('id', 'name')->get();
+    return view('product.edit', ['categories' => $categories, 'product' => $product]);
+  }
+
+  /**
    * Store a newly created resource in storage.
    *
    * @param  \Illuminate\Http\Request  $request
@@ -97,6 +109,53 @@ class ProductController extends Controller
   }
 
   /**
+   * Store a newly created resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @return \Illuminate\Http\Response
+   */
+  public function update(Request $request, $id)
+  {
+    $this->validate($request, [
+      'title' => 'required|string',
+      'category' => 'required|integer|exists:categories,id',
+      'amount' => 'required|numeric|min:1|max:10000000',
+      'reward_level' => 'required|integer|digits_between:1,20',
+      'delivery_duration' => 'required|integer|digits_between:1,99',
+      'product_images' => 'sometimes|array|nullable',
+      'product_images.*' => 'required|image|mimes:png,jpg,jpeg',
+      'description' => 'required|string',
+    ]);
+    $product_data = [
+      'title' => $request->title,
+      'amount' => $request->amount,
+      'category_id' => $request->category,
+      'reward_level' => $request->reward_level,
+      'delivery_duration' => $request->delivery_duration,
+      'description' => $request->description,
+      'status' => 'active'
+    ];
+    if ($request->hasFile('product_images') && count($product_images = $request->file('product_images'))) {
+      $request->images = [];
+      $product = Product::whereId($id)->firstOrFail();
+      $product->update($product_data);
+      $images = [];
+      foreach ($product_images as $image) {
+        $image_ext = $image->getClientOriginalExtension();
+        $image_name = sprintf("%s.%s", strtoupper(Str::random(10)), $image_ext);
+        $image_path = public_path("images/product");
+        $image->move($image_path, $image_name);
+        $images[] = $image_name;
+      }
+      $product->images = array_merge($images, $product->images);
+      $product->update();
+    }
+    return redirect()->route('list_product')->with('success', 'Product Updated successfully!');
+  }
+
+
+
+  /**
    * enable the specified resource in storage.
    *
    * @param  Int  $id
@@ -125,8 +184,4 @@ class ProductController extends Controller
     $response = 'Product Disabled';
     return response()->json($response, Response::HTTP_OK);
   }
-
 }
-
-
-
