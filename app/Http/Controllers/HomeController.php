@@ -368,7 +368,7 @@ class HomeController extends Controller
         $new_rc_trx->used_by = Auth()->user()->id;
         $new_rc_trx->save();
 
-        $membership_plan = MembershipPlan::whereSlug($new_rc_trx->plan);
+        $membership_plan = MembershipPlan::whereSlug($new_rc_trx->plan)->first();
         $referer = User::find($new_rc_trx->user_id);
 
         $new_trx = new Transaction();
