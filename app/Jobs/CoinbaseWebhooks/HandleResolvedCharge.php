@@ -43,6 +43,7 @@ class HandleResolvedCharge implements ShouldQueue
    */
   public function handle()
   {
+    Log::info('handling...charge resolved starting');
     try {
       $payload_obj = $this->webhookCall->payload;
       $amount_confirmed = 0;
@@ -61,24 +62,30 @@ class HandleResolvedCharge implements ShouldQueue
       $transaction->status = 'confirmed';
 
       $transaction->update();
+
       $crypto_transaction = $transaction->method;
       $crypto_transaction->status = 'confirmed';
       $crypto_transaction->update();
       Log::info("crypto_trnx: " . $crypto_transaction->id);
       Log::info("crypto_trnx_user: " . $transaction->user_id);
       if ($transaction->type == 'user_registration_fee') {
+        Log::info('handling...user reg payment');
         $membership_plan = MembershipPlan::whereSlug($payload_obj['event']['data']['metadata']['membership_plan'])->first();
+        Log::info('processing...user reg payment: ' . $user->username);
         $user->membership_plan_id = $membership_plan->id;
         $user->wallet += $membership_plan->min_trading_capital;
         $user->update();
         $user->give_referal_bonus();
         if ($user->parent->children->count() == 2) {
-          $this->check_for_bonus_eligible_ancestors($user);
+          $user->check_for_bonus_eligible_ancestors($user);
         }
       } else if ($transaction->type == 'user_wallet_funding') {
+        Log::info('handling...user wallet fund');
         $transaction->update(['amount' => $amount_confirmed]);
+        Log::info('handling...user wallet fund trnx_id: ' . $user->username);
         $user->wallet += $amount_confirmed;
         $user->update();
+        Log::info('handling...user wallet fund...completed');
       } else if ($transaction->type == 'registration_credit_purchase') {
         $rc_purchase = RegistrationCreditPurchase::whereId($payload_obj['event']['data']['metadata']['rcp_id'])->first();
         $membership_plan = MembershipPlan::whereSlug($rc_purchase->plan)->first();
@@ -97,42 +104,8 @@ class HandleResolvedCharge implements ShouldQueue
       }
       Log::info('handling...user reg payment...completed');
     } catch (\Exception $e) {
-      Log::error(sprintf('Error handling resolved Charged: ', $e->getMessage()));
+      Log::error(sprintf('Error handling confirmed Charged: %s', $e->getMessage()));
     }
-  }
-  public function check_for_bonus_eligible_ancestors(User $user)
-  {
-    $ancestors = User::defaultOrder()->with(['membership_plan:id,fee,name'])
-      ->ancestorsOf($user->id, ['id', '_rgt', '_lft', 'parent_id', 'placement_id', 'username', 'name', 'phone', 'membership_plan_id', 'created_at', 'activated_at']);
-    foreach ($ancestors as $ancestor) {
-      $ancestor_directline_count = $ancestor->children->count();
-      $leg_count[$ancestor->username]['name'] = $ancestor->name;
-      if ($ancestor_directline_count > 0) {
-        if ($ancestor_directline_count == 2) {
-          $leg_count[$ancestor->username]['left'] = $leg_count[$ancestor->username]['right'] = 1;
-          $leg_count[$ancestor->username]['left_amount'] = $ancestor->children->first()->membership_plan->fee ?? 0;
-          $leg_count[$ancestor->username]['right_amount'] = $ancestor->children->last()->membership_plan->fee ?? 0;
-        } else {
-          $leg_count[$ancestor->username]['left'] = 1;
-          $leg_count[$ancestor->username]['right'] = 0;
-          $leg_count[$ancestor->username]['left_amount'] = $ancestor->children->first()->membership_plan->fee ?? 0;
-          $leg_count[$ancestor->username]['right_amount'] = 0;
-        }
-      } else {
-        $leg_count[$ancestor->username]['left'] = $leg_count[$ancestor->username]['right'] = 1;
-        $leg_count[$ancestor->username]['left_amount'] = $leg_count[$ancestor->username]['right_amount'] = 0;
-      }
-      $left_desc = User::descendantsOf($ancestor->children->first());
-      $right_desc = User::descendantsOf($ancestor->children->last());
-
-      $leg_count[$ancestor->username]['left'] += $left_desc->count();
-      $leg_count[$ancestor->username]['right'] += $right_desc->count();
-
-      $leg_count[$ancestor->username]['left_amount'] += $left_desc->sum('membership_plan.fee');
-      $leg_count[$ancestor->username]['right_amount'] += $right_desc->sum('membership_plan.fee');
-      if ($leg_count[$ancestor->username]['left'] == $leg_count[$ancestor->username]['right']) {
-        $ancestor->calculate_matching_bonus($leg_count[$ancestor->username]['left'] + $leg_count[$ancestor->username]['right']);
-      }
-    }
+    Log::info('handling...charge resolved completed');
   }
 }

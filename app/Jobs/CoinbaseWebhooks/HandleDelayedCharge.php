@@ -2,13 +2,13 @@
 
 namespace App\Jobs\CoinbaseWebhooks;
 
-use App\CryptoTransaction;
+use Illuminate\Bus\Queueable;
+use App\Transaction;
+use App\Investment;
 use App\MembershipPlan;
 use App\Order;
 use App\RegistrationCredit;
 use App\RegistrationCreditPurchase;
-use Illuminate\Bus\Queueable;
-use App\Transaction;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Log;
 use Shakurov\Coinbase\Models\CoinbaseWebhookCall;
 
 
-class HandleConfirmedCharge implements ShouldQueue
+class HandleDelayedCharge implements ShouldQueue
 {
   use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -43,7 +43,7 @@ class HandleConfirmedCharge implements ShouldQueue
    */
   public function handle()
   {
-    Log::info('handling...charge confirmed starting');
+    Log::info('handling...charge delayed starting');
     try {
       $payload_obj = $this->webhookCall->payload;
       $amount_confirmed = 0;
@@ -106,6 +106,6 @@ class HandleConfirmedCharge implements ShouldQueue
     } catch (\Exception $e) {
       Log::error(sprintf('Error handling confirmed Charged: %s', $e->getMessage()));
     }
-    Log::info('handling...charge confirmed completed');
+    Log::info('handling...charge delayed completed');
   }
 }
