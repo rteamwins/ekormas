@@ -226,7 +226,7 @@ class HomeController extends Controller
    */
   public function user_dashboard()
   {
-    $profits = Profit::whereUserId(Auth()->user()->id)->whereDate('created_at', now())->latest()->get();
+    $profits = Profit::whereUserId(Auth()->user()->id)->where([['created_at', '>=', now()->startOfDay()], ['created_at', '<=', now()->format('Y-m-d H:i:s')]])->latest()->get();
     // $candle_sticks = $this->market_candlestick_bar();
     $plabels = [];
     $pdata = [];
