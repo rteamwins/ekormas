@@ -471,7 +471,7 @@ class HomeController extends Controller
   public function check_for_bonus_eligible_ancestors(User $user)
   {
     $ancestors = User::defaultOrder()->with(['membership_plan:id,fee,name'])
-      ->ancestorsOf($user->id, ['id', '_rgt', '_lft', 'parent_id', 'placement_id', 'username', 'name', 'total_points', 'phone', 'membership_plan_id', 'created_at', 'activated_at']);
+      ->ancestorsOf($user->id, ['id', '_rgt', '_lft', 'parent_id', 'placement_id', 'username', 'name','phone', 'membership_plan_id', 'created_at', 'activated_at']);
     foreach ($ancestors as $ancestor) {
       $ancestor_directline_count = $ancestor->children->count();
       $leg_count[$ancestor->username]['name'] = $ancestor->name;
