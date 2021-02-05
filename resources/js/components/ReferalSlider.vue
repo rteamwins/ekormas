@@ -82,7 +82,10 @@ export default {
           phone: data.phone,
           username: this.user_name,
           placement_id: data.placement_id,
-          canAcceptChild: data.children?this.checkCanAcceptChild(data.children):true
+          canAcceptChild: data.children
+            ? this.checkCanAcceptChild(data.children)
+            : true,
+          isDownline: data.referer == this.user_id
         }
       });
     },

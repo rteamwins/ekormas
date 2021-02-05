@@ -1,7 +1,7 @@
 <template>
-  <div class="uk-padding-remove green-text">
+  <div :class="['uk-padding-remove green-text',{'green lighten-4':isDownline}]" style="height:63px;">
     <div class="uk-flex uk-flex-center">
-      <div class="uk-width-2-5">
+      <!-- <div class="uk-width-2-5">
         <img
           class="uk-animation-stroke uk-animation-reverse"
           style="height:65px;width:75px;object-fit:cover;"
@@ -9,11 +9,11 @@
           alt="User profile picture"
           uk-svg="stroke-animation: true"
         />
-      </div>
-      <div class="uk-width-3-5">
+      </div> -->
+      <div class="uk-width-1-1">
         <ul class="uk-list uk-list-collapse uk-margin-remove">
           <li class="uk-text-small uk-text-bold uk-text-truncate">
-            {{ name }}
+            {{ username }}
           </li>
           <li class="uk-text-bold" style="font-size:12px;">{{ phone }}</li>
           <!-- <li class="uk-text-small uk-text-bold">
@@ -58,7 +58,8 @@ export default {
     phone: { type: String, required: true },
     username: { type: String, required: true },
     placement_id: { type: Number, required: true },
-    canAcceptChild: { type: Boolean, required: true }
+    canAcceptChild: { type: Boolean, required: true },
+    isDownline: { type: Boolean, required: true }
   },
   methods: {
     copyValueToClipboard() {

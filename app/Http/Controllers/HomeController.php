@@ -108,8 +108,8 @@ class HomeController extends Controller
     if ($id === null) {
       $id = Auth()->user()->id;
     }
-    $node = User::select('id', '_rgt', '_lft', 'parent_id', 'placement_id', 'username', 'name', 'dormant_points', 'phone')->where('id', $id)->firstOrFail();
-    $nodes = User::descendantsOf($id, ['id', '_rgt', '_lft', 'parent_id', 'placement_id', 'username', 'name', 'dormant_points', 'phone']);
+    $node = User::select('id', '_rgt', '_lft', 'parent_id', 'placement_id', 'username', 'name', 'dormant_points','referer','phone')->where('id', $id)->firstOrFail();
+    $nodes = User::descendantsOf($id, ['id', '_rgt', '_lft', 'parent_id', 'placement_id', 'username', 'name', 'dormant_points', 'referer', 'phone']);
     $node->children = $nodes->toTree();
     return response()->json($node, Response::HTTP_OK);
   }
