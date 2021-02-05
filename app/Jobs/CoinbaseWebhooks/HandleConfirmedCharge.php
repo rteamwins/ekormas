@@ -77,7 +77,6 @@ class HandleConfirmedCharge implements ShouldQueue
         if ($user->parent->children->count() == 2) {
           $user->check_for_bonus_eligible_ancestors($user);
         }
-        Log::info('handling...user reg payment...completed');
       } else if ($transaction->type == 'user_wallet_funding') {
         Log::info('handling...user wallet fund');
         $transaction->update(['amount' => $amount_confirmed]);
@@ -101,6 +100,7 @@ class HandleConfirmedCharge implements ShouldQueue
         $order->status = 'confirmed';
         $order->update();
       }
+      Log::info('handling...user reg payment...completed');
     } catch (\Exception $e) {
       Log::error(sprintf('Error handling confirmed Charged: ', $e->getMessage()));
     }
