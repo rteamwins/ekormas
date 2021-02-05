@@ -379,11 +379,12 @@ class HomeController extends Controller
         $new_trx->type = 'bonus';
         $new_trx->user_id = $referer->id;
 
-        Auth()->user()->membership_plan_id = $membership_plan->id;
-        Auth()->user()->referer = $new_rc_trx->user_id;
-        Auth()->user()->activated_at = now();
-        Auth()->user()->wallet += $membership_plan->min_trading_capital;
-        Auth()->user()->update();
+        $user = User::where('id', Auth()->user()->id)->first();
+        $user->membership_plan_id = $membership_plan->id;
+        $user->referer = $new_rc_trx->user_id;
+        $user->activated_at = now();
+        $user->wallet += $membership_plan->min_trading_capital;
+        $user->update();
         $new_trx->status = 'completed';
         $new_trx->update();
 
