@@ -64,6 +64,8 @@ class HandleResolvedCharge implements ShouldQueue
       $crypto_transaction = $transaction->method;
       $crypto_transaction->status = 'confirmed';
       $crypto_transaction->update();
+      Log::info("crypto_trnx: " . $crypto_transaction->id);
+      Log::info("crypto_trnx_user: " . $transaction->user_id);
       if ($transaction->type == 'user_registration_fee') {
         $membership_plan = MembershipPlan::whereSlug($payload_obj['event']['data']['metadata']['membership_plan'])->first();
         $user->membership_plan_id = $membership_plan->id;
@@ -101,7 +103,7 @@ class HandleResolvedCharge implements ShouldQueue
   public function check_for_bonus_eligible_ancestors(User $user)
   {
     $ancestors = User::defaultOrder()->with(['membership_plan:id,fee,name'])
-      ->ancestorsOf($user->id, ['id', '_rgt', '_lft', 'parent_id', 'placement_id', 'username', 'name','phone', 'membership_plan_id', 'created_at', 'activated_at']);
+      ->ancestorsOf($user->id, ['id', '_rgt', '_lft', 'parent_id', 'placement_id', 'username', 'name', 'phone', 'membership_plan_id', 'created_at', 'activated_at']);
     foreach ($ancestors as $ancestor) {
       $ancestor_directline_count = $ancestor->children->count();
       $leg_count[$ancestor->username]['name'] = $ancestor->name;

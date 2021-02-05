@@ -66,6 +66,8 @@ class HandleConfirmedCharge implements ShouldQueue
       $crypto_transaction = $transaction->method;
       $crypto_transaction->status = 'confirmed';
       $crypto_transaction->update();
+      Log::info("crypto_trnx: " . $crypto_transaction->id);
+      Log::info("crypto_trnx_user: " . $transaction->user_id);
       if ($transaction->type == 'user_registration_fee') {
         Log::info('handling...user reg payment');
         $membership_plan = MembershipPlan::whereSlug($payload_obj['event']['data']['metadata']['membership_plan'])->first();

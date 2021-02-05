@@ -65,7 +65,7 @@ trait GiveReferalBonus
       $ancestor->update();
     }
 
-    Log::info('Giving Ancestor Referal Bonus to: ' . $this->referer . "completed");
+    Log::info('Giving Ancestor Referal Bonus: $' . $new_bonus_trx->amount . ' to: ' . $this->referer . " completed");
   }
 
   public function check_for_bonus_eligible_ancestors($user)

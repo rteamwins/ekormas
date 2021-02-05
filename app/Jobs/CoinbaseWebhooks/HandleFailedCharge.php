@@ -49,7 +49,8 @@ class HandleFailedCharge implements ShouldQueue
 
       $transaction->update();
       $crypto_transaction = $transaction->method;
-      Log::info($crypto_transaction);
+      Log::info("crypto_trnx: " . $crypto_transaction->id);
+      Log::info("crypto_trnx_user: " . $transaction->user_id);
       $crypto_transaction->status = 'failed';
       $crypto_transaction->update();
     } catch (\Exception $e) {

@@ -37,7 +37,6 @@ class HandlePendingCharge implements ShouldQueue
   public function handle()
   {
     Log::info('handling...charge pending starting');
-    Log::info($this->webhookCall->payload);
     try {
       $payload_obj = $this->webhookCall->payload;
       $transaction = Transaction::where(
@@ -52,6 +51,8 @@ class HandlePendingCharge implements ShouldQueue
       $crypto_transaction = $transaction->method;
       $crypto_transaction->status = 'pending';
       $crypto_transaction->update();
+      Log::info("crypto_trnx: " . $crypto_transaction->id);
+      Log::info("crypto_trnx_user: " . $transaction->user_id);
       Log::info('handling...charge pending starting');
     } catch (\Exception $e) {
       Log::error(sprintf('Error handling pending Charged: ', $e->getMessage()));
