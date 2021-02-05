@@ -4,7 +4,7 @@
 @endpush
 @push('scripts_bottom')
 <script>
-  var btc_input = '<label for="plan" class="uk-form-label">Plan <span class="red-text uk-text-bold">*</span></label><div class="uk-form-control"><div class="uk-inline uk-width-1-1"><select onchange="display_package_info(this)" class="uk-select uk-border-rounded" name="plan" required id="plan"><option value="oynx">Oynx($50) </option><option value="pearl">Pearl($100) </option><option value="ruby">Ruby($250) </option><option value="gold">Gold($500) </option><option value="sapphire">Sapphire($1000) </option><option value="emerald">Emerald($3000) </option><option value="diamond">Diamond($5000) </option></select></div>@error('plan')<span class="uk-text-danger">{{ $message }}</span>@enderror</div>'
+  var btc_input = '<label for="plan" class="uk-form-label">Plan <span class="red-text uk-text-bold">*</span></label><div class="uk-form-control"><div class="uk-inline uk-width-1-1"><select onchange="display_package_info(this)" class="uk-select uk-border-rounded" name="plan" required id="plan"><option value="onyx">Oynx($50) </option><option value="pearl">Pearl($100) </option><option value="ruby">Ruby($250) </option><option value="gold">Gold($500) </option><option value="sapphire">Sapphire($1000) </option><option value="emerald">Emerald($3000) </option><option value="diamond">Diamond($5000) </option></select></div>@error('plan')<span class="uk-text-danger">{{ $message }}</span>@enderror</div>'
   var rc_input ='<label for="rc_code" class="uk-form-label">RC Code <span class="red-text uk-text-bold">*</span></label><div class="uk-form-control uk-width-1-1"><div class="uk-inline uk-width-1-1"><span class="uk-form-icon" uk-icon="hashtag"></span><input class="uk-input uk-border-rounded @error('rc_code') uk-form-danger @enderror" name="rc_code" type="text" value="{{ old('rc_code') }}" required></div>@error('rc_code')<span class="uk-text-danger">{{ $message }}</span>@enderror</div>'
   var rc_submit = '<span class="uk-text-large">R</span>egister Now';
   var btc_submit = '<span class="uk-text-large">P</span>ay Registration Fee';
@@ -79,7 +79,7 @@
                 <div class="uk-inline uk-width-1-1">
                   <select onchange="display_package_info(this)" class="uk-select uk-border-rounded" name="plan" required
                     id="plan">
-                    <option value="oynx">Oynx($50) </option>
+                    <option value="onyx">Onyx($50) </option>
                     <option value="pearl">Pearl($100) </option>
                     <option value="ruby">Ruby($250) </option>
                     <option value="gold">Gold($500) </option>

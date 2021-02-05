@@ -71,7 +71,7 @@ class HandleConfirmedCharge implements ShouldQueue
       if ($transaction->type == 'user_registration_fee') {
         Log::info('handling...user reg payment');
         $membership_plan = MembershipPlan::whereSlug($payload_obj['event']['data']['metadata']['membership_plan'])->first();
-        Log::info('process...user reg payment: ' . $user->username);
+        Log::info('processing...user reg payment: ' . $user->username);
         $user->membership_plan_id = $membership_plan->id;
         $user->wallet += $membership_plan->min_trading_capital;
         $user->update();

@@ -358,10 +358,10 @@ class HomeController extends Controller
   {
     $this->validate($request, [
       'rc_code' => 'required_without:plan|alpha_num|size:15|exists:registration_credits,code',
-      'plan' => 'required_without:rc_code|in:oynx,pearl,ruby,gold,sapphire,emerald,diamond',
+      'plan' => 'required_without:rc_code|in:onyx,pearl,ruby,gold,sapphire,emerald,diamond',
     ]);
 
-    $plan = ['oynx' => 70, 'pearl' => 130, 'ruby' => 310, 'gold' => 610, 'sapphire' => 1210, 'emerald' => 3610, 'diamond' => 6010];
+    $plan = ['onyx' => 70, 'pearl' => 130, 'ruby' => 310, 'gold' => 610, 'sapphire' => 1210, 'emerald' => 3610, 'diamond' => 6010];
     if (Auth()->user()->membership_plan_id == null) {
       if ($request->has('rc_code')) {
         $rc_code = $request->rc_code;
