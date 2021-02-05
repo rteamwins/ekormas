@@ -50,7 +50,7 @@
           </td>
           <td>
             <span class="uk-hidden@m uk-text-bold">Amount: </span>
-            ${{ number_format(rc_plans[reg_credit.plan]) }}
+            ${{ rc_plans[reg_credit.plan] }}
           </td>
           <td>
             <span class="uk-hidden@m uk-text-bold">Plan: </span>
