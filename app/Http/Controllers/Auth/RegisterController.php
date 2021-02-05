@@ -54,7 +54,7 @@ class RegisterController extends Controller
     $req['placement_id'] = $placement_id;
     $val_req = Validator::make($req, [
       'referer' => 'required|alpha_dash|min:3|max:25|exists:users,username',
-      'placement_id' => 'required|integer|min:1000000000|max:9999999999|exists:users',
+      'placement_id' => 'required|integer|min:100000|max:9999999999|exists:users',
     ]);
     if ($val_req->fails()) {
       return abort(404);
