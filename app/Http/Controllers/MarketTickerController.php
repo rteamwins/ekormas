@@ -16,7 +16,8 @@ class MarketTickerController extends Controller
    */
   public function index()
   {
-    
+    return User::latest()->limit(5)->ancestorsOf(9);
+
     // $n = 1;
     // while ($n <= 20) {
     //   $arr["stage_{$n}"] = number_format(5 * ((100 / $n) / 100), 2);
