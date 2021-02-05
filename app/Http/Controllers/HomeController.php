@@ -277,6 +277,7 @@ class HomeController extends Controller
       'non_active_user_count' => $this->non_active_user_count(),
       'open_order' => Order::whereIn('status', ['confirmed', 'shipped'])->count(),
       'closed_order' => Order::where('status', 'completed')->count(),
+      'avail_reg_credit'=>RegistrationCredit::whereUserId(auth()->user()->id)->whereNull('used_by')->count(),
       'admin_local_pay_pending' => LocalPay::whereAgentId(auth()->user()->id)->whereStatus('creeated')->count(),
       'local_pay_pending' => LocalPay::whereUserId(auth()->user()->id)->whereStatus('creeated')->count(),
       'local_pay_completed' => LocalPay::whereAgentId(auth()->user()->id)->whereStatus('completed')->count(),

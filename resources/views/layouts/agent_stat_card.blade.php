@@ -162,7 +162,7 @@
       'roles' => ['admin','agent',],
       'title'=>'REGISTRATION CREDIT',
       'stat_data'=>[
-      ['text'=>"AVAIL",'value'=>number_format(Auth()->user()->registration_credits_count)],
+      ['text'=>"AVAIL",'value'=>$avail_reg_credit?:0],
       ['text'=>"REFERALS",'value'=>number_format(Auth()->user()->referals_count)]
       ],
       'stat_link'=>[
@@ -199,7 +199,7 @@
       'roles' => ['user'],
       'title'=>'LOCAL PAYOUT',
       'stat_data'=>[
-        ['text'=>"PENDING",'value'=>$local_pay_pending?:0],
+      ['text'=>"PENDING",'value'=>$local_pay_pending?:0],
       ['text'=>"COMPLETED",'value'=>$local_pay_completed?:0]
       ],
       'stat_link'=>[
