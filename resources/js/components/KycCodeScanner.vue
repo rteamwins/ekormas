@@ -3,7 +3,7 @@
     class="uk-margin uk-width-1-1 uk-width-2-3@s uk-width-1-2@m  uk-align-center"
   >
     <label for="funding_kyc_code" class="uk-form-label">
-      KYC Code *
+      TGLM Token *
     </label>
     <div class="">
       <qrcode-stream

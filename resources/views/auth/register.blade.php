@@ -111,6 +111,21 @@
               @enderror
             </div>
           </div>
+          <div class="uk-width-1-1 uk-width-1-2@s uk-margin-small-top">
+            <label for="confirm_password" class="uk-form-label">
+              Confirm Password *
+            </label>
+            <div class="uk-form-control uk-width-1-1">
+              <div class="uk-inline uk-width-1-1">
+                <span class="uk-form-icon" uk-icon="lock"></span>
+                <input class="uk-input uk-border-rounded @error('confirm_password') uk-form-danger @enderror"
+                  name="confirm_password" type="password" required>
+              </div>
+              @error('confirm_password')
+              <span class="uk-text-danger">{{ $message }}</span>
+              @enderror
+            </div>
+          </div>
           <div class="uk-width-1-1 uk-width-2-3@s uk-width-1-2@m  uk-margin-top uk-align-center">
             <div class="uk-form-control ">
               <button type="submit"

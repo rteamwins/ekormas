@@ -17,7 +17,9 @@
                     src="{{asset(sprintf("images/misc/%s.svg",strtolower(Auth()->user()->membership_plan->name)))}}"
                     alt="{{Auth()->user()->membership_plan->name . "Badge"}}">
                   <span class="uk-text-right uk-text-bold white-text">
-                    {{ucfirst(Auth()->user()->membership_plan->name)}}</span></td>
+                    {{ucfirst(Auth()->user()->membership_plan->name)}}</span>
+                    <span class="uk-text-right uk-text-bold white-text">
+                      ${{number_format(Auth()->user()->membership_plan->fee,0)}}</span></td>
               </tr>
               <tr>
                 <td class="uk-text-bold uk-text-truncate uk-width-1-3">WALLET
@@ -163,7 +165,7 @@
       'title'=>'REGISTRATION CREDIT',
       'stat_data'=>[
       ['text'=>"AVAIL",'value'=>$avail_reg_credit?:0],
-      ['text'=>"REFERALS",'value'=>number_format(Auth()->user()->referals_count)]
+      ['text'=>"REFERALS",'value'=>$downlines_count?:0]
       ],
       'stat_link'=>[
       ['route'=>route('user_list_registration_credits'),'name'=>'History','icon'=>'list'],
@@ -175,7 +177,7 @@
       'roles' => ['user',],
       'title'=>'REFERALS',
       'stat_data'=>[
-      ['text'=>"ACTIVE",'value'=>number_format(Auth()->user()->referals_count)]
+      ['text'=>"ACTIVE",'value'=>$downlines_count?:0]
       ],
       'stat_link'=>[
       ['route'=>route('user_referal_history'),'name'=>'Referals','icon'=>'users'],

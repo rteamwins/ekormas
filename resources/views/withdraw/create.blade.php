@@ -152,7 +152,7 @@
                     id="withdraw_type">
                     <option value=""> -- Select Type -- </option>
                     <option selected value="bitcoin"> To Bitcoin </option>
-                    <option value="kyc"> To KYC </option>
+                    <option value="kyc"> To TGLM  Token</option>
                     <option value="local"> To Service Center </option>
                   </select>
                 </div>

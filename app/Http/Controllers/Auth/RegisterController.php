@@ -59,7 +59,12 @@ class RegisterController extends Controller
     if ($val_req->fails()) {
       return abort(404);
     }
-    return view('auth.register')->with(['referer' => $ref_code, 'placement_id' => $placement_id]);
+    $ref = User::where('placement_id', $placement_id)->first();
+    if ($ref->children()->count() < 2) {
+      return view('auth.register')->with(['referer' => $ref_code, 'placement_id' => $placement_id]);
+    } else {
+      return redirect()->route('home')->with('info', 'No more spaces on direct legs, ask for new Registration Link');
+    }
   }
 
   /**
@@ -89,6 +94,7 @@ class RegisterController extends Controller
       'username' => 'required|alpha_dash|max:25|min:3|unique:users,username',
       'email' => 'required|email|max:150|min:5|unique:users,email',
       'password' => 'required|string',
+      'confirm_password' => 'required|same:password',
     ]);
   }
 

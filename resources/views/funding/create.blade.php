@@ -56,7 +56,7 @@
               <form method="POST" id="kyc_funding" action="{{route('user_fund_wallet_save')}}"
                 class="uk-form-stacked uk-flex uk-flex-column">
                 @csrf
-                <h5 class="uk-h5 uk-margin-remove-vertical uk-text-center uk-text-bold">USE KYC INSTEAD</h5>
+                <h5 class="uk-h5 uk-margin-remove-vertical uk-text-center uk-text-bold">TGLM TOKEN</h5>
                 <div class="uk-divider-icon"></div>
 
 
@@ -68,7 +68,7 @@
                   <div class="uk-form-control">
                     <button type="submit"
                       class="uk-button uk-border-rounded blue darken-2 white-text uk-text-bolder uk-width-1-1">
-                      <span class="uk-text-large">K</span>YC
+                      <span class="uk-text-large">T</span>oken
                     </button>
                   </div>
                 </div>

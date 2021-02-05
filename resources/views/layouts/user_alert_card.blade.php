@@ -1,11 +1,10 @@
-@auth
 <div class="uk-grid-small" uk-grid>
   <div class="uk-width-1-1 uk-margin-small-bottom">
     <div class="uk-card uk-card-default uk-card-body" style="border-radius:0 0 5px 5px;padding:5px;">
       <div>
         <div class="scrolling_news uk-background-primary uk-margin-remove-vertical uk-border-rounded" uk-alert>
           <p class=" uk-text-bold">
-            @foreach (Auth()->user()->alerts() as $alert)
+            @foreach (NewsAlert::whereStatus('active')->get() as $alert)
             {{ $alert->message }} <----||---->
               @endforeach
           </p>
@@ -30,4 +29,3 @@
     </div>
   </div>
 </div>
-@endauth

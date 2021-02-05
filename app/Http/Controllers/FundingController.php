@@ -44,8 +44,9 @@ class FundingController extends Controller
   {
     request()->validate([
       'funding_amount' => 'required_without:funding_kyc_code|numeric|min:100',
-      'funding_kyc_code' => 'required_without:funding_amount|alpha_num|size:15|exists:k_y_c_s,code',
+      'funding_kyc_code' => 'required_without:funding_amount|alpha_num|size:22|exists:k_y_c_s,code',
     ]);
+
     if ($request->has('funding_amount')) {
       try {
         $new_crypto_trx = new CryptoTransaction();
@@ -57,7 +58,7 @@ class FundingController extends Controller
         $new_trx->amount = $request->funding_amount;
         $new_trx->status = 'created';
         $new_trx->type = 'wallet_funding';
-        $new_trx->user_id = Auth()->id();
+        $new_trx->user_id = Auth()->user()->id;
         $new_trx->save();
 
         $new_crypto_trx = CryptoTransaction::find($new_crypto_trx->id)->first();
@@ -98,22 +99,22 @@ class FundingController extends Controller
         $new_trx->amount = $valid_kyc->amount;
         $new_trx->status = 'created';
         $new_trx->type = 'wallet_funding';
-        $new_trx->user_id = Auth()->id();
+        $new_trx->user_id = Auth()->user()->id;
 
-        $valid_kyc->used_by = Auth()->id();
+        $valid_kyc->used_by = Auth()->user()->id;
         $valid_kyc->status = 'used';
         $valid_kyc->update();
         $valid_kyc->transaction()->save($new_trx);
         $new_trx->status = 'completed';
         $new_trx->update();
-        $user = User::find(Auth()->id)->first();
-        $user->wallet += $new_trx->amount;
+        $user = User::where('id', Auth()->user()->id)->first();
+        $user->wallet += $valid_kyc->amount;
         $user->update();
 
         if (Auth()->user()->type == 'agent') {
           $benefactor = $user;
         } else {
-          $benefactor = User::whereRole("admin")->firstOrFail();
+          $benefactor = User::where('role', "admin")->firstOrFail();
         }
 
         $new_trx = new Transaction();
@@ -134,7 +135,7 @@ class FundingController extends Controller
         $benefactor->bonus += $new_trx->amount;
         $benefactor->update();
 
-        return redirect()->route('home')->with('success', "Your wallet was successfully funded with {$valid_kyc->amount}");
+        return redirect()->route('user_home')->with('success', "Your wallet was successfully funded with {$valid_kyc->amount}");
       } catch (\Exception $e) {
         return back()->with('error', sprintf('Could not fund your wallet: %s', $e->getMessage()));
       }
