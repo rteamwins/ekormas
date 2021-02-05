@@ -51,10 +51,10 @@ class HandleCreatedCharge implements ShouldQueue
       $crypto_transaction = $transaction->method();
       $crypto_transaction->status = 'created';
       $crypto_transaction->update();
-      Log::info('handling...charge created completed');
       // Log::info(sprintf('Handled Created Charged: ', $payload_obj['event']['data']['id']));
     } catch (\Exception $e) {
       Log::error(sprintf('Error handling Created Charge: ', $e->getMessage()));
     }
+    Log::info('handling...charge created completed');
   }
 }

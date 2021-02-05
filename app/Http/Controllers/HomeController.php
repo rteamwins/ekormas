@@ -413,7 +413,7 @@ class HomeController extends Controller
         $user = User::where('id', Auth()->user()->id)->first();
         $user->give_referal_bonus();
         if ($user->parent->children->count() == 2) {
-          $this->check_for_bonus_eligible_ancestors($user);
+          $user->check_for_bonus_eligible_ancestors($user);
         }
         return redirect()->route('home');
       } else {

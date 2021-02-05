@@ -36,6 +36,7 @@ class HandleFailedCharge implements ShouldQueue
    */
   public function handle()
   {
+    Log::info('handling...charge failed starting');
     try {
       $payload_obj = $this->webhookCall->payload;
       $transaction = Transaction::updateOrCreate(
@@ -54,5 +55,6 @@ class HandleFailedCharge implements ShouldQueue
     } catch (\Exception $e) {
       Log::error(sprintf('Error handling Failed Charged: ', $e->getMessage()));
     }
+    Log::info('handling...charge failed completed');
   }
 }
