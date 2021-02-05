@@ -14,7 +14,7 @@ class RegistrationCreditController extends Controller
   }
   function index_json()
   {
-    $rcs = RegistrationCredit::with(['consumer:id,name,username,phone,email'])->whereUserId(auth()->user()->id)->paginate(10);
+    $rcs = RegistrationCredit::with(['consumer:id,name,username,phone,email'])->whereUserId(auth()->user()->id)->whereNull('used_by')->paginate(10);
     return response()->json($rcs, Response::HTTP_OK);
   }
 }
