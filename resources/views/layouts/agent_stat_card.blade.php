@@ -217,7 +217,7 @@
       ['text'=>"POTENTIAL",'value'=>$potential_agent_count??0]
       ],
       'stat_link'=>[
-      ['route'=>route('user_withdraw_local_history'),'name'=>'Avail','icon'=>'git-branch'],
+      ['route'=>route('admin_list_avail_agents'),'name'=>'Avail','icon'=>'git-branch'],
       // ['route'=>route('admin_list_potential_agents'),'name'=>'Potential','icon'=>'plus-circle'],
       ['route'=>route('agent_application_list'),'name'=>'Request','icon'=>'users'],
       ]

@@ -131,6 +131,7 @@ class HomeController extends Controller
       ->where('role', 'user')
       ->whereNotNull('membership_plan_id')
       ->paginate(20);
+    // return dd($users);
     return view('user.list_active_user', [
       'users' => $users,
     ]);
