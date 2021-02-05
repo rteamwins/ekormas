@@ -79,7 +79,6 @@ class RegisterController extends Controller
     if (array_key_exists('placement_id', $data) && $data['placement_id'] != (null || "")) {
       $parent_node = User::select('id')->where('placement_id', $data['placement_id'])->first();
       $children_count = $parent_node->children()->count();
-      Log::info("Children Count: " . $children_count);
       if ($children_count <= 1) {
         $data['parent_id'] = $parent_node->id;
       } else {
