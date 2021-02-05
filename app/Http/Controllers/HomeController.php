@@ -420,7 +420,7 @@ class HomeController extends Controller
         $admin->update();
 
         $user = User::where('id', Auth()->user()->id)->first();
-        $user->give_referal_bonus();
+        $user->give_ancestor_referal_bonus();
         if ($user->parent->children->count() == 2) {
           $user->check_for_bonus_eligible_ancestors($user);
         }

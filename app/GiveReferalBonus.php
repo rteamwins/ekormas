@@ -15,37 +15,37 @@ trait GiveReferalBonus
    */
   public function give_referal_bonus()
   {
-    Log::info('Giving Referal Bonus to: ' . $this->referer);
-    $referer =  static::where('id', $this->referer)->first();
-    // $parent =  static::where('id', $model->parent_id)->first();
-    $new_trx = new Transaction();
-    $new_trx->amount =  (($this->membership_plan->fee ?? 0) * 0.10);
-    $new_trx->status = 'created';
-    $new_trx->type = 'bonus';
-    $new_trx->user_id = $referer->id;
+    // Log::info('Giving Referal Bonus to: ' . $this->referer);
+    // $referer =  static::where('id', $this->referer)->first();
+    // // $parent =  static::where('id', $model->parent_id)->first();
+    // $new_trx = new Transaction();
+    // $new_trx->amount =  (($this->membership_plan->fee ?? 0) * 0.10);
+    // $new_trx->status = 'created';
+    // $new_trx->type = 'bonus';
+    // $new_trx->user_id = $referer->id;
 
-    $new_bonus_trx = new Bonus();
-    $new_bonus_trx->user_id = $referer->id;
-    $new_bonus_trx->amount = (($this->membership_plan->fee ?? 0) * 0.10);
-    $new_bonus_trx->status = 'created';
-    $new_bonus_trx->type = 'referal_direct';
-    $new_bonus_trx->save();
-    $new_bonus_trx->transaction()->save($new_trx);
-    $new_trx->status = 'completed';
-    $new_trx->update();
-    $referer->bonus += $new_trx->amount;
-    $referer->update();
-    $referer->give_ancestor_referal_bonus();
-    Log::info('Giving Referal Bonus to: ' . $this->referer . "completed");
+    // $new_bonus_trx = new Bonus();
+    // $new_bonus_trx->user_id = $referer->id;
+    // $new_bonus_trx->amount = (($this->membership_plan->fee ?? 0) * 0.10);
+    // $new_bonus_trx->status = 'created';
+    // $new_bonus_trx->type = 'referal_direct';
+    // $new_bonus_trx->save();
+    // $new_bonus_trx->transaction()->save($new_trx);
+    // $new_trx->status = 'completed';
+    // $new_trx->update();
+    // $referer->bonus += $new_trx->amount;
+    // $referer->update();
+    // $this->give_ancestor_referal_bonus();
+    // Log::info('Giving Referal Bonus to: ' . $this->referer . "completed");
   }
 
   public function give_ancestor_referal_bonus()
   {
-    Log::info('Giving Ancestor Referal Bonus to: ' . $this->referer);
-    $percent = [4, 2, 1, 0.5, 0.25];
+    $percent = [10, 4, 2, 1, 0.5, 0.25];
     $ancestors = User::latest()->limit(5)->ancestorsOf($this->id);
 
     foreach ($ancestors as $key => $ancestor) {
+      Log::info('Giving Ancestor Referal Bonus to user: ' . $ancestor->id);
       $new_trx = new Transaction();
       $new_trx->amount = (($this->membership_plan->fee ?? 0) * ($percent[$key] / 100));
       $new_trx->status = 'created';
@@ -56,16 +56,21 @@ trait GiveReferalBonus
       $new_bonus_trx->user_id = $ancestor->id;
       $new_bonus_trx->amount = (($this->membership_plan->fee ?? 0) * ($percent[$key] / 100));
       $new_bonus_trx->status = 'created';
-      $new_bonus_trx->type = 'referal_indirect';
+      if ($key == 0) {
+        Log::info('Giving Direct Referal Bonus to user: ' . $ancestor->id);
+        $new_bonus_trx->type = 'referal_direct';
+      } else {
+        Log::info('Giving Ancestor Referal Bonus to user: ' . $ancestor->id);
+        $new_bonus_trx->type = 'referal_indirect';
+      }
       $new_bonus_trx->save();
       $new_bonus_trx->transaction()->save($new_trx);
       $new_trx->status = 'completed';
       $new_trx->update();
       $ancestor->bonus += $new_trx->amount;
       $ancestor->update();
+      Log::info('Giving Ancestor Referal Bonus: $' . $new_bonus_trx->amount . ' to user: ' . $ancestor->id . " completed");
     }
-
-    Log::info('Giving Ancestor Referal Bonus: $' . $new_bonus_trx->amount . ' to: ' . $this->referer . " completed");
   }
 
   public function check_for_bonus_eligible_ancestors($user)
