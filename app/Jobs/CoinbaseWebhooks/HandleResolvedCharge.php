@@ -52,16 +52,15 @@ class HandleResolvedCharge implements ShouldQueue
       }
       $user = User::whereUserId($payload_obj['event']['data']['metadata']['user_id'])->first();
 
-      $transaction = Transaction::updateOrCreate(
+      $transaction = Transaction::where(
         [
           'id' => $payload_obj['event']['data']['metadata']['trnx_id'],
           'user_id' => $payload_obj['event']['data']['metadata']['user_id']
-        ],
-        [
-          'status' => 'confirmed',
-        ],
+        ]
+      )->first();
+      $transaction->status = 'confirmed';
 
-      );
+      $transaction->update();
       $crypto_transaction = $transaction->method;
       $crypto_transaction->status = 'confirmed';
       $crypto_transaction->update();

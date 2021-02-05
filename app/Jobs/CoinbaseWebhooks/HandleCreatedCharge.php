@@ -38,16 +38,15 @@ class HandleCreatedCharge implements ShouldQueue
     Log::info('handling...charge created starting');
     try {
       $payload_obj = $this->webhookCall->payload;
-      $transaction = Transaction::updateOrCreate(
+      $transaction = Transaction::where(
         [
           'id' => $payload_obj['event']['data']['metadata']['trnx_id'],
           'user_id' => $payload_obj['event']['data']['metadata']['user_id']
-        ],
-        [
-          'status' => 'created',
-        ],
+        ]
+      )->first();
+      $transaction->status = 'created';
 
-      );
+      $transaction->update();
       $crypto_transaction = $transaction->method;
       Log::info($crypto_transaction);
       $crypto_transaction->status = 'created';

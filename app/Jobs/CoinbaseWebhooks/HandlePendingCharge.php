@@ -40,16 +40,15 @@ class HandlePendingCharge implements ShouldQueue
     Log::info($this->webhookCall->payload);
     try {
       $payload_obj = $this->webhookCall->payload;
-      $transaction = Transaction::updateOrCreate(
+      $transaction = Transaction::where(
         [
           'id' => $payload_obj['event']['data']['metadata']['trnx_id'],
           'user_id' => $payload_obj['event']['data']['metadata']['user_id']
-        ],
-        [
-          'status' => 'pending',
-        ],
+        ]
+      )->first();
+      $transaction->status = 'pending';
 
-      );
+      $transaction->update();
       $crypto_transaction = $transaction->method;
       $crypto_transaction->status = 'pending';
       $crypto_transaction->update();
