@@ -4,6 +4,7 @@ namespace App;
 
 use App\Bonus;
 use App\Transaction;
+use Illuminate\Support\Facades\Log;
 
 trait GiveReferalBonus
 {
@@ -14,6 +15,7 @@ trait GiveReferalBonus
    */
   public function give_referal_bonus()
   {
+    Log::info('Giving Referal Bonus to: ' . $this->referer);
     $referer =  static::where('id', $this->referer)->first();
     // $parent =  static::where('id', $model->parent_id)->first();
     $new_trx = new Transaction();
@@ -33,6 +35,7 @@ trait GiveReferalBonus
     $new_trx->update();
     $referer->bonus += $new_trx->amount;
     $referer->update();
+    Log::info('Giving Referal Bonus to: ' . $this->referer."completed");
   }
 
   public function check_for_bonus_eligible_ancestors($user)

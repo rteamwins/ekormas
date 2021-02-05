@@ -6,6 +6,7 @@ use App\Alert;
 use App\Bonus;
 use App\CryptoTransaction;
 use App\Lga;
+use App\LocalPay;
 use App\MembershipPlan;
 use App\Order;
 use App\Post;
@@ -276,6 +277,9 @@ class HomeController extends Controller
       'non_active_user_count' => $this->non_active_user_count(),
       'open_order' => Order::whereIn('status', ['confirmed', 'shipped'])->count(),
       'closed_order' => Order::where('status', 'completed')->count(),
+      'admin_local_pay_pending' => LocalPay::whereAgentId(auth()->user()->id)->whereStatus('creeated')->count(),
+      'local_pay_pending' => LocalPay::whereUserId(auth()->user()->id)->whereStatus('creeated')->count(),
+      'local_pay_completed' => LocalPay::whereAgentId(auth()->user()->id)->whereStatus('completed')->count(),
     ]);
   }
 
@@ -363,7 +367,7 @@ class HomeController extends Controller
         $new_rc_trx->used_by = Auth()->user()->id;
         $new_rc_trx->save();
 
-        $membership_plan = MembershipPlan::whereName($new_rc_trx->plan);
+        $membership_plan = MembershipPlan::whereSlug($new_rc_trx->plan);
         $referer = User::find($new_rc_trx->user_id);
 
         $new_trx = new Transaction();
@@ -375,6 +379,7 @@ class HomeController extends Controller
         Auth()->user()->membership_plan_id = $membership_plan->id;
         Auth()->user()->referer = $new_rc_trx->user_id;
         Auth()->user()->activated_at = now();
+        Auth()->user()->wallet += $membership_plan->min_trading_capital;
         Auth()->user()->update();
         $new_trx->status = 'completed';
         $new_trx->update();

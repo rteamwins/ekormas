@@ -186,8 +186,8 @@
       'roles' => ['admin','agent',],
       'title'=>'LOCAL PAYOUT',
       'stat_data'=>[
-      ['text'=>"PENDING",'value'=>12],
-      ['text'=>"COMPLETED",'value'=>1232]
+      ['text'=>"PENDING",'value'=>$admin_local_pay_pending?:0],
+      ['text'=>"COMPLETED",'value'=>$local_pay_completed?:0]
       ],
       'stat_link'=>[
       ['route'=>route('user_withdraw_local_history'),'name'=>'History','icon'=>'list'],
@@ -199,8 +199,8 @@
       'roles' => ['user'],
       'title'=>'LOCAL PAYOUT',
       'stat_data'=>[
-      ['text'=>"PENDING",'value'=>12],
-      ['text'=>"COMPLETED",'value'=>1232]
+        ['text'=>"PENDING",'value'=>$local_pay_pending?:0],
+      ['text'=>"COMPLETED",'value'=>$local_pay_completed?:0]
       ],
       'stat_link'=>[
       ['route'=>route('user_withdraw_local_history'),'name'=>'History','icon'=>'list'],
