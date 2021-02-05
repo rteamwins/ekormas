@@ -49,7 +49,8 @@ class HandleFailedCharge implements ShouldQueue
         ],
 
       );
-      $crypto_transaction = $transaction->method();
+      $crypto_transaction = $transaction->method;
+      Log::info($crypto_transaction);
       $crypto_transaction->status = 'failed';
       $crypto_transaction->update();
     } catch (\Exception $e) {

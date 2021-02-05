@@ -50,7 +50,7 @@ class HandlePendingCharge implements ShouldQueue
         ],
 
       );
-      $crypto_transaction = $transaction->method();
+      $crypto_transaction = $transaction->method;
       $crypto_transaction->status = 'pending';
       $crypto_transaction->update();
       Log::info('handling...charge pending starting');

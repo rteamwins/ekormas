@@ -35,7 +35,7 @@ trait GiveReferalBonus
     $referer->update();
   }
 
-  public function check_for_bonus_eligible_ancestors(User $user)
+  public function check_for_bonus_eligible_ancestors($user)
   {
     $ancestors = User::defaultOrder()->with(['membership_plan:id,fee,name'])
       ->ancestorsOf($user->id, ['id', '_rgt', '_lft', 'parent_id', 'placement_id', 'username', 'name', 'total_points', 'phone', 'membership_plan_id', 'created_at', 'activated_at']);

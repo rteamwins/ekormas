@@ -62,7 +62,7 @@ class HandleResolvedCharge implements ShouldQueue
         ],
 
       );
-      $crypto_transaction = $transaction->method();
+      $crypto_transaction = $transaction->method;
       $crypto_transaction->status = 'confirmed';
       $crypto_transaction->update();
       if ($transaction->type == 'user_registration_fee') {
