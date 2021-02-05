@@ -50,7 +50,7 @@
           </td>
           <td>
             <span class="uk-hidden@m uk-text-bold">Amount: </span>
-            ${{ number_format(rc_plans[reg_credit.plan], 2) }}
+            ${{ number_format(rc_plans[reg_credit.plan]) }}
           </td>
           <td>
             <span class="uk-hidden@m uk-text-bold">Plan: </span>
@@ -134,7 +134,7 @@ export default {
         ruby: 310,
         gold: 610,
         sapphire: 1210,
-        emerald: 3160,
+        emerald: 3610,
         diamond: 6010
       },
       reg_credits: [],
