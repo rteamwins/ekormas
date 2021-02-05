@@ -79,8 +79,9 @@ export default {
       return h(RefNode, {
         props: {
           name: data.name,
+          username: data.username,
           phone: data.phone,
-          username: this.user_name,
+          ref_username: this.user_name,
           placement_id: data.placement_id,
           canAcceptChild: data.children
             ? this.checkCanAcceptChild(data.children)

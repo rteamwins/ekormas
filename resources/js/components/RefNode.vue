@@ -55,8 +55,9 @@ export default {
   },
   props: {
     name: { type: String, required: true },
-    phone: { type: String, required: true },
     username: { type: String, required: true },
+    phone: { type: String, required: true },
+    refusername: { type: String, required: true },
     placement_id: { type: Number, required: true },
     canAcceptChild: { type: Boolean, required: true },
     isDownline: { type: Boolean, required: true }
@@ -66,7 +67,7 @@ export default {
       let tt = this.Toast;
       navigator.clipboard
         .writeText(
-          `${this.base_url}/register/ref/${this.username}/pos/${this.placement_id}`
+          `${this.base_url}/register/ref/${this.ref_username}/pos/${this.placement_id}`
         )
         .then(
           function() {
