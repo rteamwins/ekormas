@@ -87,7 +87,7 @@ class RegisterController extends Controller
     }
     return Validator::make($data, [
       'referer' => 'required|alpha_dash|min:3|max:25|exists:users,username',
-      'placement_id' => 'required|integer|min:100000|max:9999999999|exists:users',
+      'placement_id' => 'required|integer|exists:users',
       'name' => 'required|string|max:25|min:3',
       'phone' => 'required|numeric|unique:users',
       'username' => 'required|alpha_dash|max:25|min:3|unique:users,username',

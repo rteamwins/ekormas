@@ -146,7 +146,7 @@ class User extends Authenticatable
 
   public function generate_placement_id()
   {
-    return random_int(1000000000, 9999999999);
+    return rand(1000000000, 9999999999);
   }
 
   protected static function boot()

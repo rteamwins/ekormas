@@ -17,7 +17,7 @@ class BonusController extends Controller
    */
   public function index()
   {
-    $bonuses = Bonus::where('user_id', Auth()->user()->id)->paginate(10);
+    $bonuses = Bonus::where('user_id', Auth()->user()->id)->latest()->paginate(10);
     return view('bonus.list', ['bonuses' => $bonuses]);
   }
 

@@ -18,8 +18,8 @@
                     alt="{{Auth()->user()->membership_plan->name . "Badge"}}">
                   <span class="uk-text-right uk-text-bold white-text">
                     {{ucfirst(Auth()->user()->membership_plan->name)}}</span>
-                    <span class="uk-text-right uk-text-bold white-text">
-                      ${{number_format(Auth()->user()->membership_plan->fee,0)}}</span></td>
+                  <span class="uk-text-right uk-text-bold white-text">
+                    ${{number_format(Auth()->user()->membership_plan->fee,0)}}</span></td>
               </tr>
               <tr>
                 <td class="uk-text-bold uk-text-truncate uk-width-1-3">WALLET
@@ -74,8 +74,8 @@
       'roles' => ['admin','user','agent'],
       'title'=>'WALLET WITHDRAW',
       'stat_data'=>[
-      ['text'=>"TODAY",'value'=>"$".number_format(Auth()->user()->bonus?:0,2)],
-      ['text'=>"WEEK",'value'=>number_format(Auth()->user()->points?:0,2)]
+      ['text'=>"TODAY",'value'=>"$".number_format($today_withdraw?:0,2)],
+      ['text'=>"WEEK",'value'=>"$".number_format($week_widthdraw?:0,2)]
       ],
       'stat_link'=>[
       ['route'=>route('user_create_withdraw_fund'),'name'=>'Withdraw','icon'=>'upload'],
@@ -87,8 +87,8 @@
       'roles' => ['admin','user','agent'],
       'title'=>'WALLET FUNDING',
       'stat_data'=>[
-      ['text'=>"TODAY",'value'=>"$".number_format(Auth()->user()->bonus?:0,2)],
-      ['text'=>"WEEK",'value'=>number_format(Auth()->user()->points?:0,2)]
+      ['text'=>"TODAY",'value'=>"$".number_format($today_funding?:0,2)],
+      ['text'=>"WEEK",'value'=>"$".number_format($week_funding?:0,2)]
       ],
       'stat_link'=>[
       ['route'=>route('user_fund_wallet'),'name'=>'Fund','icon'=>'download'],
@@ -101,7 +101,7 @@
       'title'=>'TRADE CAPITAL',
       'stat_data'=>[
       ['text'=>"TOTAL",'value'=>"$".number_format(Auth()->user()->trading_capital?:0,2)],
-      ['text'=>"ROI",'value'=>"$".number_format(Auth()->user()->trading_capital?:0,2)]
+      ['text'=>"ROI",'value'=>"$".number_format($trade_roi?:0,2)]
       ],
       'stat_link'=>[
       ['route'=>route('user_create_trade'),'name'=>'Start','icon'=>'cart'],
