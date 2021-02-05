@@ -57,7 +57,7 @@ export default {
     name: { type: String, required: true },
     username: { type: String, required: true },
     phone: { type: String, required: true },
-    refusername: { type: String, required: true },
+    ref_username: { type: String, required: true },
     placement_id: { type: Number, required: true },
     canAcceptChild: { type: Boolean, required: true },
     isDownline: { type: Boolean, required: true }
