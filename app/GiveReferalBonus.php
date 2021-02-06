@@ -12,7 +12,7 @@ trait GiveReferalBonus
   {
     $percent = [4, 2, 1, 0.5, 0.25];
     $ancestors = User::latest()->limit(5)->ancestorsOf($this->id);
-    $referer =  static::where('id', $this->referer)->first();
+    $referer =  User::where('id', $this->referer)->first();
 
     Log::info('Giving Direct Referal Bonus to user: ' . $referer->id);
     $new_trx = new Transaction();
@@ -65,7 +65,7 @@ trait GiveReferalBonus
   public function check_for_bonus_eligible_ancestors($user)
   {
     Log::info('Check Potential Matching Bonus Ancestor...');
-    $ancestors = User::defaultOrder()->with(['membership_plan:id,fee,name'])
+    $ancestors = User::defaultOrder()->with(['membership_plan'])
       ->ancestorsOf($user->id, ['id', '_rgt', '_lft', 'parent_id', 'placement_id', 'username', 'name', 'phone', 'membership_plan_id', 'created_at', 'activated_at']);
     foreach ($ancestors as $ancestor) {
       $ancestor_directline_count = $ancestor->children->count();

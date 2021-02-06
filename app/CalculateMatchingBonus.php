@@ -23,8 +23,8 @@ trait CalculateMatchingBonus
       Log::info('Matching Bonus Stage: ' . $stage_num);
       $stage_per = (5 * ((100 / $stage_num) / 100));
       Log::info('Matching Bonus Stage Percent: ' . $stage_per);
-      $left_leg = static::withDepth()->find($this->children->first()->id);
-      $right_leg = static::withDepth()->find($this->children->last()->id);
+      $left_leg = User::withDepth()->find($this->children->first()->id);
+      $right_leg = User::withDepth()->find($this->children->last()->id);
       Log::info($right_leg->depth + $stage_num);
       Log::info($left_leg->depth + $stage_num);
 
