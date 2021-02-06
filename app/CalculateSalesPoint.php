@@ -29,7 +29,7 @@ trait CalculateSalesPoint
       $weak_amount = $amount['left_amount'];
       Log::info("Calculated Left Amount: " . $amount['left_amount']);
       if ($weak_amount > 0) {
-        $this->give_active_sales_point(($weak_amount * 0.05));
+        $this->give_dormant_sales_point(($weak_amount / 2));
       }
     } else {
       $left_desc = static::withDepth()
