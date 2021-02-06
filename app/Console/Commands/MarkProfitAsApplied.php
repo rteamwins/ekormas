@@ -39,9 +39,11 @@ class MarkProfitAsApplied extends Command
    */
   public function handle()
   {
-    Log::info('Mark failed transaction job Started');
-    Profit::where('applied', false)->where('created_at', '<=', now())->update(['applied' => true]);
-    Log::info('Mark failed transaction job Ended');
+    Log::info('Mark Profit as Applied job Started');
+    Profit::where('applied', false)
+      ->where([['applied', false], ['created_at', '<=', now()]])
+      ->update(['applied' => true]);
+      Log::info('Mark Profit as Applied job Ended');
     return 0;
   }
 }
