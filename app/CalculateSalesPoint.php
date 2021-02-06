@@ -22,7 +22,7 @@ trait CalculateSalesPoint
       $left_desc = static::withDepth()
         ->descendantsOf($this->children->first());
       $amount['left_amount'] = $left_desc->sum(function ($user) {
-        if (isset($user->activated_at) && Carbon::parse($user->activated_at)->isCurrentDay()) {
+        if (isset($user->activated_at) && Carbon::parse($user->activated_at)->isYesterday()) {
           return $user->membership_plan->point_value;
         }
       });
@@ -37,12 +37,12 @@ trait CalculateSalesPoint
       $right_desc = static::withDepth()
         ->descendantsOf($this->children->last());
       $amount['left_amount'] = $left_desc->sum(function ($user) {
-        if (isset($user->activated_at) && Carbon::parse($user->activated_at)->isCurrentDay()) {
+        if (isset($user->activated_at) && Carbon::parse($user->activated_at)->isYesterday()) {
           return $user->membership_plan->point_value;
         }
       });
       $amount['right_amount'] = $right_desc->sum(function ($user) {
-        if (isset($user->activated_at) && Carbon::parse($user->activated_at)->isCurrentDay()) {
+        if (isset($user->activated_at) && Carbon::parse($user->activated_at)->isYesterday()) {
           return $user->membership_plan->point_value;
         }
       });
