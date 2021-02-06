@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\point;
+use App\Point;
 use App\Transaction;
 use Illuminate\Support\Facades\Log;
 
@@ -32,7 +32,7 @@ trait GiveDormantSalesPoint
     $new_point_trx->transaction()->save($new_trx);
     $new_trx->status = 'completed';
     $new_trx->update();
-    $this->dormant_point += $new_trx->amount;
+    $this->dormant_points += $new_trx->amount;
     $this->update();
     Log::info("Awarded Daily Dormant Sale Bonus: " . $amount . "PV to User: " . $this->id . " Starting...");
     Log::info("Preparing Daily Dormant Sale Bonus for User: " . $this->id . " Completed");

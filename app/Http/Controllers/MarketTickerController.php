@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\MarketTicker;
 use App\Profit;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class MarketTickerController extends Controller
 {
@@ -16,15 +18,41 @@ class MarketTickerController extends Controller
    */
   public function index()
   {
-    return User::latest()->limit(5)->ancestorsOf(9);
+    $ancestors = User::defaultOrder()->with(['membership_plan:id,fee,name'])
+      ->ancestorsOf(11, ['id', '_rgt', '_lft', 'parent_id', 'placement_id', 'username', 'name', 'phone', 'membership_plan_id', 'created_at', 'activated_at']);
+    $leg_count = [];
+    foreach ($ancestors as $ancestor) {
+      $ancestor_directline_count = $ancestor->children->count();
+      $leg_count[$ancestor->username]['name'] = $ancestor->name;
+      if ($ancestor_directline_count > 0) {
+        if ($ancestor_directline_count == 2) {
+          $leg_count[$ancestor->username]['left'] = $leg_count[$ancestor->username]['right'] = 1;
+          $leg_count[$ancestor->username]['left_amount'] = $ancestor->children->first()->membership_plan->fee ?? 0;
+          $leg_count[$ancestor->username]['right_amount'] = $ancestor->children->last()->membership_plan->fee ?? 0;
+        } else {
+          $leg_count[$ancestor->username]['left'] = 1;
+          $leg_count[$ancestor->username]['right'] = 0;
+          $leg_count[$ancestor->username]['left_amount'] = $ancestor->children->first()->membership_plan->fee ?? 0;
+          $leg_count[$ancestor->username]['right_amount'] = 0;
+        }
+      } else {
+        $leg_count[$ancestor->username]['left'] = $leg_count[$ancestor->username]['right'] = 1;
+        $leg_count[$ancestor->username]['left_amount'] = $leg_count[$ancestor->username]['right_amount'] = 0;
+      }
+      $left_desc = User::descendantsOf($ancestor->children->first());
+      $right_desc = User::descendantsOf($ancestor->children->last());
 
-    // $n = 1;
-    // while ($n <= 20) {
-    //   $arr["stage_{$n}"] = number_format(5 * ((100 / $n) / 100), 2);
-    //   $n++;
-    // }
-    // return $arr;
-    // return number_format((2 ** (2 * $n - 1)) + 2 ** (2 * $n));
+      $leg_count[$ancestor->username]['left'] += $left_desc->count();
+      $leg_count[$ancestor->username]['right'] += $right_desc->count();
+
+      $leg_count[$ancestor->username]['left_amount'] += $left_desc->sum('membership_plan.fee');
+      $leg_count[$ancestor->username]['right_amount'] += $right_desc->sum('membership_plan.fee');
+
+      // if ($leg_count[$ancestor->username]['left'] == $leg_count[$ancestor->username]['right']) {
+      //   $ancestor->calculate_matching_bonus($leg_count[$ancestor->username]['left'] + $leg_count[$ancestor->username]['right']);
+      // }
+    }
+    return $leg_count;
 
 
     $date_ranges = [];
@@ -51,69 +79,4 @@ class MarketTickerController extends Controller
     return $OHLCs;
   }
 
-  /**
-   * Show the form for creating a new resource.
-   *
-   * @return \Illuminate\Http\Response
-   */
-  public function create()
-  {
-    //
-  }
-
-  /**
-   * Store a newly created resource in storage.
-   *
-   * @param  \Illuminate\Http\Request  $request
-   * @return \Illuminate\Http\Response
-   */
-  public function store(Request $request)
-  {
-    //
-  }
-
-  /**
-   * Display the specified resource.
-   *
-   * @param  \App\MarketTicker  $marketTicker
-   * @return \Illuminate\Http\Response
-   */
-  public function show(MarketTicker $marketTicker)
-  {
-    //
-  }
-
-  /**
-   * Show the form for editing the specified resource.
-   *
-   * @param  \App\MarketTicker  $marketTicker
-   * @return \Illuminate\Http\Response
-   */
-  public function edit(MarketTicker $marketTicker)
-  {
-    //
-  }
-
-  /**
-   * Update the specified resource in storage.
-   *
-   * @param  \Illuminate\Http\Request  $request
-   * @param  \App\MarketTicker  $marketTicker
-   * @return \Illuminate\Http\Response
-   */
-  public function update(Request $request, MarketTicker $marketTicker)
-  {
-    //
-  }
-
-  /**
-   * Remove the specified resource from storage.
-   *
-   * @param  \App\MarketTicker  $marketTicker
-   * @return \Illuminate\Http\Response
-   */
-  public function destroy(MarketTicker $marketTicker)
-  {
-    //
-  }
 }

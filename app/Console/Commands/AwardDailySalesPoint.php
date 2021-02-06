@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
@@ -39,7 +40,10 @@ class AwardDailySalesPoint extends Command
   public function handle()
   {
     Log::info('Award Daily Points job Started');
-    
+    $users = User::get();
+    foreach ($users as $user) {
+      $user->calculate_sales_bonus();
+    }
     Log::info('Award Daily Points job Ended');
     return 0;
   }

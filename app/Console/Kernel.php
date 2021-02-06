@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\AwardDailySalesPoint;
 use App\Console\Commands\Ekormas;
 use App\Console\Commands\MarkProfitAsApplied;
 use App\Console\Commands\MarkTradeAsCompleted;
@@ -18,7 +19,8 @@ class Kernel extends ConsoleKernel
   protected $commands = [
     Ekormas::class,
     MarkProfitAsApplied::class,
-    MarkTradeAsCompleted::class
+    MarkTradeAsCompleted::class,
+    AwardDailySalesPoint::class,
   ];
 
   /**
