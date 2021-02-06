@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\Log;
 
 trait CalculateMatchingBonus
 {
@@ -16,8 +17,10 @@ trait CalculateMatchingBonus
   public function calculate_matching_bonus($total_node_count)
   {
 
+    Log::info('Calculating Matching Bonus For User: ' . $this->id . 'For node count: ' . $total_node_count);
     $stage_num = $this->has_any_stage_required_node($total_node_count);
     if ($stage_num !== 0) {
+      Log::info('Matching Bonus Stage: ' . $stage_num);
       $stage_per = (5 * ((100 / $stage_num) / 100));
       $left_desc = static::withDepth()
         ->having('depth', '=', $stage_num)
@@ -31,6 +34,7 @@ trait CalculateMatchingBonus
       $this->give_stage_matching_bonus($weak_amount, $stage_num, 'stage');
 
       if (2 % $stage_num == 0) {
+        Log::info('Matching Bonus Level: ' . $stage_num / 2);
         $left_desc = static::withDepth()
           ->having('depth', '>', ($stage_num - 2))
           ->having('depth', '<', ($stage_num + 1))
@@ -42,7 +46,7 @@ trait CalculateMatchingBonus
         $amount['left_amount'] = $left_desc->sum('membership_plan.fee') * $stage_per;
         $amount['right_amount'] = $right_desc->sum('membership_plan.fee') * $stage_per;
         $weak_amount = $amount['left_amount'] <= $amount['right_amount'] ? $amount['left_amount'] : $amount['right_amount'];
-        $this->give_stage_matching_bonus($weak_amount, $stage_num, 'level');
+        $this->give_stage_matching_bonus($weak_amount, ($stage_num / 2), 'level');
       }
     }
   }

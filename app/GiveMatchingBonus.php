@@ -4,6 +4,7 @@ namespace App;
 
 use App\Bonus;
 use App\Transaction;
+use Illuminate\Support\Facades\Log;
 
 trait GiveMatchingBonus
 {
@@ -15,8 +16,9 @@ trait GiveMatchingBonus
    *
    * @return void
    */
-  public function give_stage_matching_bonus($amount,$stage, $matching_type)
+  public function give_stage_matching_bonus($amount, $stage, $matching_type)
   {
+    Log::info('Awarding Matching Bonus For User: ' . $this->id);
     $new_trx = new Transaction();
     $new_trx->amount =  $amount;
     $new_trx->status = 'created';
@@ -34,5 +36,6 @@ trait GiveMatchingBonus
     $new_trx->update();
     $this->bonus += $new_trx->amount;
     $this->update();
+    Log::info('Awarding User: ' . $this->id . " {$matching_type} {$stage} " . " Matching Bonus: " . $amount . "Completed");
   }
 }
