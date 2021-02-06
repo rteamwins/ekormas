@@ -12,7 +12,7 @@ class MarkTradeAsCompleted extends Command
    *
    * @var string
    */
-  protected $signature = 'trade:mark_completed';
+  protected $signature = 'trade:markAsCompleted';
 
   /**
    * The console command description.
