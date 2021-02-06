@@ -26,10 +26,10 @@ trait CalculateSalesPoint
           return $user->membership_plan->point_value;
         }
       });
-      $weak_amount = $amount['left_amount'];
-      Log::info("Calculated Left Amount: " . $amount['left_amount']);
-      if ($weak_amount > 0) {
-        $this->give_dormant_sales_point(($weak_amount / 2));
+      $stong_amount = $amount['left_amount'];
+      Log::info("Calculated Left Amount: " . $amount['left_amount'] . " Right Amount: 0");
+      if (($stong_amount / 2) > 0) {
+        $this->give_dormant_sales_point(($stong_amount / 2));
       }
     } else {
       $left_desc = static::withDepth()
@@ -49,12 +49,12 @@ trait CalculateSalesPoint
       $weak_amount = $amount['left_amount'] <= $amount['right_amount'] ? $amount['left_amount'] : $amount['right_amount'];
 
       Log::info("Calculated Left Amount: " . $amount['left_amount'] . " Right Amount: " . $amount['right_amount']);
-      if ($weak_amount > 0) {
+      if (($weak_amount * 0.05) > 0) {
         $this->give_active_sales_point(($weak_amount * 0.05));
       }
       $stong_amount = $amount['left_amount'] <= $amount['right_amount'] ? $amount['right_amount'] : $amount['left_amount'];
-      if ($stong_amount > 0) {
-        $this->give_dormant_sales_point(($weak_amount / 2));
+      if (($stong_amount / 2) > 0) {
+        $this->give_dormant_sales_point(($stong_amount / 2));
       }
     }
 
