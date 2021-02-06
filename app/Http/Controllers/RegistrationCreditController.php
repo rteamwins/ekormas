@@ -30,6 +30,8 @@ class RegistrationCreditController extends Controller
       'receiver_username' => 'required|string|exists:users,username,role,agent',
       'plan' => "required|alpha_dash|in:onyx,pearl,ruby,gold,sapphire,emerald,diamond",
       "quantity" => "required|digits_between:1,50",
+    ], [
+      'receiver_username.exists' => 'No  Agent with that username',
     ]);
 
     $user = User::where('username', $request->receiver_username)->first();

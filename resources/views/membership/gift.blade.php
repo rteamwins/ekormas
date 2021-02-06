@@ -38,7 +38,7 @@
 @section('content')
 <div class="uk-container uk-padding-remove">
   <div class="uk-margin-large-bottom uk-flex-center" uk-grid>
-    <div class="uk-width-1">
+    <div class="uk-width-1-1 uk-width-2-3@s uk-width-1-2@m">
       <div class="uk-card uk-card-default uk-border-rounded">
         <div class="uk-card-header">
           <h2 class="uk-h2 uk-margin-remove-bottom uk-text-bolder">GIFT REGISTRATION CREDIT</h2>
@@ -47,81 +47,82 @@
           </p>
         </div>
         <div class="uk-card-body uk-padding-small">
-          <div class="uk-margin-large-bottom uk-grid-divider uk-child-width-1-1 uk-child-width-1-2@s" uk-grid>
-            <div>
-              <form method="POST" id="btc_funding" action="{{route('user_fund_wallet_save')}}"
-                class="uk-form-stacked uk-flex uk-flex-column">
-                @csrf
-                <div class="uk-margin uk-width-1-1 uk-width-2-3@s uk-width-1-2@m  uk-align-center">
-                  <label for="receiver_username" class="uk-form-label">
-                    Receiver Username *
-                  </label>
-                  <div class="uk-form-control uk-width-1-1">
-                    <div class="uk-inline uk-width-1-1">
-                      <span class="uk-form-icon" uk-icon="user"></span>
-                      <input class="uk-input uk-border-rounded @error('receiver_username') uk-form-danger @enderror"
-                        name="receiver_username" id="receiver_username" type="text"
-                        value="{{ old('receiver_username') }}" required autofocus>
-                    </div>
-                    @error('receiver_username')
-                    <span class="uk-text-danger">{{ $message }}</span>
-                    @enderror
+          <form method="POST" id="btc_funding" action="{{route('admin_store_gift_registration_credits')}}"
+            class="uk-form-stacked uk-flex uk-flex-column">
+            @csrf
+            <div class="uk-margin uk-width-1-1">
+              <label for="receiver_username" class="uk-form-label">
+                Receiver Username *
+              </label>
+              <div class="uk-form-control uk-width-1-1">
+                <div class="uk-inline uk-width-1-1">
+                  <span class="uk-form-icon" uk-icon="user"></span>
+                  <input class="uk-input uk-border-rounded @error('receiver_username') uk-form-danger @enderror"
+                    name="receiver_username" id="receiver_username" type="text" value="{{ old('receiver_username') }}"
+                    required autofocus>
+                </div>
+                @error('receiver_username')
+                <span class="uk-text-danger">{{ $message }}</span>
+                @enderror
+              </div>
+            </div>
+            <div class="" uk-grid>
+              <div class="uk-width-1-2">
+                <label for="plan" class="uk-form-label">
+                  Plan <span class="red-text uk-text-bold">*</span>
+                </label>
+                <div class="uk-form-control">
+                  <div class="uk-inline uk-width-1-1">
+                    <select onchange="display_package_info(this)" class="uk-select uk-border-rounded" name="plan"
+                      required id="plan">
+                      <option value="onyx">Onyx($50) </option>
+                      <option value="pearl">Pearl($100) </option>
+                      <option value="ruby">Ruby($250) </option>
+                      <option value="gold">Gold($500) </option>
+                      <option value="sapphire">Sapphire($1000) </option>
+                      <option value="emerald">Emerald($3000) </option>
+                      <option value="diamond">Diamond($5000) </option>
+                    </select>
                   </div>
                 </div>
-                <div class="uk-margin uk-width-1-2">
-                  <label for="plan" class="uk-form-label">
-                    Plan <span class="red-text uk-text-bold">*</span>
-                  </label>
-                  <div class="uk-form-control">
-                    <div class="uk-inline uk-width-1-1">
-                      <select onchange="display_package_info(this)" class="uk-select uk-border-rounded" name="plan"
-                        required id="plan">
-                        <option value="pearl">Pearl($100) </option>
-                        <option value="ruby">Ruby($250) </option>
-                        <option value="gold">Gold($500) </option>
-                        <option value="sapphire">Sapphire($1000) </option>
-                        <option value="emerald">Emerald($3000) </option>
-                        <option value="diamond">Diamond($5000) </option>
-                      </select>
-                    </div>
+                @error('amount')
+                <span class="uk-text-danger">{{ $message }}</span>
+                @enderror
+              </div>
+              <div class="uk-width-1-2">
+                <label for="quantity" class="uk-form-label">
+                  Plan Quantity *
+                </label>
+                <div class="uk-form-control uk-width-1-1">
+                  <div class="uk-inline uk-width-1-1">
+                    <span class="uk-form-icon">#</span>
+                    <input class="uk-input uk-border-rounded @error('quantity') uk-form-danger @enderror"
+                      name="quantity" id="quantity" type="text" value="{{ old('quantity') }}" required type="number"
+                      min="1" max="50">
                   </div>
-                  @error('amount')
+                  @error('quantity')
                   <span class="uk-text-danger">{{ $message }}</span>
                   @enderror
                 </div>
-                <div class="uk-margin uk-width-1-2">
-                  <label for="quantity" class="uk-form-label">
-                    Plan Quantity *
-                  </label>
-                  <div class="uk-form-control uk-width-1-1">
-                    <div class="uk-inline uk-width-1-1">
-                      <span class="uk-form-icon">#</span>
-                      <input class="uk-input uk-border-rounded @error('quantity') uk-form-danger @enderror"
-                        name="quantity" id="quantity" type="text" value="{{ old('quantity') }}" required type="number"
-                        min="1" max="50">
-                    </div>
-                    @error('quantity')
-                    <span class="uk-text-danger">{{ $message }}</span>
-                    @enderror
-                  </div>
-                </div>
-                <div class="uk-margin uk-width-1-1">
-                  <div class="uk-alert-primary" id="plan_info_alert" uk-alert>
-                    <p class="uk-text-center uk-text-bold" id="plan_info">Membership Package: $50 <br> Minimum
-                      Trading Capital: $10 <br> Registration Fee: $10 <br> Total: $70</p>
-                  </div>
-                </div>
-                <div class="uk-margin-remove-top uk-width-1-1 uk-width-2-3@s uk-width-1-2@m  uk-align-center">
-                  <div class="uk-form-control">
-                    <button type="submit"
-                      class="uk-button uk-border-rounded green accent-2 white-text uk-text-bolder uk-width-1-1">
-                      <span class="uk-text-large">G</span>ift
-                    </button>
-                  </div>
-                </div>
-              </form>
+              </div>
             </div>
-          </div>
+
+            <div class="uk-margin uk-width-1-1">
+              <div class="uk-alert-primary" id="plan_info_alert" uk-alert>
+                <p class="uk-text-center uk-text-bold" id="plan_info">Membership Package: $50 <br> Minimum
+                  Trading Capital: $10 <br> Registration Fee: $10 <br> Total: $70</p>
+              </div>
+            </div>
+            <div class="uk-margin-remove-top uk-width-1-1 uk-width-2-3@s uk-width-1-2@m  uk-align-center">
+              <div class="uk-form-control">
+                <button type="submit"
+                  class="uk-button uk-border-rounded green accent-2 white-text uk-text-bolder uk-width-1-1">
+                  <span class="uk-text-large">G</span>ift
+                </button>
+              </div>
+            </div>
+          </form>
+
         </div>
       </div>
     </div>

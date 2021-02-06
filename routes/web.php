@@ -112,7 +112,7 @@ Route::group(['middleware' => ['verifyRegPayment']], function () {
     Route::get('/investor/list/potential', 'HomeController@non_active_users')->name('admin_list_non_active_users');
 
     Route::get('/order', 'OrderController@admin_index')->name('admin_order_request_list');
-
+    Route::get('bitcoin/list/request', 'WithdrawController@admin_index_request')->name('bitcoin_requests');
     Route::group(['prefix' => 'post'], function () {
       Route::post('/process_new_post', 'PostController@store')->name('process_new_post');
       Route::get('/create', 'PostController@create')->name('create_post');

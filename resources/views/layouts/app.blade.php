@@ -309,6 +309,15 @@
               </div>
             </li>
             @endif
+            @if(in_array(auth()->user()->role,['admin']))
+            <li>
+              <div class="uk-padding-small green accent-2">
+                <a href="{{route('bitcoin_requests')}}"
+                  class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">BITCOIN
+                  REQUESTS</a>
+              </div>
+            </li>
+            @endif
           </ul>
         </li>
         <li class="uk-parent uk-padding-remove">

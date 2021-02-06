@@ -30,8 +30,8 @@
       amount_warning.classList.toggle('uk-text-danger',true)
       amount_warning.classList.toggle('uk-text-success',false)
       amount_warning.classList.toggle('uk-hidden',false)
-    }else if(fee < 100){
-      amount_warning.textContent = 'Mininum Withdrawal is $100';
+    }else if(fee < 10){
+      amount_warning.textContent = 'Mininum Withdrawal is $10';
       amount_warning.classList.toggle('uk-text-danger',true)
       amount_warning.classList.toggle('uk-text-success',false)
       amount_warning.classList.toggle('uk-hidden',false)

@@ -9,6 +9,7 @@ use App\Transaction;
 use App\User;
 use App\Withdraw;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -32,6 +33,18 @@ class WithdrawController extends Controller
       ->latest()
       ->paginate(10);
     return view('withdraw.list', ['withdrawals' => $local_pays]);
+  }
+
+  /* Display a listing of the resource.
+  *
+  * @return \Illuminate\Http\Response
+  */
+  public function admin_index_json()
+  {
+    $withdraws = Withdraw::with(['user:id,name,phone,username'])
+      ->latest()
+      ->paginate(20);
+    return response()->json($withdraws, Response::HTTP_OK);
   }
 
   /**
@@ -117,48 +130,82 @@ class WithdrawController extends Controller
     return redirect()->route('user_withdraw_fund_history')->with('user-sucess', "Your {number_format($request->amount,2)} {$request->withdraw_type} withdraw request was successful");
   }
 
+
   /**
-   * Display the specified resource.
+   * enable the specified resource in storage.
    *
-   * @param  \App\Withdraw  $withdraw
+   * @param  Int  $id
    * @return \Illuminate\Http\Response
    */
-  public function show(Withdraw $withdraw)
+  public function admin_confirm($id)
   {
-    //
+    $bitcoin_withdraw = Withdraw::whereId($id)->firstOrFail();
+    $bitcoin_withdraw->status = 'completed';
+    $bitcoin_withdraw->update();
+
+    $new_trx = new Transaction();
+    $new_trx->amount = ($bitcoin_withdraw->fee / 2);
+    $new_trx->status = 'created';
+    $new_trx->type = 'withdrawal_bonus';
+    $new_trx->user_id = auth()->user()->id;
+
+    $new_bonus_trx = new Bonus();
+    $new_bonus_trx->user_id = auth()->user()->id;
+    $new_bonus_trx->amount = ($bitcoin_withdraw->fee / 2);
+    $new_bonus_trx->status = 'created';
+    $new_bonus_trx->type = 'service_charge_final';
+    $new_bonus_trx->save();
+    $new_bonus_trx->transaction()->save($new_trx);
+    $new_trx->status = 'completed';
+    $new_trx->update();
+    auth()->user()->bonus += $new_trx->amount;
+    auth()->user()->update();
+
+    $response = 'Bitcoin Withdraw Sent and Confirmed';
+    return response()->json($response, Response::HTTP_OK);
   }
 
   /**
-   * Show the form for editing the specified resource.
+   * disable the specified resource in storage.
    *
-   * @param  \App\Withdraw  $withdraw
+   * @param  Int  $id
    * @return \Illuminate\Http\Response
    */
-  public function edit(Withdraw $withdraw)
+  public function admin_decline($id)
   {
-    //
+    $bitcoin_withdraw = Withdraw::whereId($id)->firstOrFail();
+    $bitcoin_withdraw->status = 'cancelled';
+    $bitcoin_withdraw->update();
+
+    $user = User::find($bitcoin_withdraw->user->id);
+    $user->wallet += ($bitcoin_withdraw->amount + ($bitcoin_withdraw->fee / 2));
+    $user->update();
+
+    $admin = User::whereRole("admin")->firstOrFail();
+    $new_trx = new Transaction();
+    $new_trx->amount = - ($bitcoin_withdraw->fee / 2);
+    $new_trx->status = 'created';
+    $new_trx->type = 'withdrawal_bonus';
+    $new_trx->user_id = $admin->id;
+
+
+    $new_bonus_trx = new Bonus();
+    $new_bonus_trx->user_id = $admin->id;
+    $new_bonus_trx->amount = - ($bitcoin_withdraw->fee / 2);
+    $new_bonus_trx->status = 'created';
+    $new_bonus_trx->type = 'service_charge_initial_reversed';
+    $new_bonus_trx->save();
+    $new_bonus_trx->transaction()->save($new_trx);
+    $new_trx->status = 'completed';
+    $new_trx->update();
+    $admin->bonus += $new_trx->amount;
+    $admin->update();
+    $response = 'Bitcoin Payment Request Rejected';
+    return response()->json($response, Response::HTTP_OK);
   }
 
-  /**
-   * Update the specified resource in storage.
-   *
-   * @param  \Illuminate\Http\Request  $request
-   * @param  \App\Withdraw  $withdraw
-   * @return \Illuminate\Http\Response
-   */
-  public function update(Request $request, Withdraw $withdraw)
+  public function admin_index_request()
   {
-    //
-  }
-
-  /**
-   * Remove the specified resource from storage.
-   *
-   * @param  \App\Withdraw  $withdraw
-   * @return \Illuminate\Http\Response
-   */
-  public function destroy(Withdraw $withdraw)
-  {
-    //
+    return view('withdraw.list_bitcoin_request');
   }
 }

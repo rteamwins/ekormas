@@ -32,8 +32,13 @@ Route::middleware('auth:api')->group(function () {
   Route::get('user/referal/tree_data/for/{id}', 'HomeController@get_ref_level')->where(['id' => '[0-9]+']);
 
   Route::get('local-pay/request/list/open', 'LocalPayController@index_json');
-  Route::post('local-pay/request/confirm/{id}', 'LocalPayController@confirm')->where(['id' => '[0-9]+']);;
-  Route::get('local-pay/request/decline/{id}', 'LocalPayController@decline')->where(['id' => '[0-9]+']);;
+  Route::post('local-pay/request/confirm/{id}', 'LocalPayController@confirm')->where(['id' => '[0-9]+']);
+  Route::get('local-pay/request/decline/{id}', 'LocalPayController@decline')->where(['id' => '[0-9]+']);
+
+  Route::get('bitcoin/request/list/open', 'WithdrawController@admin_index_json');
+  Route::get('bitcoin/request/confirm/{id}', 'WithdrawController@admin_confirm')->where(['id' => '[0-9]+']);;
+  Route::get('bitcoin/request/decline/{id}', 'WithdrawController@admin_decline')->where(['id' => '[0-9]+']);;
+
 
 
   Route::get('category/list', 'CategoryController@index_json');
