@@ -166,7 +166,7 @@
                 Withdrawing Amount <b>(Service Fee 5%)</b> <span class="red-text uk-text-bold">*</span>
               </label>
               <label for="amount" class="uk-form-label">
-                Min ${{number_format(100,0)}} - Max
+                Min ${{number_format(10,0)}} - Max
                 ${{number_format((Auth()->user()->wallet * ((100-5) / 100)),2)}}
               </label>
               <div class="uk-form-control">
@@ -174,7 +174,7 @@
                   <span class="uk-form-icon">$</span>
                   <input onkeyup="calc_service_fee(this.value)"
                     class="uk-input @error('amount') uk-form-danger @enderror" name="amount" id="amount" type="number"
-                    max="{{(Auth()->user()->wallet * ((100-5) / 100))}}" min="100" value="{{ old('amount') }}"
+                    max="{{(Auth()->user()->wallet * ((100-5) / 100))}}" min="10" value="{{ old('amount') }}"
                     required>
                 </div>
                 <span id="amount_warning" class="uk-hidden"></span>

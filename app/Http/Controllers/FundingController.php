@@ -20,7 +20,7 @@ class FundingController extends Controller
    */
   public function index()
   {
-    $fundings = Transaction::where('type', 'funding')->paginate(10);
+    $fundings = Transaction::where('type', 'wallet_funding')->latest()->paginate(10);
     return view('funding.list', ['fundings' => $fundings]);
   }
 

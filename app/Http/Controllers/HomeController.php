@@ -231,8 +231,8 @@ class HomeController extends Controller
    */
   public function user_dashboard()
   {
-    $profits = Profit::whereUserId(Auth()->user()->id)->where([['created_at', '>=', now()->startOfDay()], ['created_at', '<=', now()->format('Y-m-d H:i:s')]])->latest()->get();
-    // $candle_sticks = $this->market_candlestick_bar();
+    $profits = Profit::whereUserId(Auth()->user()->id)->where([['created_at', '>=', now()->subDay()], ['created_at', '<=', now()->format('Y-m-d H:i:s')]])->latest()->get();
+    $candle_sticks = $this->market_candlestick_bar();
     $plabels = [];
     $pdata = [];
     $series = [];
@@ -241,24 +241,24 @@ class HomeController extends Controller
       $pdata[] = number_format($profit->amount, 3);
     }
 
-    // foreach ($candle_sticks as $candle_stick) {
-    //   $series[] = [
-    //     "x" => $candle_stick['date'] * 1000,
-    //     "y" => [
-    //       $candle_stick['open'],
-    //       $candle_stick['high'],
-    //       $candle_stick['low'],
-    //       $candle_stick['close']
-    //     ]
-    //   ];
-    // }
-    // $mdata = [
+    foreach ($candle_sticks as $candle_stick) {
+      $series[] = [
+        "x" => $candle_stick['date'] * 1000,
+        "y" => [
+          $candle_stick['open'],
+          $candle_stick['high'],
+          $candle_stick['low'],
+          $candle_stick['close']
+        ]
+      ];
+    }
+    $mdata = [
 
-    //   "series" => [[
-    //     "data" => $series,
-    //     // "backgroundColor" => '#00C853',
-    //   ]]
-    // ];
+      "series" => [[
+        "data" => $series,
+        // "backgroundColor" => '#00C853',
+      ]]
+    ];
     $pdata = [
       "series" => [[
         "name" => 'Trade Profits',
@@ -269,11 +269,11 @@ class HomeController extends Controller
     ];
     return view('user.dashboard', [
       'pdata' => $pdata,
-      // 'mdata' => $mdata,
+      'mdata' => $mdata,
       'role' => auth()->user()->role,
       'trade_roi' => Trade::whereUserId(auth()->user()->id)->where('completed', false)->first()->earning ?? 0,
-      'today_funding' => Funding::whereUserId(auth()->user()->id)->whereDate('created_at', now())->latest()->sum('amount'),
-      'week_funding' => Funding::whereUserId(auth()->user()->id)->whereDate('created_at', '>=', now()->startOfWeek())->latest()->sum('amount'),
+      'today_funding' => Transaction::where('type', 'wallet_funding')->whereDate('created_at', now())->latest()->sum('amount'),
+      'week_funding' => Transaction::where('type', 'wallet_funding')->whereDate('created_at', '>=', now()->startOfWeek())->latest()->sum('amount'),
       'today_withdraw' => $this->withdraw_amount_today(),
       'week_widthdraw' => $this->withdraw_amount_week(),
       'downlines_count' => auth()->user()->downlines()->whereNotNull('membership_plan_id')->count(),
