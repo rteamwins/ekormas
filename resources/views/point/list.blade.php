@@ -31,7 +31,13 @@
               @foreach ($points as $point)
               <tr class="{{$point->amount<0?"red":"green"}} lighten-5">
                 <td><span class="uk-hidden@m uk-text-bold">#: </span>{{$loop->index +1}}</td>
-                <td><span class="uk-hidden@m uk-text-bold">Amount: </span>{{number_format($point->amount,2)}}</td>
+                <td><span class="uk-hidden@m uk-text-bold">Amount: </span>{{number_format($point->amount,2)}}
+                  @if($point->type =='daily_sales_dormant_weak_leg')
+                  <span class="uk-label orange uk-text-bold">DPV</span>
+                  @elseif($point->type =='daily_sales_active_strong_leg')
+                  <span class="uk-label green uk-text-bold">APV</span>
+                  @endif
+                </td>
                 <td>
                   <span class="uk-hidden@m uk-text-bold">Type: </span> <span class="uk-label cyan">
                     {{str_replace("_"," ",$point->type)}}

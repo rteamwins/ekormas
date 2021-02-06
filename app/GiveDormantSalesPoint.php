@@ -27,14 +27,14 @@ trait GiveDormantSalesPoint
     $new_point_trx->user_id = $this->id;
     $new_point_trx->amount = $amount;
     $new_point_trx->status = 'created';
-    $new_point_trx->type = 'daily_sales_dormant';
+    $new_point_trx->type = 'daily_sales_dormant_weak_leg';
     $new_point_trx->save();
     $new_point_trx->transaction()->save($new_trx);
     $new_trx->status = 'completed';
     $new_trx->update();
     $this->dormant_points += $new_trx->amount;
     $this->update();
-    Log::info("Awarded Daily Dormant Sale Bonus: " . $amount . "PV to User: " . $this->id . " Starting...");
+    Log::info("Awarded Daily Dormant Sale Bonus: " . $amount . "DPV to User: " . $this->id . " Starting...");
     Log::info("Preparing Daily Dormant Sale Bonus for User: " . $this->id . " Completed");
   }
 }
