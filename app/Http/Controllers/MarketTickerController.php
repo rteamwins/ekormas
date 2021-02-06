@@ -18,8 +18,12 @@ class MarketTickerController extends Controller
    */
   public function index()
   {
-    $user = User::where('id', 11)->first();
-    $user->check_for_bonus_eligible_ancestors($user);
+    $user = User::where('id', 13)->first();
+    $user->give_ancestor_referal_bonus();
+    Log::info("User Siblings Count: " . $user->parent->children->count());
+    // if ($user->parent->children->count() == 2) {
+      $user->check_for_bonus_eligible_ancestors($user);
+    // }
 
 
     $date_ranges = [];

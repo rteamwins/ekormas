@@ -36,6 +36,6 @@ trait GiveMatchingBonus
     $new_trx->update();
     $this->bonus += $new_trx->amount;
     $this->update();
-    Log::info('Awarding User: ' . $this->id . " {$matching_type} {$stage} " . " Matching Bonus: " . $amount . "Completed");
+    Log::info('Awarding User: ' . $this->id . " {$matching_type} {$stage} " . " Matching Bonus: " . $amount . " Completed");
   }
 }

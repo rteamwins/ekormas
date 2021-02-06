@@ -14,7 +14,9 @@ trait GiveReferalBonus
     $ancestors = User::latest()->limit(5)->ancestorsOf($this->id);
     $referer =  static::where('id', $this->referer)->first();
 
+    Log::info('Giving Direct Referal Bonus to user: ' . $referer->id);
     $new_trx = new Transaction();
+    Log::info("plan_fee: " . $this->membership_plan->fee ?? 0);
     $new_trx->amount = (($this->membership_plan->fee ?? 0) * 0.10);
     $new_trx->status = 'created';
     $new_trx->type = 'bonus';
@@ -24,7 +26,6 @@ trait GiveReferalBonus
     $new_bonus_trx->user_id = $this->referer;
     $new_bonus_trx->amount = (($this->membership_plan->fee ?? 0) * 0.10);
     $new_bonus_trx->status = 'created';
-    Log::info('Giving Direct Referal Bonus to user: ' . $referer->id);
     $new_bonus_trx->type = 'referal_direct';
 
     $new_bonus_trx->save();
