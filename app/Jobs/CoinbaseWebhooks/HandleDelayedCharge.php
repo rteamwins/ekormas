@@ -105,6 +105,7 @@ class HandleDelayedCharge implements ShouldQueue
       }
     } catch (\Exception $e) {
       Log::error(sprintf('Error handling delayed Charged: %s. File: %s. Line: ', $e->getMessage(), $e->getFile(), $e->getLine()));
+      Abort(500);
     }
     Log::info('handling...charge delayed completed');
   }

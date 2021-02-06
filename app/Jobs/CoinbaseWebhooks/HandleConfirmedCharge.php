@@ -105,6 +105,7 @@ class HandleConfirmedCharge implements ShouldQueue
       }
     } catch (\Exception $e) {
       Log::error(sprintf('Error handling confirmed Charged: %s. File: %s. Line: ', $e->getMessage(), $e->getFile(), $e->getLine()));
+      Abort(500);
     }
     Log::info('handling...charge confirmed completed');
   }
