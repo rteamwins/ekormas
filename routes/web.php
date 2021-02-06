@@ -132,6 +132,11 @@ Route::group(['middleware' => ['verifyRegPayment']], function () {
       Route::post('/update/{id}', 'ProductController@update')->name('update_product');
     });
   });
+
+  Route::group(['prefix' => 'registration_credit'], function () {
+    Route::get('gift', 'RegistrationCreditController@gift')->name('admin_gift_registration_credits');
+    Route::post('gift/process', 'RegistrationCreditController@gift_store')->name('admin_store_gift_registration_credits');
+  });
 });
 
 Route::post('/process_registration_plan', 'HomeController@process_reg_plan')->name('process_reg_plan');

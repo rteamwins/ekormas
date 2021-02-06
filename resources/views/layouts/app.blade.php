@@ -330,6 +330,15 @@
                   CREDITS</a>
               </div>
             </li>
+            @if(in_array(auth()->user()->role,['admin']))
+            <li>
+              <div class="uk-padding-small green accent-2">
+                <a href="{{route('admin_gift_registration_credits')}}"
+                  class="uk-button-small green accent-2 uk-text-bold white-text uk-width-1-1">GIFT REGISTRATION
+                  CREDITS</a>
+              </div>
+            </li>
+            @endif
           </ul>
         </li>
         <li>

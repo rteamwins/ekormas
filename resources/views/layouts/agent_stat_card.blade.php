@@ -161,7 +161,21 @@
       ])
 
       @include('layouts.stat_card',[
-      'roles' => ['admin','agent',],
+      'roles' => ['admin',],
+      'title'=>'REGISTRATION CREDIT',
+      'stat_data'=>[
+      ['text'=>"AVAIL",'value'=>$avail_reg_credit?:0],
+      ['text'=>"REFERALS",'value'=>$downlines_count?:0]
+      ],
+      'stat_link'=>[
+      ['route'=>route('user_list_registration_credits'),'name'=>'History','icon'=>'list'],
+      ['route'=>route('user_referal_history'),'name'=>'Referals','icon'=>'users'],
+      ['route'=>route('admin_gift_registration_credits'),'name'=>'Gift','icon'=>'lifesaver'],
+      ]
+      ])
+
+      @include('layouts.stat_card',[
+      'roles' => ['agent',],
       'title'=>'REGISTRATION CREDIT',
       'stat_data'=>[
       ['text'=>"AVAIL",'value'=>$avail_reg_credit?:0],

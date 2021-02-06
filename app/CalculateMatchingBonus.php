@@ -49,6 +49,7 @@ trait CalculateMatchingBonus
         $this->give_stage_matching_bonus($weak_amount, $stage_num, 'stage');
       }
 
+      $amount = [];
       if ($stage_num % 2 == 0) {
         Log::info('Matching Bonus Level: ' . $stage_num / 2);
         $left_leg = static::withDepth()->find($this->children->first()->id);
@@ -56,11 +57,11 @@ trait CalculateMatchingBonus
         $left_desc = static::withDepth()
           ->having('depth', '>', ((($right_leg->depth + $stage_num) - 1) - 2))
           ->having('depth', '<', ((($right_leg->depth + $stage_num) - 1) + 1))
-          ->descendantsAndSelf($this->children->first());
+          ->descendantsAndSelf($left_leg->id);
         $right_desc = static::withDepth()
           ->having('depth', '>', ((($right_leg->depth + $stage_num) - 1) - 2))
           ->having('depth', '<', ((($right_leg->depth + $stage_num) - 1) + 1))
-          ->descendantsAndSelf($this->children->last());
+          ->descendantsAndSelf($right_leg->id);
         $amount['left_amount'] = $left_desc->sum('membership_plan.fee');
         $amount['right_amount'] = $right_desc->sum('membership_plan.fee');
         Log::info('Left Amount: ' . $amount['left_amount']);

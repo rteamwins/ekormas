@@ -65,6 +65,12 @@
           @enderror
         </div>
         <div class="uk-margin uk-width-1-1">
+          <div class="uk-alert-primary" id="plan_info_alert" uk-alert>
+            <p class="uk-text-center uk-text-bold" id="plan_info">Membership Package: $50 <br> Minimum
+              Trading Capital: $10 <br> Upgrade Fee: $10 <br> Total: $70</p>
+          </div>
+        </div>
+        <div class="uk-margin uk-width-1-1">
           <div class="uk-form-control">
             <button type="submit"
               class="uk-button uk-border-rounded green accent-2 white-text uk-text-bolder uk-width-1-1">
