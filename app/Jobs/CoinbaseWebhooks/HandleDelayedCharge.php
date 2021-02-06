@@ -103,9 +103,8 @@ class HandleDelayedCharge implements ShouldQueue
         $order->status = 'confirmed';
         $order->update();
       }
-      Log::info('handling...user reg payment...completed');
     } catch (\Exception $e) {
-      Log::error(sprintf('Error handling confirmed Charged: %s', $e->getMessage()));
+      Log::error(sprintf('Error handling delayed Charged: %s. File: %s. Line: ', $e->getMessage(), $e->getFile(), $e->getLine()));
     }
     Log::info('handling...charge delayed completed');
   }
