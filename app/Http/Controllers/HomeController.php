@@ -272,8 +272,20 @@ class HomeController extends Controller
       'mdata' => $mdata,
       'role' => auth()->user()->role,
       'trade_roi' => Trade::whereUserId(auth()->user()->id)->where('completed', false)->first()->earning ?? 0,
-      'today_funding' => Transaction::where('type', 'wallet_funding')->whereDate('created_at', now())->latest()->sum('amount'),
-      'week_funding' => Transaction::where('type', 'wallet_funding')->whereDate('created_at', '>=', now()->startOfWeek())->latest()->sum('amount'),
+      'today_funding' => Transaction::where([
+        ['type', 'wallet_funding'],
+        ['user_id' => auth()->user()->id],
+        ['status' => 'completed']
+      ])->whereDate('created_at', now())
+        ->latest()
+        ->sum('amount'),
+      'week_funding' => Transaction::where([
+        ['type', 'wallet_funding'],
+        ['user_id' => auth()->user()->id],
+        ['status' => 'completed']
+      ])->whereDate('created_at', '>=', now()->startOfWeek())
+        ->latest()
+        ->sum('amount'),
       'today_withdraw' => $this->withdraw_amount_today(),
       'week_widthdraw' => $this->withdraw_amount_week(),
       'downlines_count' => auth()->user()->downlines()->whereNotNull('membership_plan_id')->count(),
@@ -287,8 +299,8 @@ class HomeController extends Controller
       'potential_agent_count' => $this->potential_agents_count(),
       'active_user_count' => $this->active_user_count(),
       'non_active_user_count' => $this->non_active_user_count(),
-      'open_order' => Order::whereIn('status', ['confirmed', 'shipped'])->count(),
-      'closed_order' => Order::where('status', 'completed')->count(),
+      'open_order' => Order::where('user_id', auth()->user()->id)->whereIn('status', ['confirmed', 'shipped'])->count(),
+      'closed_order' => Order::where('user_id', auth()->user()->id)->where('status', 'completed')->count(),
       'avail_reg_credit' => RegistrationCredit::whereUserId(auth()->user()->id)->whereNull('used_by')->count(),
       'admin_local_pay_pending' => LocalPay::whereAgentId(auth()->user()->id)->whereStatus('creeated')->count(),
       'local_pay_pending' => LocalPay::whereUserId(auth()->user()->id)->whereStatus('creeated')->count(),
