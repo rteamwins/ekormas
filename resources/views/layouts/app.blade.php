@@ -631,9 +631,9 @@
                 class="uk-link-reset uk-text-bolder">support@thegreenlifemarket.shop</a>
             </p>
             <div class="uk-margin-bottom">
-              <a href="" class="uk-icon-button uk-margin-small-right" uk-icon="twitter" style="color: aqua;"></a>
-              <a href="" class="uk-icon-button  uk-margin-small-right" uk-icon="facebook" style="color:blue"></a>
-              <a href="" class="uk-icon-button" uk-icon="whatsapp" style="color:green; background-color: white;"></a>
+              <a href="#" class="uk-icon-button uk-margin-small-right" uk-icon="twitter" style="color: aqua;"></a>
+              <a href="#" class="uk-icon-button  uk-margin-small-right" uk-icon="facebook" style="color:blue"></a>
+              <a href="https://api.whatsapp.com/send?phone=+441277887553" class="uk-icon-button" uk-icon="whatsapp" style="color:green; background-color: white;"></a>
             </div>
           </div>
         </div>
