@@ -145,7 +145,7 @@ class User extends Authenticatable
     return Alert::whereStatus('active')->get();
   }
 
-  public function generate_placement_id()
+   public static function generate_placement_id()
   {
     return rand(1000000000, 9999999999);
   }
@@ -156,7 +156,7 @@ class User extends Authenticatable
     static::creating(function (User $model) {
       $pid = $model->generate_placement_id();
       while (User::where('placement_id', $pid)->exists()) {
-        $pid = $model->generate_placement_id();
+        $pid = static::generate_placement_id();
       }
       $model->placement_id = $pid;
     });

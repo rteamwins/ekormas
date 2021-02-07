@@ -76,6 +76,7 @@ class HandleConfirmedCharge implements ShouldQueue
         $user->wallet += $membership_plan->min_trading_capital;
         $user->activated_at = now();
         $user->update();
+        $user->refresh();
         $user->give_ancestor_referal_bonus();
         if ($user->parent->children->count() == 2) {
           $user->check_for_bonus_eligible_ancestors($user);
@@ -105,7 +106,6 @@ class HandleConfirmedCharge implements ShouldQueue
       }
     } catch (\Exception $e) {
       Log::channel('coinbase')->error(sprintf('Error handling confirmed Charged: %s. File: %s. Line: %s', $e->getMessage(), $e->getFile(), $e->getLine()));
-
     }
     Log::channel('coinbase')->info('handling...charge confirmed completed');
   }

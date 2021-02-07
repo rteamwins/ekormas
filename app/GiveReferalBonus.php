@@ -13,18 +13,19 @@ trait GiveReferalBonus
     $percent = [4, 2, 1, 0.5, 0.25];
     $ancestors = User::latest()->limit(5)->ancestorsOf($this->id);
     $referer =  User::where('id', $this->referer)->first();
+    $user =  User::with('membership_plan')->where('id', $this->id)->first();
 
     Log::channel('bonus')->info('Giving Direct Referal Bonus to user: ' . $referer->id);
     $new_trx = new Transaction();
-    Log::channel('bonus')->info("plan_fee: " . $this->membership_plan->fee ?? 0);
-    $new_trx->amount = (($this->membership_plan->fee ?? 0) * 0.10);
+    Log::channel('bonus')->info("plan_fee: " . $user->membership_plan->fee ?? 0);
+    $new_trx->amount = (($user->membership_plan->fee ?? 0) * 0.10);
     $new_trx->status = 'created';
     $new_trx->type = 'bonus';
     $new_trx->user_id = $referer->id;
 
     $new_bonus_trx = new Bonus();
-    $new_bonus_trx->user_id = $this->referer;
-    $new_bonus_trx->amount = (($this->membership_plan->fee ?? 0) * 0.10);
+    $new_bonus_trx->user_id = $user->referer;
+    $new_bonus_trx->amount = (($user->membership_plan->fee ?? 0) * 0.10);
     $new_bonus_trx->status = 'created';
     $new_bonus_trx->type = 'referal_direct';
 
@@ -39,14 +40,14 @@ trait GiveReferalBonus
     foreach ($ancestors as $key => $ancestor) {
       Log::channel('bonus')->info('Giving Ancestor Referal Bonus to user: ' . $ancestor->id);
       $new_trx = new Transaction();
-      $new_trx->amount = (($this->membership_plan->fee ?? 0) * ($percent[$key] / 100));
+      $new_trx->amount = (($user->membership_plan->fee ?? 0) * ($percent[$key] / 100));
       $new_trx->status = 'created';
       $new_trx->type = 'bonus';
       $new_trx->user_id = $ancestor->id;
 
       $new_bonus_trx = new Bonus();
       $new_bonus_trx->user_id = $ancestor->id;
-      $new_bonus_trx->amount = (($this->membership_plan->fee ?? 0) * ($percent[$key] / 100));
+      $new_bonus_trx->amount = (($user->membership_plan->fee ?? 0) * ($percent[$key] / 100));
       $new_bonus_trx->status = 'created';
 
       Log::channel('bonus')->info('Giving Ancestor Referal Bonus to user: ' . $ancestor->id);
