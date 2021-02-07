@@ -19,7 +19,7 @@ class MarkTradeAsCompleted extends Command
    *
    * @var string
    */
-  protected $description = 'Mark Trade with closing at <= now and award profits';
+  protected $description = 'Mark Trade with closing at less than or equal now and award profits';
 
   /**
    * Create a new command instance.

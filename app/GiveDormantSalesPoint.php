@@ -15,7 +15,7 @@ trait GiveDormantSalesPoint
    */
   public function give_dormant_sales_point($amount)
   {
-    Log::info("Preparing Daily Dormant Sale Bonus for User: " . $this->id . " Starting...");
+    Log::channel('point')->info("Preparing Daily Dormant Sale Bonus for User: " . $this->id . " Starting...");
     // $parent =  static::where('id', $model->parent_id)->first();
     $new_trx = new Transaction();
     $new_trx->amount =  $amount;
@@ -34,7 +34,7 @@ trait GiveDormantSalesPoint
     $new_trx->update();
     $this->dormant_points += $new_trx->amount;
     $this->update();
-    Log::info("Awarded Daily Dormant Sale Bonus: " . $amount . "DPV to User: " . $this->id . " Starting...");
-    Log::info("Preparing Daily Dormant Sale Bonus for User: " . $this->id . " Completed");
+    Log::channel('point')->info("Awarded Daily Dormant Sale Bonus: " . $amount . "DPV to User: " . $this->id . " Starting...");
+    Log::channel('point')->info("Preparing Daily Dormant Sale Bonus for User: " . $this->id . " Completed");
   }
 }

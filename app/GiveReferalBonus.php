@@ -14,9 +14,9 @@ trait GiveReferalBonus
     $ancestors = User::latest()->limit(5)->ancestorsOf($this->id);
     $referer =  User::where('id', $this->referer)->first();
 
-    Log::info('Giving Direct Referal Bonus to user: ' . $referer->id);
+    Log::channel('bonus')->info('Giving Direct Referal Bonus to user: ' . $referer->id);
     $new_trx = new Transaction();
-    Log::info("plan_fee: " . $this->membership_plan->fee ?? 0);
+    Log::channel('bonus')->info("plan_fee: " . $this->membership_plan->fee ?? 0);
     $new_trx->amount = (($this->membership_plan->fee ?? 0) * 0.10);
     $new_trx->status = 'created';
     $new_trx->type = 'bonus';
@@ -34,10 +34,10 @@ trait GiveReferalBonus
     $new_trx->update();
     $referer->bonus += $new_trx->amount;
     $referer->update();
-    Log::info('Giving Direct Referal Bonus: $' . $new_bonus_trx->amount . ' to user: ' . $referer->id . " completed");
+    Log::channel('bonus')->info('Giving Direct Referal Bonus: $' . $new_bonus_trx->amount . ' to user: ' . $referer->id . " completed");
 
     foreach ($ancestors as $key => $ancestor) {
-      Log::info('Giving Ancestor Referal Bonus to user: ' . $ancestor->id);
+      Log::channel('bonus')->info('Giving Ancestor Referal Bonus to user: ' . $ancestor->id);
       $new_trx = new Transaction();
       $new_trx->amount = (($this->membership_plan->fee ?? 0) * ($percent[$key] / 100));
       $new_trx->status = 'created';
@@ -49,7 +49,7 @@ trait GiveReferalBonus
       $new_bonus_trx->amount = (($this->membership_plan->fee ?? 0) * ($percent[$key] / 100));
       $new_bonus_trx->status = 'created';
 
-      Log::info('Giving Ancestor Referal Bonus to user: ' . $ancestor->id);
+      Log::channel('bonus')->info('Giving Ancestor Referal Bonus to user: ' . $ancestor->id);
       $new_bonus_trx->type = 'referal_indirect';
 
       $new_bonus_trx->save();
@@ -58,13 +58,13 @@ trait GiveReferalBonus
       $new_trx->update();
       $ancestor->bonus += $new_trx->amount;
       $ancestor->update();
-      Log::info('Giving Ancestor Referal Bonus: $' . $new_bonus_trx->amount . ' to user: ' . $ancestor->id . " completed");
+      Log::channel('bonus')->info('Giving Ancestor Referal Bonus: $' . $new_bonus_trx->amount . ' to user: ' . $ancestor->id . " completed");
     }
   }
 
   public function check_for_bonus_eligible_ancestors($user)
   {
-    Log::info('Check Potential Matching Bonus Ancestor...');
+    Log::channel('bonus')->info('Check Potential Matching Bonus Ancestor...');
     $ancestors = User::defaultOrder()->with(['membership_plan'])
       ->ancestorsOf($user->id, ['id', '_rgt', '_lft', 'parent_id', 'placement_id', 'username', 'name', 'phone', 'membership_plan_id', 'created_at', 'activated_at']);
     foreach ($ancestors as $ancestor) {
@@ -86,7 +86,7 @@ trait GiveReferalBonus
 
           if ($leg_count[$ancestor->username]['left'] == $leg_count[$ancestor->username]['right']) {
             if ($this->has_any_stage_required_node($leg_count[$ancestor->username]['left'] + $leg_count[$ancestor->username]['right'])) {
-              Log::info('Eligible Matching Bonus Ancestor found');
+              Log::channel('bonus')->info('Eligible Matching Bonus Ancestor found');
               $ancestor->calculate_matching_bonus($leg_count[$ancestor->username]['left'] + $leg_count[$ancestor->username]['right']);
             }
           }
@@ -101,6 +101,6 @@ trait GiveReferalBonus
         $leg_count[$ancestor->username]['left_amount'] = $leg_count[$ancestor->username]['right_amount'] = 0;
       }
     }
-    Log::info('Check Ended');
+    Log::channel('bonus')->info('Check Ended');
   }
 }

@@ -8,6 +8,7 @@ use App\GiveReferalBonus;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Log;
 use Kalnoy\Nestedset\NodeTrait;
 use Laravel\Passport\HasApiTokens;
 
@@ -158,6 +159,13 @@ class User extends Authenticatable
         $pid = $model->generate_placement_id();
       }
       $model->placement_id = $pid;
+    });
+
+    static::created(function (User $model) {
+      Log::channel('referal')->info("New User Created");
+      Log::channel('referal')->info("User Id: " . $model->id);
+      Log::channel('referal')->info("Referal Id: " . $model->referer);
+      Log::channel('referal')->info("===================================================");
     });
   }
 }

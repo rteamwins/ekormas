@@ -18,7 +18,7 @@ trait GiveMatchingBonus
    */
   public function give_stage_matching_bonus($amount, $stage, $matching_type)
   {
-    Log::info('Awarding Matching Bonus For User: ' . $this->id);
+    Log::channel('bonus')->info('Awarding Matching Bonus For User: ' . $this->id);
     $new_trx = new Transaction();
     $new_trx->amount =  $amount;
     $new_trx->status = 'created';
@@ -36,6 +36,6 @@ trait GiveMatchingBonus
     $new_trx->update();
     $this->bonus += $new_trx->amount;
     $this->update();
-    Log::info('Awarding User: ' . $this->id . " {$matching_type} {$stage} " . " Matching Bonus: " . $amount . " Completed");
+    Log::channel('bonus')->info('Awarding User: ' . $this->id . " {$matching_type} {$stage} " . " Matching Bonus: " . $amount . " Completed");
   }
 }

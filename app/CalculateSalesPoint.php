@@ -17,7 +17,7 @@ trait CalculateSalesPoint
    */
   public function calculate_sales_bonus()
   {
-    Log::info("Calculating Daily Sale Bonus for User: " . $this->id . " Starting...");
+    Log::channel('point')->info("Calculating Daily Sale Bonus for User: " . $this->id . " Starting...");
     if ($this->children->count() < 2) {
       $left_desc = static::withDepth()
         ->descendantsOf($this->children->first());
@@ -27,7 +27,7 @@ trait CalculateSalesPoint
         }
       });
       $stong_amount = $amount['left_amount'];
-      Log::info("Calculated Left Amount: " . $amount['left_amount'] . " Right Amount: 0");
+      Log::channel('point')->info("Calculated Left Amount: " . $amount['left_amount'] . " Right Amount: 0");
       if (($stong_amount / 2) > 0) {
         $this->give_dormant_sales_point(($stong_amount / 2));
       }
@@ -48,7 +48,7 @@ trait CalculateSalesPoint
       });
       $weak_amount = $amount['left_amount'] <= $amount['right_amount'] ? $amount['left_amount'] : $amount['right_amount'];
 
-      Log::info("Calculated Left Amount: " . $amount['left_amount'] . " Right Amount: " . $amount['right_amount']);
+      Log::channel('point')->info("Calculated Left Amount: " . $amount['left_amount'] . " Right Amount: " . $amount['right_amount']);
       if (($weak_amount * 0.05) > 0) {
         $this->give_active_sales_point(($weak_amount * 0.05));
       }
@@ -58,6 +58,6 @@ trait CalculateSalesPoint
       }
     }
 
-    Log::info("Calculating Daily Sale Bonus for User: " . $this->id . " Completed");
+    Log::channel('point')->info("Calculating Daily Sale Bonus for User: " . $this->id . " Completed");
   }
 }

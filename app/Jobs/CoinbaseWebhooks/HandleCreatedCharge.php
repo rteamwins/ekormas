@@ -35,7 +35,7 @@ class HandleCreatedCharge implements ShouldQueue
    */
   public function handle()
   {
-    Log::info('handling...charge created starting');
+    Log::channel('coinbase')->info('handling...charge created starting');
     try {
       $payload_obj = $this->webhookCall->payload;
       $transaction = Transaction::where(
@@ -50,12 +50,12 @@ class HandleCreatedCharge implements ShouldQueue
       $crypto_transaction = $transaction->method;
       $crypto_transaction->status = 'created';
       $crypto_transaction->update();
-      Log::info("crypto_trnx: " . $crypto_transaction->id);
-      Log::info("crypto_trnx_user: " . $transaction->user_id);
-      // Log::info(sprintf('Handled Created Charged: ', $payload_obj['event']['data']['id']));
+      Log::channel('coinbase')->info("crypto_trnx: " . $crypto_transaction->id);
+      Log::channel('coinbase')->info("crypto_trnx_user: " . $transaction->user_id);
+      // Log::channel('coinbase')->info(sprintf('Handled Created Charged: ', $payload_obj['event']['data']['id']));
     } catch (\Exception $e) {
-      Log::error(sprintf('Error handling Created Charge: ', $e->getMessage()));
+      Log::channel('coinbase')->error(sprintf('Error handling Created Charge: ', $e->getMessage()));
     }
-    Log::info('handling...charge created completed');
+    Log::channel('coinbase')->info('handling...charge created completed');
   }
 }

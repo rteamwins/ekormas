@@ -39,12 +39,12 @@ class AwardDailySalesPoint extends Command
    */
   public function handle()
   {
-    Log::info('Award Daily Points job Started');
+    Log::channel('point')->info('Award Daily Points job Started');
     $users = User::get();
     foreach ($users as $user) {
       $user->calculate_sales_bonus();
     }
-    Log::info('Award Daily Points job Ended');
+    Log::channel('point')->info('Award Daily Points job Ended');
     return 0;
   }
 }

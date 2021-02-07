@@ -43,7 +43,7 @@ class HandleConfirmedCharge implements ShouldQueue
    */
   public function handle()
   {
-    Log::info('handling...charge confirmed starting');
+    Log::channel('coinbase')->info('handling...charge confirmed starting');
     try {
       $payload_obj = $this->webhookCall->payload;
       $amount_confirmed = 0;
@@ -66,12 +66,12 @@ class HandleConfirmedCharge implements ShouldQueue
       $crypto_transaction = $transaction->method;
       $crypto_transaction->status = 'confirmed';
       $crypto_transaction->update();
-      Log::info("crypto_trnx: " . $crypto_transaction->id);
-      Log::info("crypto_trnx_user: " . $transaction->user_id);
+      Log::channel('coinbase')->info("crypto_trnx: " . $crypto_transaction->id);
+      Log::channel('coinbase')->info("crypto_trnx_user: " . $transaction->user_id);
       if ($transaction->type == 'user_registration_fee') {
-        Log::info('handling...user reg payment');
+        Log::channel('coinbase')->info('handling...user reg payment');
         $membership_plan = MembershipPlan::whereSlug($payload_obj['event']['data']['metadata']['membership_plan'])->first();
-        Log::info('processing...user reg payment: ' . $user->username);
+        Log::channel('coinbase')->info('processing...user reg payment: ' . $user->username);
         $user->membership_plan_id = $membership_plan->id;
         $user->wallet += $membership_plan->min_trading_capital;
         $user->activated_at = now();
@@ -81,12 +81,12 @@ class HandleConfirmedCharge implements ShouldQueue
           $user->check_for_bonus_eligible_ancestors($user);
         }
       } else if ($transaction->type == 'user_wallet_funding') {
-        Log::info('handling...user wallet fund');
+        Log::channel('coinbase')->info('handling...user wallet fund');
         $transaction->update(['amount' => $amount_confirmed]);
-        Log::info('handling...user wallet fund trnx_id: ' . $user->username);
+        Log::channel('coinbase')->info('handling...user wallet fund trnx_id: ' . $user->username);
         $user->wallet += $amount_confirmed;
         $user->update();
-        Log::info('handling...user wallet fund...completed');
+        Log::channel('coinbase')->info('handling...user wallet fund...completed');
       } else if ($transaction->type == 'registration_credit_purchase') {
         $rc_purchase = RegistrationCreditPurchase::whereId($payload_obj['event']['data']['metadata']['rcp_id'])->first();
         $membership_plan = MembershipPlan::whereSlug($rc_purchase->plan)->first();
@@ -104,9 +104,9 @@ class HandleConfirmedCharge implements ShouldQueue
         $order->update();
       }
     } catch (\Exception $e) {
-      Log::error(sprintf('Error handling confirmed Charged: %s. File: %s. Line: %s', $e->getMessage(), $e->getFile(), $e->getLine()));
+      Log::channel('coinbase')->error(sprintf('Error handling confirmed Charged: %s. File: %s. Line: %s', $e->getMessage(), $e->getFile(), $e->getLine()));
 
     }
-    Log::info('handling...charge confirmed completed');
+    Log::channel('coinbase')->info('handling...charge confirmed completed');
   }
 }

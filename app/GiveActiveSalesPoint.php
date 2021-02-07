@@ -15,7 +15,7 @@ trait GiveActiveSalesPoint
    */
   public function give_active_sales_point($amount)
   {
-    Log::info("Preparing Daily Active Sale Bonus for User: " . $this->id . " Starting...");
+    Log::channel('point')->info("Preparing Daily Active Sale Bonus for User: " . $this->id . " Starting...");
     // $parent =  static::where('id', $model->parent_id)->first();
     $new_trx = new Transaction();
     $new_trx->amount =  $amount;
@@ -34,7 +34,7 @@ trait GiveActiveSalesPoint
     $new_trx->update();
     $this->active_points += $new_trx->amount;
     $this->update();
-    Log::info("Awarded Daily Active Sale Bonus: " . $amount . "APV to User: " . $this->id . " Starting...");
-    Log::info("Preparing Daily Active Sale Bonus for User: " . $this->id . " Completed");
+    Log::channel('point')->info("Awarded Daily Active Sale Bonus: " . $amount . "APV to User: " . $this->id . " Starting...");
+    Log::channel('point')->info("Preparing Daily Active Sale Bonus for User: " . $this->id . " Completed");
   }
 }
