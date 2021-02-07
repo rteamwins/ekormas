@@ -436,7 +436,6 @@ class HomeController extends Controller
 
         $user = User::where('id', Auth()->user()->id)->first();
         $user->membership_plan_id = $membership_plan->id;
-        $user->referer = $new_rc_trx->user_id;
         $user->activated_at = now();
         $user->wallet += $membership_plan->min_trading_capital;
         $user->update();
