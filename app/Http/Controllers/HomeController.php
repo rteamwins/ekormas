@@ -273,16 +273,16 @@ class HomeController extends Controller
       'role' => auth()->user()->role,
       'trade_roi' => Trade::whereUserId(auth()->user()->id)->where('completed', false)->first()->earning ?? 0,
       'today_funding' => Transaction::where([
-        ['type', 'wallet_funding'],
-        ['user_id' => auth()->user()->id],
-        ['status' => 'completed']
+        ['type','wallet_funding'],
+        ['user_id',auth()->user()->id],
+        ['status','completed']
       ])->whereDate('created_at', now())
         ->latest()
         ->sum('amount'),
       'week_funding' => Transaction::where([
-        ['type', 'wallet_funding'],
-        ['user_id' => auth()->user()->id],
-        ['status' => 'completed']
+        ['type','wallet_funding'],
+        ['user_id',auth()->user()->id],
+        ['status','completed']
       ])->whereDate('created_at', '>=', now()->startOfWeek())
         ->latest()
         ->sum('amount'),
