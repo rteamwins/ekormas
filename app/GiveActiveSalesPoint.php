@@ -27,7 +27,7 @@ trait GiveActiveSalesPoint
     $new_point_trx->user_id = $this->id;
     $new_point_trx->amount = $amount;
     $new_point_trx->status = 'created';
-    $new_point_trx->type = 'daily_sales_active_strong_leg';
+    $new_point_trx->type = 'daily_sales_active_weak_leg';
     $new_point_trx->save();
     $new_point_trx->transaction()->save($new_trx);
     $new_trx->status = 'completed';
