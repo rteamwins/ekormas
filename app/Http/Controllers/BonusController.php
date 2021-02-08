@@ -90,7 +90,7 @@ class BonusController extends Controller
         $new_trx = new Transaction();
         $new_trx->amount = ($request->funding_amount * 0.02);
         $new_trx->status = 'created';
-        $new_trx->type = 'bonus_convert';
+        $new_trx->type = 'bonus';
         $new_trx->user_id = $admin->id;
 
         $new_bonus_trx = new Bonus();
