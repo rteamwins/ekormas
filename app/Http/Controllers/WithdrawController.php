@@ -78,7 +78,7 @@ class WithdrawController extends Controller
     ]);
 
 
-    $user = User::find(Auth()->user()->id)->first();
+    $user = User::where('id',Auth()->user()->id)->first();
     if ($request->withdraw_type == 'bitcoin') {
       $withdraw = new Withdraw();
       $withdraw->amount = $request->amount;
@@ -108,7 +108,6 @@ class WithdrawController extends Controller
       $withdraw->status = 'created';
       $withdraw->save();
     }
-    $user = User::find(Auth()->user()->id);
     $user->wallet -= ($withdraw->amount + $withdraw->fee);
     $user->update();
 
