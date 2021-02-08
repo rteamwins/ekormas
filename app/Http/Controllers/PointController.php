@@ -56,9 +56,9 @@ class PointController extends Controller
    */
   public function store_convert_points_to_wallet_funds(Request $request)
   {
-    $max = (Auth()->user()->wallet);
+    $max = (Auth()->user()->wallet) * 0.02;
     request()->validate([
-      'funding_amount' => 'required|numeric|min:100|max:' . $max,
+      'funding_amount' => 'required|numeric|min:10|max:' . $max,
     ]);
 
     if ($request->has('funding_amount')) {
@@ -83,43 +83,44 @@ class PointController extends Controller
         $user->wallet += $new_trx->amount;
         $user->update();
 
-        $new_trx = new Transaction();
-        $new_trx->amount = ($request->funding_amount * 0.02);
-        $new_trx->status = 'created';
-        $new_trx->type = 'funding_fee';
-        $new_trx->user_id = Auth()->id();
+        //collect service charge
+        $new_sc_trx = new Transaction();
+        $new_sc_trx->amount = - ($request->funding_amount * 0.02);
+        $new_sc_trx->status = 'created';
+        $new_sc_trx->type = 'funding_fee';
+        $new_sc_trx->user_id = $user->id;
 
-        $new_bonus_trx = new Point();
-        $new_bonus_trx->user_id = Auth()->user()->id;
-        $new_bonus_trx->amount = - ($request->funding_amount * 0.02);
-        $new_bonus_trx->status = 'created';
-        $new_bonus_trx->type = 'point_convert_fee';
-        $new_bonus_trx->save();
-        $new_bonus_trx->transaction()->save($new_trx);
-        $new_trx->status = 'completed';
-        $new_trx->update();
+        $new_sc_point_trx = new Point();
+        $new_sc_point_trx->user_id = $user->id;
+        $new_sc_point_trx->amount = - ($request->funding_amount * 0.02);
+        $new_sc_point_trx->status = 'created';
+        $new_sc_point_trx->type = 'point_convert_fee';
+        $new_sc_point_trx->save();
+        $new_sc_point_trx->transaction()->save($new_sc_trx);
+        $new_sc_trx->status = 'completed';
+        $new_sc_trx->update();
         // $user = User::find(Auth()->user()->id)->first();
-        Auth()->user()->active_points -= $new_trx->amount;
-        Auth()->user()->wallet += $new_trx->amount;
-        Auth()->user()->update();
+        $user->active_points -= ($request->funding_amount * 0.02);
+        $user->update();
 
+        //receive service charge
         $admin = User::whereRole("admin")->firstOrFail();
-        $new_trx = new Transaction();
-        $new_trx->amount = ($request->funding_amount * 0.02);
-        $new_trx->status = 'created';
-        $new_trx->type = 'point_convert';
-        $new_trx->user_id = $admin->id;
+        $new_scr_trx = new Transaction();
+        $new_scr_trx->amount = ($request->funding_amount * 0.02);
+        $new_scr_trx->status = 'created';
+        $new_scr_trx->type = 'point_convert';
+        $new_scr_trx->user_id = $admin->id;
 
-        $new_bonus_trx = new Point();
-        $new_bonus_trx->user_id = $admin->id;
-        $new_bonus_trx->amount = ($request->funding_amount * 0.02);
-        $new_bonus_trx->status = 'created';
-        $new_bonus_trx->type = 'point_convert_charge';
-        $new_bonus_trx->save();
-        $new_bonus_trx->transaction()->save($new_trx);
-        $new_trx->status = 'completed';
-        $new_trx->update();
-        $admin->bonus += $new_trx->amount;
+        $new_scr_point_trx = new Point();
+        $new_scr_point_trx->user_id = $admin->id;
+        $new_scr_point_trx->amount = ($request->funding_amount * 0.02);
+        $new_scr_point_trx->status = 'created';
+        $new_scr_point_trx->type = 'point_convert_charge';
+        $new_scr_point_trx->save();
+        $new_scr_point_trx->transaction()->save($new_scr_trx);
+        $new_scr_trx->status = 'completed';
+        $new_scr_trx->update();
+        $admin->bonus += $new_scr_trx->amount;
         $admin->update();
         return redirect()->route('user_home')->with('success', "Your wallet was successfully funded with {$request->amount} from your points");
       } catch (\Exception $e) {

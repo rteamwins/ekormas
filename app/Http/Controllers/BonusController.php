@@ -67,42 +67,43 @@ class BonusController extends Controller
         $user->update();
 
         //collect service charge
-        $new_trx = new Transaction();
-        $new_trx->amount = ($request->funding_amount * 0.02);
-        $new_trx->status = 'created';
-        $new_trx->type = 'funding_fee';
-        $new_trx->user_id = Auth()->id();
+        $new_sc_trx = new Transaction();
+        $new_sc_trx->amount = - ($request->funding_amount * 0.02);
+        $new_sc_trx->status = 'created';
+        $new_sc_trx->type = 'funding_fee';
+        $new_sc_trx->user_id = $user->id;
 
-        $new_bonus_trx = new Bonus();
-        $new_bonus_trx->user_id = $user->id;
-        $new_bonus_trx->amount = - ($request->funding_amount * 0.02);
-        $new_bonus_trx->status = 'created';
-        $new_bonus_trx->type = 'bonus_convert_fee';
-        $new_bonus_trx->save();
-        $new_bonus_trx->transaction()->save($new_trx);
-        $new_trx->status = 'completed';
-        $new_trx->update();
+        $new_sc_bonus_trx = new Bonus();
+        $new_sc_bonus_trx->user_id = $user->id;
+        $new_sc_bonus_trx->amount = - ($request->funding_amount * 0.02);
+        $new_sc_bonus_trx->status = 'created';
+        $new_sc_bonus_trx->type = 'bonus_convert_fee';
+        $new_sc_bonus_trx->save();
+        $new_sc_bonus_trx->transaction()->save($new_sc_trx);
+        $new_sc_trx->status = 'completed';
+        $new_sc_trx->update();
         // $user = User::find(Auth()->user()->id)->first();
-        $user->bonus -= $new_trx->amount;
+        $user->bonus -= ($request->funding_amount * 0.02);
         $user->update();
 
+        //receive service charge
         $admin = User::whereRole("admin")->firstOrFail();
-        $new_trx = new Transaction();
-        $new_trx->amount = ($request->funding_amount * 0.02);
-        $new_trx->status = 'created';
-        $new_trx->type = 'bonus';
-        $new_trx->user_id = $admin->id;
+        $new_scr_trx = new Transaction();
+        $new_scr_trx->amount = ($request->funding_amount * 0.02);
+        $new_scr_trx->status = 'created';
+        $new_scr_trx->type = 'bonus';
+        $new_scr_trx->user_id = $admin->id;
 
-        $new_bonus_trx = new Bonus();
-        $new_bonus_trx->user_id = $admin->id;
-        $new_bonus_trx->amount = ($request->funding_amount * 0.02);
-        $new_bonus_trx->status = 'created';
-        $new_bonus_trx->type = 'bonus_convert_charge';
-        $new_bonus_trx->save();
-        $new_bonus_trx->transaction()->save($new_trx);
-        $new_trx->status = 'completed';
-        $new_trx->update();
-        $admin->bonus += $new_trx->amount;
+        $new_scr_bonus_trx = new Bonus();
+        $new_scr_bonus_trx->user_id = $admin->id;
+        $new_scr_bonus_trx->amount = ($request->funding_amount * 0.02);
+        $new_scr_bonus_trx->status = 'created';
+        $new_scr_bonus_trx->type = 'bonus_convert_charge';
+        $new_scr_bonus_trx->save();
+        $new_scr_bonus_trx->transaction()->save($new_trx);
+        $new_scr_trx->status = 'completed';
+        $new_scr_trx->update();
+        $admin->bonus += $new_scr_trx->amount;
         $admin->update();
         return redirect()->route('user_home')->with('success', "Your wallet was successfully funded with {$request->amount} from your bonus");
       } catch (\Exception $e) {
