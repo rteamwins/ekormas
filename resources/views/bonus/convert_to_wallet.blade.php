@@ -31,7 +31,7 @@
                   <span class="uk-form-icon">$</span>
                   <input class="uk-input uk-border-rounded @error('funding_amount') uk-form-danger @enderror"
                     name="funding_amount" id="funding_amount" type="number" value="{{ old('funding_amount') }}"
-                    min="100" required autofocus>
+                    min="10" max="{{auth()->user()->bonus}}" required autofocus>
                 </div>
                 @error('funding_amount')
                 <span class="uk-text-danger">{{ $message }}</span>
