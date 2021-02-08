@@ -69,7 +69,7 @@ class WithdrawController extends Controller
     $max = (Auth()->user()->wallet * ((100 - 5) / 100));
     $this->validate($request, [
       'withdraw_type' => 'required|string|in:bitcoin,kyc,local',
-      'amount' => 'required|numeric|min:100|max:' . $max,
+      'amount' => 'required|numeric|min:10|max:' . $max,
       'agent' => 'required_if:withdraw_type,local|alpha_dash|exists:users,username',
       'medium_name' => 'required_if:withdraw_type,local|string',
       'medium_account_name' => 'required_if:withdraw_type,local|string',
