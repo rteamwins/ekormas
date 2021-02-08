@@ -39,7 +39,7 @@ class BonusController extends Controller
    */
   public function store_convert_to_wallet_funds(Request $request)
   {
-    $max = (Auth()->user()->bonus);
+    $max = ((Auth()->user()->bonus) * 0.98);
     request()->validate([
       'funding_amount' => 'required|numeric|min:10|max:' . $max,
     ]);
@@ -66,6 +66,7 @@ class BonusController extends Controller
         $user->wallet += $new_trx->amount;
         $user->update();
 
+        //collect service charge
         $new_trx = new Transaction();
         $new_trx->amount = ($request->funding_amount * 0.02);
         $new_trx->status = 'created';
@@ -73,7 +74,7 @@ class BonusController extends Controller
         $new_trx->user_id = Auth()->id();
 
         $new_bonus_trx = new Bonus();
-        $new_bonus_trx->user_id = Auth()->user()->id;
+        $new_bonus_trx->user_id = $user->id;
         $new_bonus_trx->amount = - ($request->funding_amount * 0.02);
         $new_bonus_trx->status = 'created';
         $new_bonus_trx->type = 'bonus_convert_fee';
@@ -82,9 +83,8 @@ class BonusController extends Controller
         $new_trx->status = 'completed';
         $new_trx->update();
         // $user = User::find(Auth()->user()->id)->first();
-        Auth()->user()->active_points -= $new_trx->amount;
-        Auth()->user()->wallet += $new_trx->amount;
-        Auth()->user()->update();
+        $user->bonus -= $new_trx->amount;
+        $user->update();
 
         $admin = User::whereRole("admin")->firstOrFail();
         $new_trx = new Transaction();
