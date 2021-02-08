@@ -66,6 +66,44 @@ class BonusController extends Controller
         $user->wallet += $new_trx->amount;
         $user->update();
 
+        $new_trx = new Transaction();
+        $new_trx->amount = ($request->funding_amount * 0.02);
+        $new_trx->status = 'created';
+        $new_trx->type = 'funding_fee';
+        $new_trx->user_id = Auth()->id();
+
+        $new_bonus_trx = new Bonus();
+        $new_bonus_trx->user_id = Auth()->user()->id;
+        $new_bonus_trx->amount = - ($request->funding_amount * 0.02);
+        $new_bonus_trx->status = 'created';
+        $new_bonus_trx->type = 'bonus_convert_fee';
+        $new_bonus_trx->save();
+        $new_bonus_trx->transaction()->save($new_trx);
+        $new_trx->status = 'completed';
+        $new_trx->update();
+        // $user = User::find(Auth()->user()->id)->first();
+        Auth()->user()->active_points -= $new_trx->amount;
+        Auth()->user()->wallet += $new_trx->amount;
+        Auth()->user()->update();
+
+        $admin = User::whereRole("admin")->firstOrFail();
+        $new_trx = new Transaction();
+        $new_trx->amount = ($request->funding_amount * 0.02);
+        $new_trx->status = 'created';
+        $new_trx->type = 'bonus_convert';
+        $new_trx->user_id = $admin->id;
+
+        $new_bonus_trx = new Bonus();
+        $new_bonus_trx->user_id = $admin->id;
+        $new_bonus_trx->amount = ($request->funding_amount * 0.02);
+        $new_bonus_trx->status = 'created';
+        $new_bonus_trx->type = 'bonus_convert_charge';
+        $new_bonus_trx->save();
+        $new_bonus_trx->transaction()->save($new_trx);
+        $new_trx->status = 'completed';
+        $new_trx->update();
+        $admin->bonus += $new_trx->amount;
+        $admin->update();
         return redirect()->route('user_home')->with('success', "Your wallet was successfully funded with {$request->amount} from your bonus");
       } catch (\Exception $e) {
         return back()->with('error', sprintf('Could not fund your wallet: %s', $e->getMessage()));
