@@ -76,19 +76,22 @@ class WithdrawController extends Controller
       'medium_account_number' => 'required_if:withdraw_type,local|string',
       'btc_address' => 'required_if:withdraw_type,bitcoin|alpha_num|min:20',
     ]);
+
+
+    $user = User::find(Auth()->user()->id)->first();
     if ($request->withdraw_type == 'bitcoin') {
       $withdraw = new Withdraw();
       $withdraw->amount = $request->amount;
       $withdraw->fee = ((5 / 100) * $request->amount);
       $withdraw->destination_wallet_address = $request->btc_address;
       $withdraw->status = 'created';
-      $withdraw->user_id = Auth()->user()->id;
+      $withdraw->user_id = $user->id;
       $withdraw->save();
     } else if ($request->withdraw_type == 'kyc') {
       $withdraw = new KYC();
       $withdraw->amount = $request->amount;
       $withdraw->fee = ((5 / 100) * $request->amount);
-      $withdraw->user_id = $request->user()->id;
+      $withdraw->user_id = $user->id;
       $withdraw->status = 'created';
       $withdraw->save();
     } else {
@@ -109,6 +112,7 @@ class WithdrawController extends Controller
     $user->wallet -= ($withdraw->amount + $withdraw->fee);
     $user->update();
 
+    //recieve service charge
     $admin = User::whereRole("admin")->firstOrFail();
     $new_trx = new Transaction();
     $new_trx->amount = ($withdraw->fee / 2);
