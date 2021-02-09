@@ -49,7 +49,7 @@ class MarkTradeAsCompleted extends Command
       $trade->user->update();
       $trade->completed = true;
       $trade->update();
-      Log::info(sprintf('Added $%s to User: %s', number_format($trade->amount + $trade->earning), $trade->user->id));
+      Log::info(sprintf('Added $%s to User: %s', number_format($trade->amount + $trade->earning,2), $trade->user->id));
       Log::info(sprintf('Marked Trade: %s as Completed', $trade->id));
       $counter++;
     }
