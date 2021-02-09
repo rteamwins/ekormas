@@ -45,7 +45,7 @@ class MarkTradeAsCompleted extends Command
     foreach ($trades as $trade) {
       Log::info(sprintf('Processing Data: %s ', $counter));
       $trade->user->wallet += ($trade->amount + $trade->earning);
-      $trade->user->trading_capital -= $trade->amount;
+      $trade->user->trading_capital = 0;
       $trade->user->update();
       $trade->completed = true;
       $trade->update();
