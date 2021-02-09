@@ -78,7 +78,7 @@ class PointController extends Controller
         $new_bonus_trx->transaction()->save($new_trx);
         $new_trx->status = 'completed';
         $new_trx->update();
-        $user = User::find(Auth()->user()->id)->first();
+        $user = User::where('id',Auth()->user()->id)->first();
         $user->active_points -= $new_trx->amount;
         $user->wallet += $new_trx->amount;
         $user->update();
@@ -99,7 +99,7 @@ class PointController extends Controller
         $new_sc_point_trx->transaction()->save($new_sc_trx);
         $new_sc_trx->status = 'completed';
         $new_sc_trx->update();
-        // $user = User::find(Auth()->user()->id)->first();
+        // $user = User::where('id',Auth()->user()->id)->first();
         $user->active_points -= ($request->funding_amount * 0.02);
         $user->update();
 

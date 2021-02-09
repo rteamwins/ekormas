@@ -61,7 +61,7 @@ class BonusController extends Controller
         $new_bonus_trx->transaction()->save($new_trx);
         $new_trx->status = 'completed';
         $new_trx->update();
-        $user = User::find(Auth()->user()->id)->first();
+        $user = User::where('id',Auth()->user()->id)->first();
         $user->bonus -= $new_trx->amount;
         $user->wallet += $new_trx->amount;
         $user->update();
@@ -82,7 +82,7 @@ class BonusController extends Controller
         $new_sc_bonus_trx->transaction()->save($new_sc_trx);
         $new_sc_trx->status = 'completed';
         $new_sc_trx->update();
-        // $user = User::find(Auth()->user()->id)->first();
+        // $user = User::where('id',Auth()->user()->id)->first();
         $user->bonus -= ($request->funding_amount * 0.02);
         $user->update();
 

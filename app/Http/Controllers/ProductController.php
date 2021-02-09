@@ -102,7 +102,7 @@ class ProductController extends Controller
         $image->move($image_path, $image_name);
         $images[] = $image_name;
       }
-      $new_product = Product::find($new_product->id);
+      $new_product = Product::where('id',$new_product->id)->first();
       $new_product->images = $images;
       $new_product->update();
       return redirect()->route('list_product')->with('success', 'Product Created successfully!');

@@ -104,7 +104,7 @@ class LocalPayController extends Controller
     $local_pay->status = 'cancelled';
     $local_pay->update();
 
-    $user = User::find($local_pay->user->id);
+    $user = User::where('id',$local_pay->user->id)->first();
     $user->wallet += ($local_pay->amount + ($local_pay->fee / 2));
     $user->update();
 

@@ -180,7 +180,7 @@ class WithdrawController extends Controller
     $bitcoin_withdraw->status = 'cancelled';
     $bitcoin_withdraw->update();
 
-    $user = User::find($bitcoin_withdraw->user->id);
+    $user = User::where('id',$bitcoin_withdraw->user->id)->first();
     $user->wallet += ($bitcoin_withdraw->amount + ($bitcoin_withdraw->fee / 2));
     $user->update();
 

@@ -98,7 +98,7 @@ class AgentApplicationController extends Controller
     $new_crypto_trx->status = 'created';
     $new_crypto_trx->save();
 
-    $new_crypto_trx = CryptoTransaction::find($new_crypto_trx->id)->first();
+    $new_crypto_trx = CryptoTransaction::where('id',$new_crypto_trx->id)->first();
     $new_crypto_trx->transaction()->save($new_trx);
 
     $new_charge = Coinbase::createCharge([

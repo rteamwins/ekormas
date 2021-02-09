@@ -61,7 +61,7 @@ class FundingController extends Controller
         $new_trx->user_id = Auth()->user()->id;
         $new_trx->save();
 
-        $new_crypto_trx = CryptoTransaction::find($new_crypto_trx->id)->first();
+        $new_crypto_trx = CryptoTransaction::where('id',$new_crypto_trx->id)->first();
         $new_crypto_trx->transaction()->save($new_trx);
 
 
