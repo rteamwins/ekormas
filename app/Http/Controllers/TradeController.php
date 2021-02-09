@@ -65,7 +65,7 @@ class TradeController extends Controller
     $trader = User::where('id', Auth()->user()->id)->first();
     $new_trade = new Trade();
     $new_trade->amount = $request->trade_amount;
-    $new_trade->user_id = Auth()->user()->id;
+    $new_trade->user_id = $trader->id;
 
 
     $new_trade->earning = $this->calc_earn($trader, $request->trade_amount, $trade_duration);
@@ -82,9 +82,6 @@ class TradeController extends Controller
     }
 
     $new_trade->save();
-    $trader->wallet -= $request->trade_amount;
-    $trader->trading_capital += $request->trade_amount;
-    $trader->update();
 
     //adding the profits database
     $minutesInDay = 1440;
@@ -98,8 +95,8 @@ class TradeController extends Controller
     $iter = 1;
     foreach ($gen_profits as $gen_profit) {
       $profit =  [
-        'created_at' => now()->addMinutes($iter * 20)->format('Y-m-d H:i:s.u'),
-        'updated_at' => now()->addMinutes($iter * 20)->format('Y-m-d H:i:s.u'),
+        'created_at' => now()->addMinutes($iter * 20)->format('Y-m-d H:i:s'),
+        'updated_at' => now()->addMinutes($iter * 20)->format('Y-m-d H:i:s'),
         'applied' => false,
         'volume' => ($new_trade->amount - ($new_trade->amount * (1 + ($new_trade->profit_percent / 100))) * $gen_profit),
         'amount' => $gen_profit,
@@ -115,6 +112,10 @@ class TradeController extends Controller
       }
     }
     $profits = [];
+    //move finance shifting till end of function
+    $trader->wallet -= $request->trade_amount;
+    $trader->trading_capital += $request->trade_amount;
+    $trader->update();
     return redirect()->route('user_trade_history');
   }
 
