@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Profit;
 use App\Trade;
 use App\User;
-use Carbon\Carbon;
-use Carbon\CarbonInterval;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -97,8 +95,8 @@ class TradeController extends Controller
     $iter = 1;
     foreach ($gen_profits as $gen_profit) {
       $profit =  [
-        'created_at' => now()->add(CarbonInterval::minutes($iter * 20)),
-        'updated_at' => now()->add(CarbonInterval::minutes($iter * 20)),
+        'created_at' => now()->addMinutes($iter * 20)->format('Y-m-d H:i:s'),
+        'updated_at' => now()->addMinutes($iter * 20)->format('Y-m-d H:i:s'),
         'applied' => false,
         'volume' => ($new_trade->amount - ($new_trade->amount * (1 + ($new_trade->profit_percent / 100))) * $gen_profit),
         'amount' => $gen_profit,
