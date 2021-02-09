@@ -107,7 +107,10 @@ class TradeController extends Controller
       $profits[] = $profit;
       // Log::info("iter: {$iter}....Tradecount: {$tradeable_counts_per_week}");
       if ($iter % $tradeable_counts_per_week == 0) {
-        Profit::insert($profits);
+        $split_profits = array_chunk($profits, 250);
+        foreach ($split_profits as $split_profit) {
+          Profit::insert($split_profit);
+        }
         $profits = [];
       }
     }
