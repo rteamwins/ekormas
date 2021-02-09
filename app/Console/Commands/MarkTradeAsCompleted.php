@@ -41,7 +41,7 @@ class MarkTradeAsCompleted extends Command
   {
     $counter = 1;
     Log::info('Mark trade as completed job Started');
-    $trades = Trade::with(['user:id,wallet'])->where('closing_at', '<=', now())->whereCompleted(false)->get();
+    $trades = Trade::with(['user:id,wallet,trading_capital'])->where('closing_at', '<=', now())->whereCompleted(false)->get();
     foreach ($trades as $trade) {
       Log::info(sprintf('Processing Data: %s ', $counter));
       $trade->user->wallet += ($trade->amount + $trade->earning);
@@ -49,7 +49,7 @@ class MarkTradeAsCompleted extends Command
       $trade->user->update();
       $trade->completed = true;
       $trade->update();
-      Log::info(sprintf('Added $%s to User: %s', number_format($trade->amount + $trade->earning,2), $trade->user->id));
+      Log::info(sprintf('Added $%s to User: %s', number_format($trade->amount + $trade->earning, 2), $trade->user->id));
       Log::info(sprintf('Marked Trade: %s as Completed', $trade->id));
       $counter++;
     }
