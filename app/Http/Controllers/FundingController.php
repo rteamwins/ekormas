@@ -44,8 +44,8 @@ class FundingController extends Controller
   {
     request()->validate([
       'funding_amount' => 'required_without:funding_kyc_code|numeric|min:100',
-      'funding_kyc_code' => 'required_without:funding_amount|alpha_num|size:22|exists:k_y_c_s,code',
-    ]);
+      'funding_kyc_code' => 'required_without:funding_amount|alpha_num|size:22|exists:k_y_c_s,code,used_by,null',
+    ],['funding_kyc_code.exists'=> 'Token Code is invalid or has been used']);
 
     if ($request->has('funding_amount')) {
       try {
