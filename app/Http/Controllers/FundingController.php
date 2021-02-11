@@ -10,6 +10,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Shakurov\Coinbase\Facades\Coinbase;
+use Illuminate\Validation\Rule;
 
 class FundingController extends Controller
 {
@@ -44,7 +45,7 @@ class FundingController extends Controller
   {
     request()->validate([
       'funding_amount' => 'required_without:funding_kyc_code|numeric|min:100',
-      'funding_kyc_code' => 'required_without:funding_amount|alpha_num|size:22|exists:k_y_c_s,code,used_by,null',
+      'funding_kyc_code' => ['required_without:funding_amount','alpha_num','size:22','Rule::exists('k_y_c_s','code')->where('used_by',null)],
     ],['funding_kyc_code.exists'=> 'Token Code is invalid or has been used']);
 
     if ($request->has('funding_amount')) {
