@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Shakurov\Coinbase\Facades\Coinbase;
+use Illuminate\Validation\Rule;
 
 //Make sure you don't store your API Key in your source code!
 $apiClientObj = ApiClient::init(env('COINBASE_API_KEY'));
@@ -412,9 +413,11 @@ class HomeController extends Controller
   public function process_reg_plan(Request $request)
   {
     $this->validate($request, [
-      'rc_code' => 'required_without:plan|alpha_num|size:15|exists:registration_credits,code',
+      'rc_code' => ['required_without:plan','alpha_num','size:15',Rule::exists('registration_credits','code')->where('used_by',null),],
+
       'plan' => 'required_without:rc_code|in:onyx,pearl,ruby,gold,sapphire,emerald,diamond',
-    ]);
+    ],['rc_code.exists' => 'The Registration Credit code is invalid',]
+);
 
     $plan = ['onyx' => 70, 'pearl' => 130, 'ruby' => 310, 'gold' => 610, 'sapphire' => 1210, 'emerald' => 3610, 'diamond' => 6010];
     if (Auth()->user()->membership_plan_id == null) {
