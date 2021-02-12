@@ -25,10 +25,12 @@ Route::post('register/new', 'Auth\RegisterController@register')->name('register_
 
 
 // Password Reset Routes...
+Route::get('password/confirm', 'Auth\ConfirmPasswordController@showConfirmForm')->name('password.confirm');
+Route::post('password/confirm', 'Auth\ConfirmPasswordController@confirm');
 Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
 Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
-Route::post('password/reset', 'Auth\ResetPasswordController@reset');
+Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
 
 Route::get('/about-us', 'HomeController@about_us')->name('about_us');
 Route::get('/faq', 'HomeController@faq')->name('faq');
