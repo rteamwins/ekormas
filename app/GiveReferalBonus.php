@@ -38,30 +38,30 @@ trait GiveReferalBonus
     Log::channel('bonus')->info('Giving Direct Referal Bonus: $' . $new_bonus_trx->amount . ' to user: ' . $referer->id . " completed");
     Log::channel('bonus')->info('Skipping Indirect Referal');
 
-    // foreach ($ancestors as $key => $ancestor) {
-    //   Log::channel('bonus')->info('Giving Ancestor Referal Bonus to user: ' . $ancestor->id);
-    //   $new_trx = new Transaction();
-    //   $new_trx->amount = (($user->membership_plan->fee ?? 0) * ($percent[$key] / 100));
-    //   $new_trx->status = 'created';
-    //   $new_trx->type = 'bonus';
-    //   $new_trx->user_id = $ancestor->id;
+    foreach ($ancestors as $key => $ancestor) {
+      Log::channel('bonus')->info('Giving Ancestor Referal Bonus to user: ' . $ancestor->id);
+      $new_trx = new Transaction();
+      $new_trx->amount = (($user->membership_plan->fee ?? 0) * ($percent[$key] / 100));
+      $new_trx->status = 'created';
+      $new_trx->type = 'bonus';
+      $new_trx->user_id = $ancestor->id;
 
-    //   $new_bonus_trx = new Bonus();
-    //   $new_bonus_trx->user_id = $ancestor->id;
-    //   $new_bonus_trx->amount = (($user->membership_plan->fee ?? 0) * ($percent[$key] / 100));
-    //   $new_bonus_trx->status = 'created';
+      $new_bonus_trx = new Bonus();
+      $new_bonus_trx->user_id = $ancestor->id;
+      $new_bonus_trx->amount = (($user->membership_plan->fee ?? 0) * ($percent[$key] / 100));
+      $new_bonus_trx->status = 'created';
 
-    //   Log::channel('bonus')->info('Giving Ancestor Referal Bonus to user: ' . $ancestor->id);
-    //   $new_bonus_trx->type = 'referal_indirect';
+      Log::channel('bonus')->info('Giving Ancestor Referal Bonus to user: ' . $ancestor->id);
+      $new_bonus_trx->type = 'referal_indirect';
 
-    //   $new_bonus_trx->save();
-    //   $new_bonus_trx->transaction()->save($new_trx);
-    //   $new_trx->status = 'completed';
-    //   $new_trx->update();
-    //   $ancestor->bonus += $new_trx->amount;
-    //   $ancestor->update();
-    //   Log::channel('bonus')->info('Giving Ancestor Referal Bonus: $' . $new_bonus_trx->amount . ' to user: ' . $ancestor->id . " completed");
-    // }
+      $new_bonus_trx->save();
+      $new_bonus_trx->transaction()->save($new_trx);
+      $new_trx->status = 'completed';
+      $new_trx->update();
+      $ancestor->bonus += $new_trx->amount;
+      $ancestor->update();
+      Log::channel('bonus')->info('Giving Ancestor Referal Bonus: $' . $new_bonus_trx->amount . ' to user: ' . $ancestor->id . " completed");
+    }
   }
 
   public function check_for_bonus_eligible_ancestors($user)
