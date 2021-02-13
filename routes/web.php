@@ -142,6 +142,7 @@ Route::group(['middleware' => ['verifyRegPayment']], function () {
 });
 
 Route::post('/process_registration_plan', 'HomeController@process_reg_plan')->name('process_reg_plan');
+Route::post('/process_registration_plan_valentine', 'HomeController@process_val_reg_plan')->name('process_val_reg_plan');
 Route::get('/choose_registration_plan', 'HomeController@choose_reg_plan')->name('choose_reg_plan');
 Route::get('/update_registration_plan', 'HomeController@update_reg_plan')->name('update_reg_plan');
 Route::get('/registration_plan/{plan}/payment-failed', 'HomeController@payment_failed')->name('reg_plan_payment_failed');

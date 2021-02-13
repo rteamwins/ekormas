@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\MembershipPlan;
 use App\RegistrationCredit;
 use App\User;
 use Illuminate\Http\Request;
@@ -15,20 +16,25 @@ class RegistrationCreditController extends Controller
   }
   function index_json()
   {
-    $rcs = RegistrationCredit::with(['consumer:id,name,username,phone,email'])->whereUserId(auth()->user()->id)->whereNull('used_by')->paginate(10);
+    $rcs = RegistrationCredit::with(['consumer:id,name,username,phone,email'])
+    ->whereUserId(auth()->user()->id)
+    ->whereNull('used_by')
+    ->latest()
+    ->paginate(10);
     return response()->json($rcs, Response::HTTP_OK);
   }
 
   public function gift()
   {
-    return view('membership.gift');
+    $plans = MembershipPlan::get();
+    return view('membership.gift', ['plans' => $plans]);
   }
 
   public function gift_store(Request $request)
   {
     $this->validate($request, [
-      'receiver_username' => 'required|string|exists:users,username,role,agent',
-      'plan' => "required|alpha_dash|in:onyx,pearl,ruby,gold,sapphire,emerald,diamond",
+      'receiver_username' => 'required|string|exists:users,username',
+      'plan' => "required|alpha_dash|in:onyx,pearl,ruby,gold,sapphire,emerald,diamond,onyx_valentine,pearl_valentine,ruby_valentine,gold_valentine,sapphire_valentine,emerald_valentine,diamond_valentine",
       "quantity" => "required|digits_between:1,50",
     ], [
       'receiver_username.exists' => 'No  Agent with that username',

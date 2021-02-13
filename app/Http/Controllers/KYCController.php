@@ -26,7 +26,7 @@ class KYCController extends Controller
    */
   public function index_json()
   {
-    $kycs = KYC::with(['consumer:id,name,username,phone,email'])->where('user_id', auth()->user()->id)->paginate(10);
+    $kycs = KYC::with(['consumer:id,name,username,phone,email'])->where('user_id', auth()->user()->id)->latest()->paginate(10);
     return response()->json($kycs, Response::HTTP_OK);
   }
 

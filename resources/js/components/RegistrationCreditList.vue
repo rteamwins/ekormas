@@ -135,7 +135,14 @@ export default {
         gold: 610,
         sapphire: 1210,
         emerald: 3610,
-        diamond: 6010
+        diamond: 6010,
+        onyx_valentine: 60,
+        pearl_valentine: 110,
+        ruby_valentine: 215,
+        gold_valentine: 510,
+        sapphire_valentine: 1010,
+        emerald_valentine: 3010,
+        diamond_valentine: 5010
       },
       reg_credits: [],
       address_qrcode_value: "",

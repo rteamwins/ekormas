@@ -233,7 +233,7 @@ class HomeController extends Controller
   public function user_dashboard()
   {
     $profits = Profit::whereUserId(Auth()->user()->id)->where([['created_at', '>=', now()->subDay()], ['created_at', '<=', now()->format('Y-m-d H:i:s')]])->latest()->get();
-    $candle_sticks = $this->market_candlestick_bar();
+    // $candle_sticks = $this->market_candlestick_bar();
     $plabels = [];
     $pdata = [];
     $series = [];
@@ -242,24 +242,24 @@ class HomeController extends Controller
       $pdata[] = number_format($profit->amount, 3);
     }
 
-    foreach ($candle_sticks as $candle_stick) {
-      $series[] = [
-        "x" => $candle_stick['date'] * 1000,
-        "y" => [
-          $candle_stick['open'],
-          $candle_stick['high'],
-          $candle_stick['low'],
-          $candle_stick['close']
-        ]
-      ];
-    }
-    $mdata = [
+    // foreach ($candle_sticks as $candle_stick) {
+    //   $series[] = [
+    //     "x" => $candle_stick['date'] * 1000,
+    //     "y" => [
+    //       $candle_stick['open'],
+    //       $candle_stick['high'],
+    //       $candle_stick['low'],
+    //       $candle_stick['close']
+    //     ]
+    //   ];
+    // }
+    // $mdata = [
 
-      "series" => [[
-        "data" => $series,
-        // "backgroundColor" => '#00C853',
-      ]]
-    ];
+    //   "series" => [[
+    //     "data" => $series,
+    //     // "backgroundColor" => '#00C853',
+    //   ]]
+    // ];
     $pdata = [
       "series" => [[
         "name" => 'Trade Profits',
@@ -270,20 +270,20 @@ class HomeController extends Controller
     ];
     return view('user.dashboard', [
       'pdata' => $pdata,
-      'mdata' => $mdata,
+      // 'mdata' => $mdata,
       'role' => auth()->user()->role,
       'trade_roi' => Trade::whereUserId(auth()->user()->id)->where('completed', false)->first()->earning ?? 0,
       'today_funding' => Transaction::where([
-        ['type','wallet_funding'],
-        ['user_id',auth()->user()->id],
-        ['status','completed']
+        ['type', 'wallet_funding'],
+        ['user_id', auth()->user()->id],
+        ['status', 'completed']
       ])->whereDate('created_at', now())
         ->latest()
         ->sum('amount'),
       'week_funding' => Transaction::where([
-        ['type','wallet_funding'],
-        ['user_id',auth()->user()->id],
-        ['status','completed']
+        ['type', 'wallet_funding'],
+        ['user_id', auth()->user()->id],
+        ['status', 'completed']
       ])->whereDate('created_at', '>=', now()->startOfWeek())
         ->latest()
         ->sum('amount'),
@@ -392,7 +392,7 @@ class HomeController extends Controller
    */
   public function choose_reg_plan()
   {
-    return view('membership.register_plan');
+    return view('membership.register_plan_valentine');
   }
 
   /**
@@ -413,11 +413,10 @@ class HomeController extends Controller
   public function process_reg_plan(Request $request)
   {
     $this->validate($request, [
-      'rc_code' => ['required_without:plan','alpha_num','size:15',Rule::exists('registration_credits','code')->where('used_by',null),],
+      'rc_code' => ['required_without:plan', 'alpha_num', 'size:15', Rule::exists('registration_credits', 'code')->where('used_by', null),],
 
       'plan' => 'required_without:rc_code|in:onyx,pearl,ruby,gold,sapphire,emerald,diamond',
-    ],['rc_code.exists' => 'The Registration Credit code is invalid',]
-);
+    ], ['rc_code.exists' => 'The Registration Credit code is invalid',]);
 
     $plan = ['onyx' => 70, 'pearl' => 130, 'ruby' => 310, 'gold' => 610, 'sapphire' => 1210, 'emerald' => 3610, 'diamond' => 6010];
     if (Auth()->user()->membership_plan_id == null) {
@@ -509,6 +508,138 @@ class HomeController extends Controller
           'metadata' => [
             "user_id" => Auth()->user()->id,
             "type" => "user_registration_fee",
+            "trnx_id" => $new_trx->id,
+            "membership_plan" => $request->plan
+          ],
+          'redirect_url' => route('reg_plan_payment_success', ['plan' => $request->plan]),
+          'cancel_url' => route('reg_plan_payment_failed', ['plan' => $request->plan]),
+        ]);
+
+        $new_crypto_trx->charge_id = $new_charge['data']['hosted_url'];
+        $new_crypto_trx->charge_id = $new_charge['data']['id'];
+        $new_crypto_trx->charge_code = $new_charge['data']['code'];
+        $new_crypto_trx->hosted_url = $new_charge['data']['hosted_url'];
+        $new_crypto_trx->system_wallet_address = $new_charge['data']['addresses']['bitcoin'];
+        $new_crypto_trx->update();
+        return redirect()->away($new_crypto_trx->hosted_url);
+      }
+    }
+  }
+
+  /**
+   * pay registraion fee.
+   *
+   * @return \Illuminate\Contracts\Support\Renderable
+   */
+  public function process_val_reg_plan(Request $request)
+  {
+    $this->validate($request, [
+      'rc_code' => ['required_without:plan', 'alpha_num', 'size:15', Rule::exists('registration_credits', 'code')->where('used_by', null),],
+      'plan' => 'required_without:rc_code|in:onyx_valentine,pearl_valentine,ruby_valentine,gold_valentine,sapphire_valentine,emerald_valentine,diamond_valentine',
+    ], ['rc_code.exists' => 'The Registration Credit code is invalid',]);
+
+    $plan = [
+      'onyx_valentine' => 60,
+      'pearl_valentine' => 110,
+      'ruby_valentine' => 215,
+      'gold_valentine' => 510,
+      'sapphire_valentine' => 1010,
+      'emerald_valentine' => 3010,
+      'diamond_valentine' => 5010
+    ];
+    if (Auth()->user()->membership_plan_id == null) {
+      if ($request->has('rc_code')) {
+        $rc_code = $request->rc_code;
+        $new_rc_trx = RegistrationCredit::where('code', $rc_code)->first();
+        $new_rc_trx->status = 'used';
+        $new_rc_trx->used_by = Auth()->user()->id;
+        $new_rc_trx->save();
+        if (strpos($new_rc_trx->plan, "_") !== FALSE) {
+          $plan =   strstr($new_rc_trx->plan, "_", true);
+        } else {
+          $plan =  $new_rc_trx->plan;
+        }
+        $membership_plan = MembershipPlan::where('slug', $plan)->first();
+        $referer = User::where('id', $new_rc_trx->user_id)->first();
+
+        $new_trx = new Transaction();
+        $new_trx->amount =  3;
+        $new_trx->status = 'created';
+        $new_trx->type = 'bonus';
+        $new_trx->user_id = $referer->id;
+
+        $user = User::where('id', Auth()->user()->id)->first();
+        $user->membership_plan_id = $membership_plan->id;
+        $user->activated_at = now();
+        $user->wallet += $membership_plan->min_trading_capital;
+        $user->update();
+        $new_trx->status = 'completed';
+        $new_trx->update();
+
+        $new_bonus_trx = new Bonus();
+        $new_bonus_trx->user_id = $referer->id;
+        $new_bonus_trx->amount = 3;
+        $new_bonus_trx->status = 'created';
+        $new_bonus_trx->type = 'registration_fee_split';
+        $new_bonus_trx->save();
+        $new_bonus_trx->transaction()->save($new_trx);
+        $new_trx->status = 'completed';
+        $new_trx->update();
+        $referer->bonus += $new_trx->amount;
+        $referer->update();
+
+        $admin = User::where('role', 'admin')->first();
+        $new_admin_trx = new Transaction();
+        $new_admin_trx->amount =  7;
+        $new_admin_trx->status = 'created';
+        $new_admin_trx->type = 'bonus';
+        $new_admin_trx->user_id = $admin->id;
+
+        $new_bonus_admin_trx = new Bonus();
+        $new_bonus_admin_trx->user_id = $admin->id;
+        $new_bonus_admin_trx->amount = 7;
+        $new_bonus_admin_trx->status = 'created';
+        $new_bonus_admin_trx->type = 'registration_fee_split';
+        $new_bonus_admin_trx->save();
+        $new_bonus_admin_trx->transaction()->save($new_admin_trx);
+        $new_admin_trx->status = 'completed';
+        $new_admin_trx->update();
+        $admin->bonus += $new_admin_trx->amount;
+        $admin->update();
+
+        $user = User::where('id', Auth()->user()->id)->first();
+        $user->give_ancestor_referal_bonus();
+        if ($user->parent->children->count() == 2) {
+          $user->check_for_bonus_eligible_ancestors($user);
+        }
+        return redirect()->route('user_home');
+      } else {
+
+        $new_crypto_trx = new CryptoTransaction();
+        $new_crypto_trx->currency = 'BTC';
+        $new_crypto_trx->status = 'created';
+        $new_crypto_trx->save();
+
+        $new_trx = new Transaction();
+        $new_trx->amount = $plan[$request->plan];
+        $new_trx->status = 'created';
+        $new_trx->type = 'user_registration_fee_valentine';
+        $new_trx->user_id = Auth()->id();
+        $new_trx->save();
+        // $new_crypto_trx = CryptoTransaction::where('id',$new_crypto_trx->id)->first();
+        $new_crypto_trx->transaction()->save($new_trx);
+
+        $new_charge = Coinbase::createCharge([
+          'name' => Auth()->user()->username . " " . "\${$plan[$request->plan]} {$request->plan} Valentine Plan",
+          'description' => Auth()->user()->username . " " . "\${$plan[$request->plan]} Registration Fee for {$request->plan} Valentine Plan",
+          'local_price' => [
+            'amount' => $plan[$request->plan],
+            'currency' => 'USD'
+          ],
+          'pricing_type' => 'fixed_price',
+          'metadata' => [
+            "user_id" => Auth()->user()->id,
+            "type" => "user_registration_fee_valentine",
             "trnx_id" => $new_trx->id,
             "membership_plan" => $request->plan
           ],

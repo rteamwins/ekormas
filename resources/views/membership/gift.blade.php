@@ -6,8 +6,9 @@
 <script>
   var reg_type = true;
   var current_plan = 'onyx'
-  const plan_map = (plan='onyx')=> {
-    let plan_qty = 1
+  var inc_plan = current_plan;
+  var qty = 1
+  const plan_map = (plan='onyx',plan_qty =qty)=> {
     if(plan == 'onyx'){
       return `Membership Package: $${50*plan_qty} <br> Minimum Trading Capital: $${10*plan_qty} <br> Registration Fee: $${10*plan_qty} <br> Total: $${70*plan_qty}`;
     }else if(plan == 'pearl'){
@@ -20,16 +21,31 @@
       return `Membership Package: $${1000*plan_qty} <br> Minimum Trading Capital: $${200*plan_qty} <br> Registration Fee: $${10*plan_qty} <br> Total: $${1210*plan_qty}`;
     }else if(plan == 'emerald'){
      return `Membership Package: $${3000*plan_qty} <br> Minimum Trading Capital: $${600*plan_qty} <br> Registration Fee: $${10*plan_qty} <br> Total: $${3610*plan_qty}`;
+    }else if(plan == 'onyx_valentine'){
+      return `Membership Package: $${40*plan_qty} <br> Minimum Trading Capital: $${10*plan_qty} <br> Registration Fee: $${10*plan_qty} <br> Total: $${60*plan_qty}`;
+    }else if(plan == 'pearl_valentine'){
+      return `Membership Package: $${80*plan_qty} <br> Minimum Trading Capital: $${20*plan_qty} <br> Registration Fee: $${10*plan_qty} <br> Total: $${110*plan_qty}`;
+    }else if(plan == 'ruby_valentine'){
+      return `Membership Package: $${200*plan_qty} <br> Minimum Trading Capital: $${50*plan_qty} <br> Registration Fee: $${10*plan_qty} <br> Total: $${215*plan_qty}`;
+    }else if(plan == 'gold_valentine'){
+      return `Membership Package: $${400*plan_qty} <br> Minimum Trading Capital: $${100*plan_qty} <br> Registration Fee: $${10*plan_qty} <br> Total: $${510*plan_qty}`;
+    }else if(plan == 'sapphire_valentine'){
+      return `Membership Package: $${800*plan_qty} <br> Minimum Trading Capital: $${200*plan_qty} <br> Registration Fee: $${10*plan_qty} <br> Total: $${1010*plan_qty}`;
+    }else if(plan == 'emerald_valentine'){
+     return `Membership Package: $${2400*plan_qty} <br> Minimum Trading Capital: $${600*plan_qty} <br> Registration Fee: $${10*plan_qty} <br> Total: $${3010*plan_qty}`;
     }else{
      return `Membership Package: $${5000*plan_qty} <br> Minimum Trading Capital: $${1000*plan_qty} <br> Registration Fee: $${10*plan_qty} <br> Total: $${6010*plan_qty}`;
     }
    };
   function display_package_info(plan) {
     current_plan = plan.value
-    document.getElementById('plan_info').innerHTML = plan_map(current_plan,1)
+    document.getElementById('quantity').value = 1
+    document.getElementById('plan_info').innerHTML = plan_map(current_plan)
   }
-  function display_package_info(plan) {
-    document.getElementById('plan_info').innerHTML = plan_map(plan.value)
+
+  function display_package_inc_info(qtty) {
+    inc_plan = current_plan
+    document.getElementById('plan_info').innerHTML = plan_map(inc_plan,qtty.value)
   }
 </script>
 @endpush
@@ -75,13 +91,10 @@
                   <div class="uk-inline uk-width-1-1">
                     <select onchange="display_package_info(this)" class="uk-select uk-border-rounded" name="plan"
                       required id="plan">
-                      <option value="onyx">Onyx($50) </option>
-                      <option value="pearl">Pearl($100) </option>
-                      <option value="ruby">Ruby($250) </option>
-                      <option value="gold">Gold($500) </option>
-                      <option value="sapphire">Sapphire($1000) </option>
-                      <option value="emerald">Emerald($3000) </option>
-                      <option value="diamond">Diamond($5000) </option>
+                      @foreach ($plans as $plan)
+                      <option value="{{$plan->slug}}">
+                        {{$plan->name}}(${{number_format($plan->fee+$plan->min_trading_capital+10)}}) </option>
+                      @endforeach
                     </select>
                   </div>
                 </div>
@@ -97,8 +110,8 @@
                   <div class="uk-inline uk-width-1-1">
                     <span class="uk-form-icon">#</span>
                     <input class="uk-input uk-border-rounded @error('quantity') uk-form-danger @enderror"
-                      name="quantity" id="quantity" type="text" value="{{ old('quantity') }}" required type="number"
-                      min="1" max="50">
+                      name="quantity" onchange="display_package_inc_info(this)" id="quantity" type="number"
+                      value="{{ old('quantity')?:1 }}" required type="number" min="1" max="50">
                   </div>
                   @error('quantity')
                   <span class="uk-text-danger">{{ $message }}</span>
