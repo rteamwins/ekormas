@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Bonus;
 use App\MarketTicker;
+use App\MembershipPlan;
 use App\Profit;
+use App\Transaction;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -19,42 +22,39 @@ class MarketTickerController extends Controller
   public function index()
   {
 
-    // $jcat = User::where('username','jcat')->first();
-    // $jkp2 = User::where('username','jkp2')->first();
-    // $jcat->appendToNode($jkp2)->save();
-    // $jsnake = User::where('username','jsnake')->first();
-    // $jkp3 = User::where('username','jkp3')->first();
-    // $jsnake->appendToNode($jkp3)->save();
 
-    $user = User::where('id', 12)->first();
+    $user = User::where('id', 19)->first();
+    $membership_plan = MembershipPlan::whereSlug('pearl')->first();
+    $user->membership_plan_id = $membership_plan->id;
+    $user->wallet += $membership_plan->min_trading_capital;
+    $user->activated_at = now();
+    $user->update();
+    $user->refresh();
+
+    //award registration fee to admin
+    $admin = User::where('role', 'admin')->first();
+    $new_admin_trx = new Transaction();
+    $new_admin_trx->amount =  10;
+    $new_admin_trx->status = 'created';
+    $new_admin_trx->type = 'bonus';
+    $new_admin_trx->user_id = $admin->id;
+
+    $new_bonus_admin_trx = new Bonus();
+    $new_bonus_admin_trx->user_id = $admin->id;
+    $new_bonus_admin_trx->amount = 10;
+    $new_bonus_admin_trx->status = 'created';
+    $new_bonus_admin_trx->type = 'registration_fee_full';
+    $new_bonus_admin_trx->save();
+    $new_bonus_admin_trx->transaction()->save($new_admin_trx);
+    $new_admin_trx->status = 'completed';
+    $new_admin_trx->update();
+    $admin->bonus += $new_admin_trx->amount;
+    $admin->update();
+
+
     $user->give_ancestor_referal_bonus();
-    Log::info("User Siblings Count: " . $user->parent->children->count());
     if ($user->parent->children->count() == 2) {
       $user->check_for_bonus_eligible_ancestors($user);
     }
-
-
-    $date_ranges = [];
-    $first_date = Profit::oldest()->first()->created_at;
-    $last_date = Profit::latest()->first()->created_at;
-    while ($last_date->greaterThan($first_date)) {
-      $date_ranges[] = $first_date->addHour()->getTimestamp();
-    }
-
-    $OHLCs = [];
-    array_pop($date_ranges);
-    foreach ($date_ranges as $date) {
-      $open_time = now()->setTimestamp($date);
-      $close_time = now()->setTimestamp($date)->addHour();
-      $OHLC['date'] = $date ?? null;
-      $profits = Profit::whereBetween('created_at', [$open_time, $close_time])->get();
-      $OHLC['open'] = $profits->first()->amount ?? null;
-      $OHLC['high'] = $profits->max('amount') ?? null;
-      $OHLC['low'] = $profits->min('amount') ?? null;
-      $OHLC['close'] = $profits->last()->amount ?? null;
-      $OHLC['volume'] = $profits->avg('volume') ?? null;
-      $OHLCs[] = $OHLC;
-    }
-    return $OHLCs;
   }
 }
