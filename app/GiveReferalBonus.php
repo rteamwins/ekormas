@@ -18,14 +18,14 @@ trait GiveReferalBonus
     Log::channel('bonus')->info('Giving Direct Referal Bonus to user: ' . $referer->id);
     $new_trx = new Transaction();
     Log::channel('bonus')->info("plan_fee: " . $user->membership_plan->fee ?? 0);
-    $new_trx->amount = (($user->membership_plan->fee ?? 0) * 0.15);
+    $new_trx->amount = (($user->membership_plan->fee ?? 0) * 0.10);
     $new_trx->status = 'created';
     $new_trx->type = 'bonus';
     $new_trx->user_id = $referer->id;
 
     $new_bonus_trx = new Bonus();
     $new_bonus_trx->user_id = $user->referer;
-    $new_bonus_trx->amount = (($user->membership_plan->fee ?? 0) * 0.15);
+    $new_bonus_trx->amount = (($user->membership_plan->fee ?? 0) * 0.10);
     $new_bonus_trx->status = 'created';
     $new_bonus_trx->type = 'referal_direct';
 
