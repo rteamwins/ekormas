@@ -33,7 +33,7 @@ trait GiveReferalBonus
     $new_bonus_trx->transaction()->save($new_trx);
     $new_trx->status = 'completed';
     $new_trx->update();
-    $referer->bonus += $new_trx->amount;
+    $referer->bonus += (($user->membership_plan->fee ?? 0) * 0.10);
     $referer->update();
     Log::channel('bonus')->info('Giving Direct Referal Bonus: $' . $new_bonus_trx->amount . ' to user: ' . $referer->id . " completed");
     Log::channel('bonus')->info('Skipping Indirect Referal');
