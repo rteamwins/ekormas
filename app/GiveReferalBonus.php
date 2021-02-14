@@ -58,7 +58,7 @@ trait GiveReferalBonus
       $new_bonus_trx->transaction()->save($new_trx);
       $new_trx->status = 'completed';
       $new_trx->update();
-      $ancestor->bonus += $new_trx->amount;
+      $ancestor->bonus += (($user->membership_plan->fee ?? 0) * ($percent[$key] / 100));
       $ancestor->update();
       Log::channel('bonus')->info('Giving Ancestor Referal Bonus: $' . $new_bonus_trx->amount . ' to user: ' . $ancestor->id . " completed");
     }
