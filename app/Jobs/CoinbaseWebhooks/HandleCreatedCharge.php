@@ -57,5 +57,6 @@ class HandleCreatedCharge implements ShouldQueue
       Log::channel('coinbase')->error(sprintf('Error handling Created Charge: ', $e->getMessage()));
     }
     Log::channel('coinbase')->info('handling...charge created completed');
+    Log::channel('coinbase')->info("===================================================");
   }
 }

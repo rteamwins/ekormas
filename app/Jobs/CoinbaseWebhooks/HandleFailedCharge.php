@@ -57,5 +57,6 @@ class HandleFailedCharge implements ShouldQueue
       Log::channel('coinbase')->error(sprintf('Error handling Failed Charged: ', $e->getMessage()));
     }
     Log::channel('coinbase')->info('handling...charge failed completed');
+    Log::channel('coinbase')->info("===================================================");
   }
 }

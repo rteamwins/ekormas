@@ -104,7 +104,7 @@ class HandleDelayedCharge implements ShouldQueue
         if ($user->parent->children->count() == 2) {
           $user->check_for_bonus_eligible_ancestors($user);
         }
-      }else if ($transaction->type == 'user_registration_fee_valentineI') {
+      }else if ($transaction->type == 'user_registration_fee_valentine') {
         Log::channel('coinbase')->info('handling...user reg valentine payment');
         $plan = $payload_obj['event']['data']['metadata']['membership_plan'];
         $plan = strstr($plan, "_", true);
@@ -136,7 +136,7 @@ class HandleDelayedCharge implements ShouldQueue
         $admin->bonus += $new_admin_trx->amount;
         $admin->update();
 
-        
+
         $user->give_ancestor_referal_bonus();
         if ($user->parent->children->count() == 2) {
           $user->check_for_bonus_eligible_ancestors($user);
@@ -169,5 +169,6 @@ class HandleDelayedCharge implements ShouldQueue
 
     }
     Log::channel('coinbase')->info('handling...charge delayed completed');
+    Log::channel('coinbase')->info("===================================================");
   }
 }

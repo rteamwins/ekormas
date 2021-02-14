@@ -53,7 +53,8 @@ class HandlePendingCharge implements ShouldQueue
       $crypto_transaction->update();
       Log::channel('coinbase')->info("crypto_trnx: " . $crypto_transaction->id);
       Log::channel('coinbase')->info("crypto_trnx_user: " . $transaction->user_id);
-      Log::channel('coinbase')->info('handling...charge pending starting');
+      Log::channel('coinbase')->info('handling...charge pending completed');
+      Log::channel('coinbase')->info("===================================================");
     } catch (\Exception $e) {
       Log::channel('coinbase')->error(sprintf('Error handling pending Charged: ', $e->getMessage()));
     }

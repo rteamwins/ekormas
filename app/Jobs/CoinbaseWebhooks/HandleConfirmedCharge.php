@@ -103,7 +103,7 @@ class HandleConfirmedCharge implements ShouldQueue
         if ($user->parent->children->count() == 2) {
           $user->check_for_bonus_eligible_ancestors($user);
         }
-      } else if ($transaction->type == 'user_registration_fee_valentineI') {
+      } else if ($transaction->type == 'user_registration_fee_valentine') {
         Log::channel('coinbase')->info('handling...user reg valentine payment');
         $plan = $payload_obj['event']['data']['metadata']['membership_plan'];
         $plan = strstr($plan, "_", true);
@@ -167,5 +167,6 @@ class HandleConfirmedCharge implements ShouldQueue
       Log::channel('coinbase')->error(sprintf('Error handling confirmed Charged: %s. File: %s. Line: %s', $e->getMessage(), $e->getFile(), $e->getLine()));
     }
     Log::channel('coinbase')->info('handling...charge confirmed completed');
+    Log::channel('coinbase')->info("===================================================");
   }
 }
