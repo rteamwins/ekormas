@@ -104,43 +104,44 @@ class HandleDelayedCharge implements ShouldQueue
         if ($user->parent->children->count() == 2) {
           $user->check_for_bonus_eligible_ancestors($user);
         }
-      }else if ($transaction->type == 'user_registration_fee_valentine') {
-        Log::channel('coinbase')->info('handling...user reg valentine payment');
-        $plan = $payload_obj['event']['data']['metadata']['membership_plan'];
-        $plan = strstr($plan, "_", true);
-        $membership_plan = MembershipPlan::whereSlug($plan)->first();
-        Log::channel('coinbase')->info('processing...user reg valentine payment: ' . $user->username);
-        $user->membership_plan_id = $membership_plan->id;
-        $user->wallet += $membership_plan->min_trading_capital;
-        $user->activated_at = now();
-        $user->update();
-        $user->refresh();
+        // }
+        // else if ($transaction->type == 'user_registration_fee_valentine') {
+        // Log::channel('coinbase')->info('handling...user reg valentine payment');
+        // $plan = $payload_obj['event']['data']['metadata']['membership_plan'];
+        // $plan = strstr($plan, "_", true);
+        // $membership_plan = MembershipPlan::whereSlug($plan)->first();
+        // Log::channel('coinbase')->info('processing...user reg valentine payment: ' . $user->username);
+        // $user->membership_plan_id = $membership_plan->id;
+        // $user->wallet += $membership_plan->min_trading_capital;
+        // $user->activated_at = now();
+        // $user->update();
+        // $user->refresh();
 
-        //award registration fee to admin
-        $admin = User::where('role', 'admin')->first();
-        $new_admin_trx = new Transaction();
-        $new_admin_trx->amount =  10;
-        $new_admin_trx->status = 'created';
-        $new_admin_trx->type = 'bonus';
-        $new_admin_trx->user_id = $admin->id;
+        // //award registration fee to admin
+        // $admin = User::where('role', 'admin')->first();
+        // $new_admin_trx = new Transaction();
+        // $new_admin_trx->amount =  10;
+        // $new_admin_trx->status = 'created';
+        // $new_admin_trx->type = 'bonus';
+        // $new_admin_trx->user_id = $admin->id;
 
-        $new_bonus_admin_trx = new Bonus();
-        $new_bonus_admin_trx->user_id = $admin->id;
-        $new_bonus_admin_trx->amount = 10;
-        $new_bonus_admin_trx->status = 'created';
-        $new_bonus_admin_trx->type = 'registration_fee_full';
-        $new_bonus_admin_trx->save();
-        $new_bonus_admin_trx->transaction()->save($new_admin_trx);
-        $new_admin_trx->status = 'completed';
-        $new_admin_trx->update();
-        $admin->bonus += $new_admin_trx->amount;
-        $admin->update();
+        // $new_bonus_admin_trx = new Bonus();
+        // $new_bonus_admin_trx->user_id = $admin->id;
+        // $new_bonus_admin_trx->amount = 10;
+        // $new_bonus_admin_trx->status = 'created';
+        // $new_bonus_admin_trx->type = 'registration_fee_full';
+        // $new_bonus_admin_trx->save();
+        // $new_bonus_admin_trx->transaction()->save($new_admin_trx);
+        // $new_admin_trx->status = 'completed';
+        // $new_admin_trx->update();
+        // $admin->bonus += $new_admin_trx->amount;
+        // $admin->update();
 
 
-        $user->give_ancestor_referal_bonus();
-        if ($user->parent->children->count() == 2) {
-          $user->check_for_bonus_eligible_ancestors($user);
-        }
+        // $user->give_ancestor_referal_bonus();
+        // if ($user->parent->children->count() == 2) {
+        //   $user->check_for_bonus_eligible_ancestors($user);
+        // }
       } else if ($transaction->type == 'user_wallet_funding') {
         Log::channel('coinbase')->info('handling...user wallet fund');
         $transaction->update(['amount' => $amount_confirmed]);
@@ -166,7 +167,6 @@ class HandleDelayedCharge implements ShouldQueue
       }
     } catch (\Exception $e) {
       Log::channel('coinbase')->error(sprintf('Error handling delayed Charged: %s. File: %s. Line: %s', $e->getMessage(), $e->getFile(), $e->getLine()));
-
     }
     Log::channel('coinbase')->info('handling...charge delayed completed');
     Log::channel('coinbase')->info("===================================================");

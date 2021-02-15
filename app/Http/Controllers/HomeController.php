@@ -392,7 +392,7 @@ class HomeController extends Controller
    */
   public function choose_reg_plan()
   {
-    return view('membership.register_plan_valentine');
+    return view('membership.register_plan');
   }
 
   /**
